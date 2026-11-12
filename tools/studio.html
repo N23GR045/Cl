@@ -61,20 +61,43 @@ function seedling(scale = 1, pairs = 3) {
   }
   return g;
 }
-function bushyPlant(scale = 1) {
+const LEAF_GREENS = [0x3f8a45, 0x4b9a4f, 0x58a95a, 0x367a3d, 0x62b066].map((c) => phys({ color: c, roughness: .5, sheen: .5, sheenColor: new THREE.Color(0xa8f0a8), side: THREE.DoubleSide }));
+const leafletCache = new Map();
+function leafletGeo(L) {
+  const key = L.toFixed(2); if (leafletCache.has(key)) return leafletCache.get(key);
+  const W = L * .13, n = 18, sh = new THREE.Shape(); sh.moveTo(0, 0);
+  const pts = [];
+  for (let i = 1; i < n; i++) { const t = i / n; const w = W * Math.pow(Math.sin(Math.PI * Math.min(1, t * 1.08)), .75) * (1 - .25 * t) * (i % 2 ? 1.18 : .9); pts.push([w, t * L]); }
+  pts.forEach(([x, y]) => sh.lineTo(x, y)); sh.lineTo(0, L);
+  [...pts].reverse().forEach(([x, y]) => sh.lineTo(-x, y)); sh.lineTo(0, 0);
+  const geo = new THREE.ShapeGeometry(sh, 2); const p = geo.attributes.position;
+  for (let i = 0; i < p.count; i++) { const x = p.getX(i), y = p.getY(i), t = y / L; p.setZ(i, -t * t * L * .32 + Math.abs(x) * .55); }
+  geo.computeVertexNormals(); leafletCache.set(key, geo); return geo;
+}
+function fanLeaf(L, mat) {
   const g = new THREE.Group();
-  const stem = mesh(new THREE.CylinderGeometry(.03 * scale, .045 * scale, 1.3 * scale, 8), std(0x5f9a4e, .6)); stem.position.y = .65 * scale; g.add(stem);
-  for (let i = 0; i < 7; i++) {
-    const y = (.25 + i * .15) * scale, n = 5, L = (.55 - i * .05) * scale;
+  const pet = mesh(new THREE.CylinderGeometry(.006, .009, L * .55, 5), std(0x5a9a4a, .6)); pet.rotation.z = Math.PI / 2; pet.position.x = L * .27; g.add(pet);
+  const hub = new THREE.Group(); hub.position.x = L * .55; g.add(hub);
+  const spread = [[-1.35, .42], [-.85, .68], [-.38, .9], [0, 1], [.38, .9], [.85, .68], [1.35, .42]];
+  spread.forEach(([a, k]) => { const lf = mesh(leafletGeo(L * k), mat); lf.rotation.set(0, 0, -Math.PI / 2 + a); lf.rotateX(-.25 - Math.abs(a) * .12); hub.add(lf); });
+  return g;
+}
+function bushyPlant(scale = 1, seed = 0, leafK = 1, nodes = 7) {
+  const g = new THREE.Group();
+  const H = 1.35 * scale;
+  const stemCurve = new THREE.CatmullRomCurve3([new THREE.Vector3(0, 0, 0), new THREE.Vector3(.02 * scale, H * .4, -.01 * scale), new THREE.Vector3(-.015 * scale, H * .75, .02 * scale), new THREE.Vector3(0, H, 0)]);
+  g.add(mesh(new THREE.TubeGeometry(stemCurve, 24, .022 * scale, 7), std(0x5c9449, .6)));
+  for (let i = 0; i < nodes; i++) {
+    const t = (i + 1) / (nodes + 1), pos = stemCurve.getPoint(t), L = (.62 - i * (.38 / nodes)) * scale * leafK;
     for (let k = 0; k < 2; k++) {
-      const piv = new THREE.Group(); piv.position.y = y; piv.rotation.y = i * 1.1 + k * Math.PI;
-      for (let f = 0; f < n; f++) {
-        const lf = mesh(new THREE.ShapeGeometry(leafShape(L * (f === 2 ? 1 : .75), L * .12), 10), leafMat);
-        lf.rotation.z = -1.25 + (f - 2) * .28; lf.rotation.x = -.35; piv.add(lf);
-      }
-      g.add(piv);
+      const piv = new THREE.Group(); piv.position.copy(pos); piv.rotation.y = i * Math.PI / 2 + k * Math.PI + seed * .7;
+      const leaf = fanLeaf(L, LEAF_GREENS[(i + k + seed) % LEAF_GREENS.length]); leaf.rotation.z = .55 - i * .03; piv.add(leaf); g.add(piv);
     }
   }
+  // cogollo superior
+  const top = new THREE.Group(); top.position.copy(stemCurve.getPoint(1));
+  for (let k = 0; k < 6; k++) { const lf = fanLeaf(.2 * scale * leafK, LEAF_GREENS[(k + seed) % 5]); lf.rotation.set(0, k * 1.05, 1.0); top.add(lf); }
+  g.add(top);
   return g;
 }
 function label(w, h, draw) { return canvasTex(w, h, draw); }
@@ -363,8 +386,8 @@ function fabricPot(r = .45, h = .55) {
 }
 function lushPlant(scale = 1, seed = 1) {
   const g = new THREE.Group();
-  const main = bushyPlant(scale); g.add(main);
-  for (let k = 0; k < 3; k++) { const b = bushyPlant(scale * .62); b.position.set(Math.cos(seed + k * 2.1) * .22 * scale, .25 * scale, Math.sin(seed + k * 2.1) * .22 * scale); b.rotation.set(Math.cos(k + seed) * .35, k * 1.7, Math.sin(k + seed) * .35); g.add(b); }
+  const main = bushyPlant(scale, seed, .5, 12); g.add(main);
+  for (let k = 0; k < 2; k++) { const b = bushyPlant(scale * .7, seed + k + 1, .55, 9); b.position.set(Math.cos(seed + k * 2.1) * .22 * scale, .25 * scale, Math.sin(seed + k * 2.1) * .22 * scale); b.rotation.set(Math.cos(k + seed) * .35, k * 1.7, Math.sin(k + seed) * .35); g.add(b); }
   return g;
 }
 function growRoom() {
@@ -383,7 +406,7 @@ function growRoom() {
     const led = ledPanel({ w: 2.6, d: 1.6, rows: 14, cols: 24 }); led.position.set(x, 4.5, -.5); g.add(led);
     const L = new THREE.SpotLight(0xffd6ef, 26, 12, 1.0, .7, 1.6); L.position.set(x, 4.3, -.5); L.target.position.set(x, 0, -.5); L.castShadow = true; L.shadow.mapSize.set(1024, 1024); L.shadow.radius = 4; g.add(L, L.target);
   }
-  const pink = new THREE.PointLight(0xff5fd0, 2, 9, 1.6); pink.position.set(0, 3.8, 1); g.add(pink);
+  const pink = new THREE.PointLight(0xff5fd0, 0, 9, 1.6); pink.position.set(0, 3.8, 1); g.add(pink);
   // conducto de extracción
   const curve = new THREE.CatmullRomCurve3([new THREE.Vector3(3.5, 4.8, -1.8), new THREE.Vector3(2.9, 5.0, -1.9), new THREE.Vector3(1.0, 5.2, -2.1)]);
   const foil = canvasTex(64, 256, (x, w, h) => { for (let i = 0; i < h; i += 8) { const gr = x.createLinearGradient(0, i, 0, i + 8); gr.addColorStop(0, "#8d9297"); gr.addColorStop(.5, "#f1f3f5"); gr.addColorStop(1, "#6d7277"); x.fillStyle = gr; x.fillRect(0, i, w, 8); } }, [1, 30]);
