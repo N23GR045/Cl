@@ -1,0 +1,275 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Raíz Verde · Grow Shop</title>
+  <meta name="description" content="Raíz Verde Grow Shop: iluminación LED, sustratos, fertilizantes, armarios e hidroponía para el cultivo en interior y exterior. Envío en 24/48 h y asesoramiento experto.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- Aviso de edad -->
+  <div class="age-gate" id="ageGate" role="dialog" aria-modal="true" aria-labelledby="ageTitle" hidden>
+    <div class="age-card">
+      <svg class="logo-mark" viewBox="0 0 48 48" aria-hidden="true"><path d="M24 44V22M24 22c0-9 6-15 16-16-1 10-7 16-16 16Zm0 0C24 13 18 7 8 6c1 10 7 16 16 16Z" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <h2 id="ageTitle">¿Eres mayor de 18 años?</h2>
+      <p>Para acceder a nuestra tienda debes ser mayor de edad.</p>
+      <div class="age-actions">
+        <button class="btn btn-primary" id="ageYes">Sí, soy mayor de 18</button>
+        <a class="btn btn-ghost" href="https://www.google.com">No, salir</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="topbar">Envío gratis en pedidos superiores a 49 € · Entrega en 24/48 h</div>
+
+  <header class="header" id="top">
+    <div class="container header-inner">
+      <a href="#top" class="logo" aria-label="Raíz Verde, inicio">
+        <svg class="logo-mark" viewBox="0 0 48 48" aria-hidden="true"><path d="M24 44V22M24 22c0-9 6-15 16-16-1 10-7 16-16 16Zm0 0C24 13 18 7 8 6c1 10 7 16 16 16Z" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span>Raíz Verde</span>
+      </a>
+      <nav class="nav" id="nav" aria-label="Principal">
+        <a href="#categorias">Categorías</a>
+        <a href="#productos">Productos</a>
+        <a href="#guia">Guía de cultivo</a>
+        <a href="#nosotros">Nosotros</a>
+        <a href="#contacto">Contacto</a>
+      </nav>
+      <div class="header-actions">
+        <button class="icon-btn" id="cartBtn" aria-label="Abrir carrito">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 4h2l2.4 11.2a2 2 0 0 0 2 1.6h7.7a2 2 0 0 0 2-1.5L21 8H6.2" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><circle cx="10" cy="20.5" r="1.3" fill="currentColor"/><circle cx="17" cy="20.5" r="1.3" fill="currentColor"/></svg>
+          <span class="cart-count" id="cartCount">0</span>
+        </button>
+        <button class="icon-btn menu-btn" id="menuBtn" aria-label="Abrir menú" aria-expanded="false" aria-controls="nav">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- Hero -->
+    <section class="hero">
+      <div class="container hero-inner">
+        <div class="hero-text">
+          <p class="eyebrow">Grow shop desde 2012</p>
+          <h1>Todo para tu cultivo, <em>de la raíz a la cosecha.</em></h1>
+          <p class="lead">Iluminación, sustratos, nutrientes y armarios seleccionados por cultivadores. Te asesoramos para que aciertes a la primera.</p>
+          <div class="hero-cta">
+            <a href="#productos" class="btn btn-primary">Ver productos</a>
+            <a href="#guia" class="btn btn-ghost">Guía para principiantes</a>
+          </div>
+          <ul class="hero-stats">
+            <li><strong>+2.500</strong><span>productos</span></li>
+            <li><strong>4,9/5</strong><span>valoración</span></li>
+            <li><strong>24/48 h</strong><span>entrega</span></li>
+          </ul>
+        </div>
+        <div class="hero-art" aria-hidden="true">
+          <svg viewBox="0 0 400 420">
+            <defs>
+              <radialGradient id="glow" cx="50%" cy="20%" r="70%">
+                <stop offset="0" stop-color="#f6d77a" stop-opacity=".55"/>
+                <stop offset="1" stop-color="#f6d77a" stop-opacity="0"/>
+              </radialGradient>
+            </defs>
+            <rect x="60" y="28" width="280" height="22" rx="6" fill="#1d2b22"/>
+            <rect x="80" y="50" width="240" height="6" rx="3" fill="#f6d77a"/>
+            <path d="M80 56 L20 400 H380 L320 56Z" fill="url(#glow)"/>
+            <path d="M120 330h160l-18 76H138Z" fill="#8a5a3b"/>
+            <rect x="110" y="318" width="180" height="20" rx="6" fill="#a06c48"/>
+            <path d="M200 318V150" stroke="#3f7d4e" stroke-width="7" stroke-linecap="round"/>
+            <g fill="#4f9a5f">
+              <path d="M200 160c-40-30-70-25-90-10 30 20 60 22 90 10Z"/>
+              <path d="M200 160c40-30 70-25 90-10-30 20-60 22-90 10Z"/>
+              <path d="M200 220c-50-25-85-15-105 5 35 15 70 12 105-5Z"/>
+              <path d="M200 220c50-25 85-15 105 5-35 15-70 12-105-5Z"/>
+              <path d="M200 275c-45-15-75-5-90 15 30 8 60 3 90-15Z"/>
+              <path d="M200 275c45-15 75-5 90 15-30 8-60 3-90-15Z"/>
+            </g>
+            <path d="M200 150c-10-25-5-45 0-55 5 10 10 30 0 55Z" fill="#6cbf7a"/>
+          </svg>
+        </div>
+      </div>
+    </section>
+
+    <!-- Ventajas -->
+    <section class="perks container" aria-label="Ventajas">
+      <div class="perk"><span>🚚</span><div><strong>Envío discreto</strong><p>Embalaje neutro y seguimiento.</p></div></div>
+      <div class="perk"><span>🌱</span><div><strong>Asesoría experta</strong><p>Resolvemos tus dudas por chat.</p></div></div>
+      <div class="perk"><span>↩️</span><div><strong>30 días de devolución</strong><p>Sin preguntas ni complicaciones.</p></div></div>
+      <div class="perk"><span>🔒</span><div><strong>Pago seguro</strong><p>Tarjeta, Bizum y transferencia.</p></div></div>
+    </section>
+
+    <!-- Categorías -->
+    <section class="section" id="categorias">
+      <div class="container">
+        <div class="section-head">
+          <h2>Categorías</h2>
+          <p>Encuentra lo que necesitas para cada fase del cultivo.</p>
+        </div>
+        <div class="cat-grid" id="catGrid"></div>
+      </div>
+    </section>
+
+    <!-- Productos -->
+    <section class="section section-alt" id="productos">
+      <div class="container">
+        <div class="section-head row">
+          <div>
+            <h2>Productos destacados</h2>
+            <p>Lo más vendido esta temporada.</p>
+          </div>
+          <div class="filters" id="filters" role="tablist" aria-label="Filtrar productos"></div>
+        </div>
+        <div class="product-grid" id="productGrid"></div>
+      </div>
+    </section>
+
+    <!-- Kits banner -->
+    <section class="section">
+      <div class="container">
+        <div class="banner">
+          <div>
+            <p class="eyebrow light">Kit completo</p>
+            <h2>Empieza a cultivar en interior por 299 €</h2>
+            <p>Armario 80×80×160, panel LED 240 W, extractor con filtro, macetas, sustrato y nutrientes. Montado en 30 minutos.</p>
+          </div>
+          <button class="btn btn-light" data-add="kit-interior">Añadir el kit al carrito</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Guía -->
+    <section class="section section-alt" id="guia">
+      <div class="container">
+        <div class="section-head">
+          <h2>Guía de cultivo en 4 pasos</h2>
+          <p>Lo básico para tu primer cultivo en interior.</p>
+        </div>
+        <ol class="steps">
+          <li>
+            <span class="step-num">01</span>
+            <h3>Elige el espacio</h3>
+            <p>Un armario de cultivo te da control de luz, olor y temperatura. Calcula el tamaño según las plantas que quieras.</p>
+          </li>
+          <li>
+            <span class="step-num">02</span>
+            <h3>Ilumina bien</h3>
+            <p>Los paneles LED de espectro completo consumen menos y generan menos calor. Unos 30–40 W por cada 0,1 m².</p>
+          </li>
+          <li>
+            <span class="step-num">03</span>
+            <h3>Ventila y controla</h3>
+            <p>Extractor, filtro de carbón e higrómetro. Mantén 20–28 °C y la humedad entre 40 y 65 %.</p>
+          </li>
+          <li>
+            <span class="step-num">04</span>
+            <h3>Riega y nutre</h3>
+            <p>Sustrato aireado, pH entre 6,0 y 6,5 y nutrientes de crecimiento y floración según la tabla del fabricante.</p>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- Nosotros / opiniones -->
+    <section class="section" id="nosotros">
+      <div class="container about">
+        <div class="about-text">
+          <h2>Cultivadores ayudando a cultivadores</h2>
+          <p>Raíz Verde nació en una pequeña tienda de barrio. Hoy enviamos a toda España, pero seguimos igual: probamos lo que vendemos y te recomendamos solo lo que usaríamos nosotros.</p>
+          <p>Ven a vernos a la tienda física o escríbenos. Te ayudamos a montar tu espacio de cultivo, sea tu primera vez o la número cien.</p>
+        </div>
+        <div class="reviews">
+          <figure class="review">
+            <div class="stars" aria-label="5 de 5 estrellas">★★★★★</div>
+            <blockquote>Me montaron el armario completo por teléfono y me llegó al día siguiente. Primer cultivo y salió genial.</blockquote>
+            <figcaption>— Laura M., Valencia</figcaption>
+          </figure>
+          <figure class="review">
+            <div class="stars" aria-label="5 de 5 estrellas">★★★★★</div>
+            <blockquote>Precios justos y saben de lo que hablan. El LED que me recomendaron baja la factura de luz una barbaridad.</blockquote>
+            <figcaption>— Javier R., Madrid</figcaption>
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <!-- Contacto / newsletter -->
+    <section class="section section-alt" id="contacto">
+      <div class="container contact">
+        <div>
+          <h2>Visítanos</h2>
+          <ul class="contact-list">
+            <li><strong>Dirección</strong>Calle de las Semillas 12, 46001 Valencia</li>
+            <li><strong>Horario</strong>Lun–Vie 10:00–14:00 y 17:00–20:30 · Sáb 10:00–14:00</li>
+            <li><strong>Teléfono</strong><a href="tel:+34960000000">960 000 000</a></li>
+            <li><strong>Email</strong><a href="mailto:hola@raizverde.example">hola@raizverde.example</a></li>
+          </ul>
+        </div>
+        <form class="newsletter" id="newsletter" novalidate>
+          <h3>10 % de descuento en tu primer pedido</h3>
+          <p>Suscríbete y recibe consejos de cultivo y ofertas cada mes.</p>
+          <label for="email" class="sr-only">Correo electrónico</label>
+          <div class="field">
+            <input type="email" id="email" name="email" placeholder="tu@correo.com" autocomplete="email" required>
+            <button class="btn btn-primary" type="submit">Suscribirme</button>
+          </div>
+          <p class="form-msg" id="formMsg" role="status" aria-live="polite"></p>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer-inner">
+      <div>
+        <a href="#top" class="logo light">
+          <svg class="logo-mark" viewBox="0 0 48 48" aria-hidden="true"><path d="M24 44V22M24 22c0-9 6-15 16-16-1 10-7 16-16 16Zm0 0C24 13 18 7 8 6c1 10 7 16 16 16Z" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <span>Raíz Verde</span>
+        </a>
+        <p class="small">Venta exclusiva a mayores de 18 años. Productos destinados a la jardinería y al cultivo dentro del marco legal vigente.</p>
+      </div>
+      <div>
+        <h4>Tienda</h4>
+        <a href="#categorias">Categorías</a>
+        <a href="#productos">Productos</a>
+        <a href="#guia">Guía de cultivo</a>
+      </div>
+      <div>
+        <h4>Ayuda</h4>
+        <a href="#contacto">Contacto</a>
+        <a href="#">Envíos y devoluciones</a>
+        <a href="#">Aviso legal y privacidad</a>
+      </div>
+    </div>
+    <p class="container copy">© <span id="year"></span> Raíz Verde Grow Shop</p>
+  </footer>
+
+  <!-- Carrito -->
+  <div class="overlay" id="overlay" hidden></div>
+  <aside class="cart" id="cart" aria-label="Carrito" aria-hidden="true">
+    <div class="cart-head">
+      <h2>Tu carrito</h2>
+      <button class="icon-btn" id="cartClose" aria-label="Cerrar carrito">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+    <ul class="cart-items" id="cartItems"></ul>
+    <div class="cart-foot">
+      <p class="shipping-note" id="shippingNote"></p>
+      <div class="cart-total"><span>Total</span><strong id="cartTotal">0,00 €</strong></div>
+      <button class="btn btn-primary btn-block" id="checkout">Finalizar compra</button>
+    </div>
+  </aside>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script src="script.js"></script>
+</body>
+</html>
