@@ -80,19 +80,20 @@ function bushyPlant(scale = 1) {
 function label(w, h, draw) { return canvasTex(w, h, draw); }
 
 /* ---------- escena por producto ---------- */
-async function shoot({ build, accent = "#e04fcf", dir = [0.9, 0.55, 1.6], fit = 1.15, target = null, bloom = .45, bg = "#14181c", exposure = 1.05, keyPos = [-3, 6, 4] }) {
+async function shoot({ size = [960, 788], cam: camOpt = null, floorColor = 0x1b2025, hemiI = .35, keyI = 260, build, accent = "#e04fcf", dir = [0.9, 0.55, 1.6], fit = 1.15, target = null, bloom = .45, bg = "#14181c", exposure = 1.05, keyPos = [-3, 6, 4] }) {
+  const [SW, SH] = size; renderer.setSize(SW, SH);
   const scene = new THREE.Scene();
   scene.background = new THREE.Color(bg);
   scene.environment = envTex;
   scene.fog = new THREE.Fog(bg, 9, 22);
   renderer.toneMappingExposure = exposure;
 
-  const floor = mesh(new THREE.PlaneGeometry(60, 60), std(0x1b2025, .85), false);
+  const floor = mesh(new THREE.PlaneGeometry(60, 60), std(floorColor, .85), false);
   floor.rotation.x = -Math.PI / 2; scene.add(floor);
   const wall = mesh(new THREE.PlaneGeometry(60, 30), std(0x171b1f, .95), false); wall.position.set(0, 15, -8); scene.add(wall);
 
-  const hemi = new THREE.HemisphereLight(0xdfe8ff, 0x1a1410, .35); scene.add(hemi);
-  const key = new THREE.SpotLight(0xfff1e0, 260, 30, .55, .9, 2); key.position.set(...keyPos); key.castShadow = true;
+  const hemi = new THREE.HemisphereLight(0xdfe8ff, 0x1a1410, hemiI); scene.add(hemi);
+  const key = new THREE.SpotLight(0xfff1e0, keyI, 30, .55, .9, 2); key.position.set(...keyPos); key.castShadow = true;
   key.shadow.mapSize.set(2048, 2048); key.shadow.bias = -.0004; key.shadow.radius = 6; scene.add(key);
   const rim = new THREE.SpotLight(new THREE.Color(accent), 320, 30, .7, .8, 2); rim.position.set(4, 4, -5); scene.add(rim);
   const fill = new THREE.PointLight(0x9fb8ff, 8, 20, 2); fill.position.set(4, 2, 5); scene.add(fill);
@@ -106,14 +107,14 @@ async function shoot({ build, accent = "#e04fcf", dir = [0.9, 0.55, 1.6], fit = 
   key.target.position.copy(tgt); scene.add(key.target);
   rim.target.position.copy(tgt); scene.add(rim.target);
 
-  const cam = new THREE.PerspectiveCamera(28, W / H, .05, 100);
+  const cam = new THREE.PerspectiveCamera(camOpt ? camOpt.fov : 28, SW / SH, .05, 100);
   const d = new THREE.Vector3(...dir).normalize();
   const dist = sph.radius / Math.sin(THREE.MathUtils.degToRad(28 / 2)) * fit * .78;
-  cam.position.copy(tgt).addScaledVector(d, dist); cam.lookAt(tgt);
+  if (camOpt) { cam.position.set(...camOpt.pos); cam.lookAt(new THREE.Vector3(...camOpt.target)); } else { cam.position.copy(tgt).addScaledVector(d, dist); cam.lookAt(tgt); }
 
   const comp = new EffectComposer(renderer);
   comp.addPass(new RenderPass(scene, cam));
-  if (bloom) comp.addPass(new UnrealBloomPass(new THREE.Vector2(W, H), bloom, .45, .92));
+  if (bloom) comp.addPass(new UnrealBloomPass(new THREE.Vector2(SW, SH), bloom, .45, .92));
   comp.addPass(new OutputPass());
   comp.render();
   const url = renderer.domElement.toDataURL("image/png");
@@ -352,6 +353,94 @@ function kitBox() {
   return g;
 }
 
+
+/* ---------- escenas grandes ---------- */
+function fabricPot(r = .45, h = .55) {
+  const g = new THREE.Group();
+  const pot = mesh(new THREE.CylinderGeometry(r, r * .92, h, 32), std(0xffffff, .95, 0, { map: noiseTex("#232527", 30, 128, [4, 2]) })); pot.position.y = h / 2; g.add(pot);
+  const soil = mesh(new THREE.CylinderGeometry(r * .96, r * .96, .02, 32), std(0xffffff, 1, 0, { map: noiseTex("#3a2a1d", 50, 128) })); soil.position.y = h - .04; g.add(soil);
+  return g;
+}
+function lushPlant(scale = 1, seed = 1) {
+  const g = new THREE.Group();
+  const main = bushyPlant(scale); g.add(main);
+  for (let k = 0; k < 3; k++) { const b = bushyPlant(scale * .62); b.position.set(Math.cos(seed + k * 2.1) * .22 * scale, .25 * scale, Math.sin(seed + k * 2.1) * .22 * scale); b.rotation.set(Math.cos(k + seed) * .35, k * 1.7, Math.sin(k + seed) * .35); g.add(b); }
+  return g;
+}
+function growRoom() {
+  const g = new THREE.Group();
+  const mylar = std(0xc9ced4, .38, 1, { envMapIntensity: .35 });
+  const W2 = 7, D2 = 5, H2 = 5.4;
+  const wall = (w, h, pos, rot) => { const m = mesh(new THREE.PlaneGeometry(w, h), mylar, false); m.position.set(...pos); m.rotation.set(...rot); g.add(m); };
+  wall(W2, H2, [0, H2 / 2, -D2 / 2], [0, 0, 0]);
+  wall(D2, H2, [-W2 / 2, H2 / 2, 0], [0, Math.PI / 2, 0]);
+  wall(D2, H2, [W2 / 2, H2 / 2, 0], [0, -Math.PI / 2, 0]);
+  wall(W2, D2, [0, H2, 0], [Math.PI / 2, 0, 0]);
+  const fl = mesh(new THREE.PlaneGeometry(W2, D2), std(0x8d9196, .6, .2, { envMapIntensity: .3 }), false); fl.rotation.x = -Math.PI / 2; fl.position.y = .01; g.add(fl);
+  const spots = [[-2.2, -1.2], [0, -1.4], [2.2, -1.2], [-1.2, .3], [1.2, .3]];
+  spots.forEach(([x, z], i) => { const p = fabricPot(.5, .6); p.position.set(x, 0, z); g.add(p); const pl = lushPlant(1.9 + (i % 2) * .25, i); pl.position.set(x, .58, z); pl.rotation.y = i * 1.3; g.add(pl); });
+  for (const x of [-1.7, 1.7]) {
+    const led = ledPanel({ w: 2.6, d: 1.6, rows: 14, cols: 24 }); led.position.set(x, 4.5, -.5); g.add(led);
+    const L = new THREE.SpotLight(0xffd6ef, 26, 12, 1.0, .7, 1.6); L.position.set(x, 4.3, -.5); L.target.position.set(x, 0, -.5); L.castShadow = true; L.shadow.mapSize.set(1024, 1024); L.shadow.radius = 4; g.add(L, L.target);
+  }
+  const pink = new THREE.PointLight(0xff5fd0, 2, 9, 1.6); pink.position.set(0, 3.8, 1); g.add(pink);
+  // conducto de extracción
+  const curve = new THREE.CatmullRomCurve3([new THREE.Vector3(3.5, 4.8, -1.8), new THREE.Vector3(2.9, 5.0, -1.9), new THREE.Vector3(1.0, 5.2, -2.1)]);
+  const foil = canvasTex(64, 256, (x, w, h) => { for (let i = 0; i < h; i += 8) { const gr = x.createLinearGradient(0, i, 0, i + 8); gr.addColorStop(0, "#8d9297"); gr.addColorStop(.5, "#f1f3f5"); gr.addColorStop(1, "#6d7277"); x.fillStyle = gr; x.fillRect(0, i, w, 8); } }, [1, 30]);
+  g.add(mesh(new THREE.TubeGeometry(curve, 60, .25, 24), std(0xffffff, .3, 1, { map: foil })));
+  return g;
+}
+function wood(base = "#7a5434") {
+  return canvasTex(512, 512, (x, w, h) => {
+    x.fillStyle = base; x.fillRect(0, 0, w, h);
+    for (let i = 0; i < 260; i++) { x.strokeStyle = `rgba(${Math.random() < .5 ? "40,24,12" : "255,220,180"},${Math.random() * .12})`; x.lineWidth = 1 + Math.random() * 2; x.beginPath(); const y = Math.random() * h; x.moveTo(0, y); x.bezierCurveTo(w * .3, y + Math.random() * 10 - 5, w * .7, y + Math.random() * 10 - 5, w, y + Math.random() * 6 - 3); x.stroke(); }
+  });
+}
+function shop() {
+  const g = new THREE.Group();
+  const floorT = canvasTex(1024, 1024, (x, w, h) => { for (let i = 0; i < 16; i++) { const v = 90 + Math.random() * 30; x.fillStyle = `rgb(${v + 30},${v},${v - 30})`; x.fillRect(0, i * 64, w, 64); x.fillStyle = "rgba(0,0,0,.35)"; x.fillRect(0, i * 64, w, 2); for (let k = 0; k < 40; k++) { x.fillStyle = `rgba(40,25,10,${Math.random() * .15})`; x.fillRect(Math.random() * w, i * 64 + Math.random() * 60, 80 + Math.random() * 200, 1.5); } } }, [3, 3]);
+  const floor = mesh(new THREE.PlaneGeometry(16, 12), std(0xffffff, .55, 0, { map: floorT }), false); floor.rotation.x = -Math.PI / 2; floor.position.set(0, .005, 1); g.add(floor);
+  const back = mesh(new THREE.PlaneGeometry(16, 6.5), std(0xffffff, .92, 0, { map: noiseTex("#1d2a22", 10, 256, [4, 2]) }), false); back.position.set(0, 3.25, -3); g.add(back);
+  const side = mesh(new THREE.PlaneGeometry(10, 6.5), std(0xffffff, .92, 0, { map: noiseTex("#1a241e", 10, 256, [3, 2]) }), false); side.rotation.y = Math.PI / 2; side.position.set(-6.5, 3.25, 1); g.add(side);
+  // rótulo neón
+  const neon = canvasTex(1400, 300, (x, w, h) => { x.clearRect(0, 0, w, h); x.font = "bold 190px DejaVu Sans, sans-serif"; x.textAlign = "center"; x.fillStyle = "#b8ffc0"; x.fillText("Raíz Verde", w / 2, 220); });
+  const sign = mesh(new THREE.PlaneGeometry(4.2, .9), new THREE.MeshBasicMaterial({ map: neon, transparent: true, color: new THREE.Color(2.2, 3.2, 2.4) }), false); sign.position.set(-.9, 5.5, -2.95); g.add(sign);
+  const sl = new THREE.PointLight(0x7fff9a, 8, 6, 1.6); sl.position.set(-.9, 5.4, -2.4); g.add(sl);
+  // estanterías
+  const wd = std(0xffffff, .6, 0, { map: wood() });
+  const titles = [["GROW", "#2e8b57", 0x111111], ["BLOOM", "#a9367f", 0x2a0f22], ["ROOT", "#c98a2b", 0x111111], ["PK 13/14", "#3b5bd6", 0x111111], ["CAL-MAG", "#8a8f95", 0x111111], ["BIO", null, 0x2f4a2a]];
+  [-4.2, -.9, 2.4].forEach((sx, u) => {
+    for (const dx of [-1.45, 1.45]) { const up = mesh(new THREE.BoxGeometry(.08, 4.6, .6), wd); up.position.set(sx + dx, 2.3, -2.6); g.add(up); }
+    [.35, 1.45, 2.55, 3.65].forEach((sy, k) => {
+      const sh = mesh(new THREE.BoxGeometry(3, .07, .62), wd); sh.position.set(sx, sy, -2.6); g.add(sh);
+      if (k === 0) { for (let b = 0; b < 3; b++) { const bg = bag({ kraft: (u + b) % 2 === 1, title: (u + b) % 2 ? "COCO FIBRA" : "LIGHT MIX", sub: "", vol: "50 L" }); bg.scale.setScalar(.62); bg.position.set(sx - .95 + b * .95, sy + .035, -2.55); bg.rotation.y = (b - 1) * .08; g.add(bg); } return; }
+      for (let b = 0; b < 7; b++) {
+        const t = titles[(b + k * 2 + u) % titles.length];
+        const bt = bottle({ h: .9, r: .19, color: t[1] || "#2e8b57", title: t[0], kraft: !t[1], cap: t[2], npk: "", sub: "", vol: "1 L" });
+        bt.scale.setScalar(.92); bt.position.set(sx - 1.2 + b * .4, sy + .035, -2.55 + (b % 2) * .08); bt.rotation.y = (Math.random() - .5) * .4; g.add(bt);
+      }
+    });
+  });
+  // armario expuesto con planta
+  const tt = tent({ w: 1.6, d: 1.6, h: 3.2 }); tt.scale.setScalar(1.05); tt.position.set(5.3, 0, -1.6); tt.rotation.y = -.5; g.add(tt);
+  // mostrador
+  const counter = mesh(new RoundedBoxGeometry(3.2, 1.1, 1.0, 3, .04), wd); counter.position.set(-3.4, .55, 1.9); g.add(counter);
+  const top = mesh(new THREE.BoxGeometry(3.4, .08, 1.15), std(0x16191c, .3, .4)); top.position.set(-3.4, 1.14, 1.9); g.add(top);
+  const pot1 = mesh(new THREE.CylinderGeometry(.22, .17, .32, 24), std(0xb5643a, .85)); pot1.position.set(-2.4, 1.34, 1.8); g.add(pot1);
+  const pl1 = bushyPlant(.62); pl1.position.set(-2.4, 1.48, 1.8); g.add(pl1);
+  const th = thermo(); th.scale.setScalar(.35); th.position.set(-3.9, 1.18, 1.8); th.rotation.y = .5; g.add(th);
+  // lámparas colgantes
+  [-3.6, 1.6, 4.0].forEach((x) => {
+    const cord = mesh(new THREE.CylinderGeometry(.01, .01, 1.6, 6), std(0x111111, .5)); cord.position.set(x, 5.7, -.6); g.add(cord);
+    const shade = mesh(new THREE.ConeGeometry(.34, .34, 32, 1, true), std(0x111315, .4, .6, { side: THREE.DoubleSide })); shade.position.set(x, 4.85, -.6); g.add(shade);
+    const bulb = mesh(new THREE.SphereGeometry(.1, 16, 12), new THREE.MeshBasicMaterial({ color: new THREE.Color(4, 3, 1.8) }), false); bulb.position.set(x, 4.72, -.6); g.add(bulb);
+    const L = new THREE.SpotLight(0xffcf8f, 40, 10, .9, .6, 1.5); L.position.set(x, 4.7, -.6); L.target.position.set(x, 0, -2); L.castShadow = true; L.shadow.mapSize.set(1024, 1024); L.shadow.radius = 5; g.add(L, L.target);
+  });
+  // paneles LED de exposición
+  const led = ledPanel({ w: 1.6, d: 1.0, rows: 10, cols: 16, fins: false }); led.position.set(2.9, 4.6, .8); led.rotation.x = -.15; led.traverse((o) => { if (o.userData.nofit) o.scale.y = .4; }); g.add(led);
+  return g;
+}
+
 /* ---------- catálogo de tomas ---------- */
 const SHOTS = {
   "led-240": { accent: "#ffb547", build: () => { const p = ledPanel(); p.position.y = 1.6; p.rotation.x = -.62; p.rotation.y = -.3; return p; }, dir: [0.2, -0.32, 1.6], fit: .95, target: [0, 1.6, 0], bloom: .55, keyPos: [-3, 5, 5] },
@@ -366,6 +455,8 @@ const SHOTS = {
   "termo": { accent: "#6fd3e0", build: () => { const t = thermo(); t.rotation.y = -.25; return t; }, dir: [0.15, 0.3, 1.6], fit: 1.05, target: null, bloom: 0 },
   "dwc": { accent: "#5b8cff", build: () => { const d = dwc(); d.rotation.y = .3; return d; }, dir: [0.3, 0.75, 1.5], fit: 1.0, bloom: .3 },
   "phmeter": { accent: "#5b8cff", build: () => phPens(), dir: [0.25, 0.9, 1.4], fit: 1.0, bloom: 0 },
+  "sala": { size: [1600, 900], accent: "#e04fcf", build: () => growRoom(), cam: { pos: [0.6, 1.6, 5.4], target: [0, 1.8, -1], fov: 50 }, bloom: .3, hemiI: .06, keyI: 0, exposure: .75 },
+  "tienda": { size: [1600, 900], accent: "#ffb547", build: () => shop(), cam: { pos: [0.9, 2.5, 7.2], target: [-.2, 2.3, -2], fov: 50 }, bloom: .45, hemiI: .2, keyI: 45, exposure: .95, floorColor: 0x2a2018 },
   "kit": { accent: "#e04fcf", build: () => { const k = kitBox(); k.rotation.y = -.2; return k; }, dir: [0.25, 0.35, 1.6], fit: 1.0, bloom: 0 },
 };
 window.shot = async (id) => shoot(SHOTS[id]);

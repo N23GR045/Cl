@@ -11,5 +11,5 @@ Web de un grow shop en un solo archivo: abre `index.html` en el navegador.
 ```
 cd tools && npm i three@0.160.0 playwright
 python3 -m http.server 8765 &
-mkdir -p out && node render.js led-240 led-120 armario-80 armario-120 sustrato-50 coco-50 nutri-gb nutri-bio extractor termo dwc phmeter kit
+mkdir -p out && node render.js led-240 led-120 armario-80 armario-120 sustrato-50 coco-50 nutri-gb nutri-bio extractor termo dwc phmeter kit sala tienda
 ```
