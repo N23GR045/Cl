@@ -175,7 +175,7 @@ class Repositorio(private val ctx: Context) {
             "movistar", "dazn", "laliga", "gol", "eurosport",
             // canales de pago: en listas de la comunidad suelen ser reenvíos
             "axn", "amc", "calle 13", "cosmo", "hbo", "sky", "tnt", "syfy", "warner", "fox", "comedy central",
-            "discovery", "national geographic", "nat geo", "hollywood", "canal+", "canal plus", "barca tv", "barça tv",
+            "discovery", "national geographic", "nat geo", "hollywood", "canal plus", "barca tv", "barça tv",
         )
 
         private val ADULTOS = Regex("(?i)xxx|adult|erotic|porn|\\+18")
