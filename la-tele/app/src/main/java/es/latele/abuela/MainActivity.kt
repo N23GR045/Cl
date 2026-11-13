@@ -226,7 +226,7 @@ class MainActivity : Activity() {
         ocultar(cargando)
         mostrarAviso(
             c.nombre,
-            "Este canal no se puede ver ahora mismo.\nLo vuelvo a intentar yo sola en un momento.",
+            "Ahora mismo no funciona.\nLo vuelvo a intentar yo sola.",
             "Pulsa  ▲  o  ▼  para cambiar de canal",
         )
         h.postDelayed(reintento, 30_000)
@@ -422,13 +422,15 @@ class MainActivity : Activity() {
         val t = TextView(this)
         t.text = texto
         t.setTextColor(cTexto)
-        t.textSize = 26f
+        t.textSize = 24f
+        t.maxLines = 1
+        t.ellipsize = android.text.TextUtils.TruncateAt.END
         t.typeface = Typeface.DEFAULT_BOLD
         t.isFocusable = true
         t.isClickable = true
         t.gravity = Gravity.CENTER_VERTICAL
         t.setPadding(dp(24), dp(18), dp(24), dp(18))
-        t.minWidth = dp(280)
+        t.minWidth = dp(250)
         t.background = fondoTarjeta(false)
         val lp = GridLayout.LayoutParams()
         lp.setMargins(dp(10), dp(10), dp(10), dp(10))
@@ -437,6 +439,7 @@ class MainActivity : Activity() {
         t.setOnFocusChangeListener { v, f ->
             v.background = fondoTarjeta(f)
             (v as TextView).setTextColor(if (f) Color.parseColor("#FF101826") else cTexto)
+            if (v.text.startsWith("✗")) v.alpha = if (f) 1f else 0.55f
             v.animate().scaleX(if (f) 1.08f else 1f).scaleY(if (f) 1.08f else 1f)
                 .setDuration(150).setInterpolator(DecelerateInterpolator()).start()
             v.parent?.let { (it as? View)?.invalidate() }
@@ -532,10 +535,10 @@ class MainActivity : Activity() {
             visibility = View.GONE
         }
         avisoTitulo = texto(52f, cTexto, true).apply { gravity = Gravity.CENTER }
-        avisoTexto = texto(28f, cTenue).apply { gravity = Gravity.CENTER; setPadding(0, dp(12), 0, dp(20)) }
+        avisoTexto = texto(28f, cTenue).apply { gravity = Gravity.CENTER; setPadding(0, dp(12), 0, dp(20)); minWidth = dp(560) }
         avisoPista = texto(30f, cAcento, true).apply { gravity = Gravity.CENTER }
         aviso.addView(avisoTitulo); aviso.addView(avisoTexto); aviso.addView(avisoPista)
-        raiz.addView(aviso, FrameLayout.LayoutParams(ajusta, ajusta, Gravity.CENTER))
+        raiz.addView(aviso, FrameLayout.LayoutParams(ajusta, ajusta, Gravity.TOP or Gravity.CENTER_HORIZONTAL).apply { topMargin = dp(100) })
 
         // Rótulo del canal (abajo)
         banner = LinearLayout(this).apply {
