@@ -39,7 +39,8 @@ export function initMenu() {
 export function initAgeGate() {
   const dlg = $<HTMLDialogElement>("#age-gate");
   if (!dlg || store.get("rv-age-ok", false) || typeof dlg.showModal !== "function") return;
-  dlg.showModal();
+  // Si hay intro, el aviso aparece cuando termina (evita que se solapen).
+  window.setTimeout(() => dlg.showModal(), document.documentElement.classList.contains("has-intro") ? 2200 : 0);
   dlg.addEventListener("cancel", (e) => e.preventDefault()); // la tecla Escape no salta la verificación
   $("[data-age-yes]", dlg)?.addEventListener("click", () => { store.set("rv-age-ok", true); dlg.close(); });
   $("[data-age-no]", dlg)?.addEventListener("click", () => {

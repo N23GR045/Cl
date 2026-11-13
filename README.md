@@ -5,7 +5,7 @@ Genera un sitio 100 % estático: **55 páginas** (portada, catálogo, 8 categor�
 
 | Lighthouse (móvil) | Rendimiento | Accesibilidad | Buenas prácticas | SEO |
 |---|---|---|---|---|
-| Portada | 98 | 100 | 100 | 100 |
+| Portada | 96 | 100 | 100 | 100 |
 | Ficha de producto | 98 | 100 | 100 | 100 |
 
 ## Requisitos
@@ -61,6 +61,7 @@ Mientras `demoContent` y `demoCheckout` sean `true` en `src/data/site.ts`, la we
 - **Formularios** con Netlify Forms (sin backend ni claves) y honeypot antispam.
 - **Pago** con Stripe Checkout desde una función de servidor (`netlify/functions/checkout.mts`) que recalcula los precios: el navegador nunca decide cuánto se cobra.
 - **Modo claro y oscuro** según el sistema, con botón para elegir; ambos cumplen contraste AA.
+- **Animaciones** (`src/styles/motion.css`, `src/scripts/effects.ts`): intro (una vez por sesión), partículas, planta que crece con el scroll, cintas, inclinación 3D, bola al carrito, telón y parallax. Solo con `html.motion`: si el sistema pide «reducir movimiento» no se anima nada, y sin JavaScript todo se ve completo.
 
 ## Estructura
 

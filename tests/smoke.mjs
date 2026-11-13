@@ -33,7 +33,7 @@ const pages = (await walk(DIST)).map((p) => "/" + p.slice(DIST.length).replace(/
 
 const browser = await chromium.launch();
 const ctx = await browser.newContext({ viewport: { width: 390, height: 844 } });
-await ctx.addInitScript(() => { try { localStorage.setItem("rv-age-ok", "true"); } catch {} });
+await ctx.addInitScript(() => { try { localStorage.setItem("rv-age-ok", "true"); sessionStorage.setItem("rv-intro", "1"); } catch {} });
 const titles = new Map();
 const links = new Set();
 
@@ -67,6 +67,8 @@ for (const path of pages) {
     for (const theme of ["dark", "light"]) {
       await page.evaluate((t) => { document.documentElement.dataset.theme = t; document.querySelectorAll(".reveal").forEach((r) => r.classList.add("is-in")); }, theme);
       await page.waitForTimeout(350);
+      // Espera a que terminen las animaciones de entrada (fundidos) antes de medir contraste.
+      await page.evaluate(() => Promise.all(document.getAnimations().filter((a) => a.effect?.getComputedTiming().endTime !== Infinity).map((a) => a.finished.catch(() => {})))); 
       await page.addScriptTag({ content: axeSource });
       const r = await page.evaluate(async () => (await window.axe.run(document, { runOnly: ["wcag2a", "wcag2aa", "wcag21aa", "wcag22aa"] })).violations.map((v) => `${v.id} (${v.nodes.length}): ${v.nodes[0]?.target}`));
       ok(!r.length, `${path} [${theme}]: axe → ${r.join(" ; ")}`);
@@ -160,8 +162,24 @@ await p.keyboard.press("Tab");
 ok(await p.evaluate(() => document.activeElement?.classList.contains("skip")), "El primer Tab no llega al enlace «Saltar al contenido»");
 
 const fresh = await browser.newPage();
-await fresh.goto(BASE + "/");
-ok(await fresh.locator("#age-gate[open]").count() === 1, "No aparece el aviso de edad en la primera visita");
+await fresh.goto(BASE + "/", { waitUntil: "domcontentloaded" });
+ok(await fresh.locator("#intro").isVisible(), "No aparece la intro en la primera visita");
+ok(await fresh.evaluate(() => getComputedStyle(document.documentElement).display !== "none"), "La página queda oculta durante la intro");
+await fresh.waitForSelector("#age-gate[open]", { timeout: 6000 }).catch(() => {});
+ok(await fresh.locator("#age-gate[open]").count() === 1, "No aparece el aviso de edad tras la intro");
+ok(!(await fresh.locator("#intro").isVisible().catch(() => false)), "La intro no desaparece");
+await fresh.click("[data-age-yes]");
+await fresh.evaluate(() => scrollTo(0, document.querySelector("[data-grow]").offsetTop + innerHeight * 2.2));
+await fresh.waitForTimeout(500);
+ok(Number(await fresh.getAttribute("[data-grow]", "data-stage")) >= 1, "El ciclo de cultivo no avanza con el scroll");
+
+const reduced = await browser.newContext({ reducedMotion: "reduce" });
+const still = await reduced.newPage();
+await still.goto(BASE + "/");
+ok(!(await still.evaluate(() => document.documentElement.classList.contains("motion"))), "Con movimiento reducido no deberían activarse animaciones");
+ok(!(await still.locator("#intro").isVisible()), "Con movimiento reducido no debe salir la intro");
+ok((await still.locator(".step").count()) === 4 && (await still.locator(".step").nth(3).isVisible()), "Sin movimiento, las 4 fases deben verse como lista");
+await reduced.close();
 
 await browser.close();
 server.close();

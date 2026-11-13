@@ -1,5 +1,6 @@
 import { $, $$ } from "./dom";
 import { t, fmt } from "../i18n/es";
+import { leafBurst } from "./effects";
 
 type Field = HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement;
 
@@ -74,6 +75,7 @@ export function initForms() {
         const res = await fetch(form.getAttribute("action") || "/", { method: "POST", headers: { "Content-Type": "application/x-www-form-urlencoded" }, body });
         if (!res.ok) throw new Error(String(res.status));
         form.reset();
+        leafBurst(submit);
         if (status) { status.textContent = form.dataset.success || t.form.sent; status.className = "alert alert--success"; }
       } catch {
         const cat = JSON.parse(document.getElementById("catalog-data")?.textContent ?? "{}");

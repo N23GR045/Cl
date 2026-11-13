@@ -23,9 +23,9 @@ Las pruebas se ejecutan con `npm run verify`.
 | 16 | Validación en cliente | ✅ | Mensajes en texto con icono, `aria-invalid` y `aria-describedby`, foco en el primer error (probado). |
 | 17 | Estados de UI | ✅ | hover, focus-visible, active, disabled, cargando (`aria-busy`), vacío (carrito y búsqueda), error y éxito. |
 | 18 | Modo oscuro | ✅ | Sigue al sistema, con botón para elegir; sin parpadeo; contraste AA en los dos modos. |
-| 19 | WCAG 2.2 AA | ✅ | axe-core (wcag2a, 2aa, 21aa, 22aa): 0 fallos. Lighthouse Accesibilidad: 100. Teclado, foco atrapado en diálogos, Escape, objetivos de 44 px o más, movimiento reducido. |
+| 19 | WCAG 2.2 AA | ✅ | axe-core (wcag2a, 2aa, 21aa, 22aa): 0 fallos. Lighthouse Accesibilidad: 100. Teclado, foco atrapado en diálogos, Escape, objetivos de 44 px o más. Con «reducir movimiento» no hay intro ni animaciones (probado). La intro se puede saltar y nunca dura más de 2,4 s. |
 | 20 | SEO técnico | ✅ | Título y descripción únicos (probado), canonical, Open Graph, Twitter Card, sitemap, robots.txt y JSON-LD (Store, FAQPage, Product, ItemList, BreadcrumbList). Lighthouse SEO: 100. |
-| 21 | Rendimiento | ✅ | Unos 22 KB de JS, fuentes propias con `swap`, `srcset` y `lazy`, caché inmutable. Lighthouse 98: LCP 1,8 a 2,2 s, CLS 0, TBT 0 ms. |
+| 21 | Rendimiento | ✅ | Unos 22 KB de JS, fuentes propias con `swap`, `srcset` y `lazy`, caché inmutable. Lighthouse 96 a 98 con animaciones: LCP 1,9 a 2,3 s, CLS 0, TBT 0 ms. Partículas en pausa fuera de pantalla; scroll en un solo requestAnimationFrame. |
 | 22 | Imágenes | ✅ | WebP en 2 tamaños, `width` y `height` en todas (probado), `alt` descriptivo o vacío si es decorativa. |
 | 23 | JavaScript moderno | ✅ | Módulos ES y TypeScript estricto (0 errores), sin dependencias en el navegador, cada módulo protegido con try/catch. |
 | 24 | Seguridad | ✅ | Sin `innerHTML` con datos, CSP estricta con hash (comprobada en las pruebas), HSTS, nosniff, `frame-ancestors 'none'`, honeypot, `rel="noopener noreferrer"`, saneo de `localStorage`, sin secretos. |

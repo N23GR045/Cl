@@ -1,5 +1,6 @@
 import { $, $$, el, store, toast, trapFocus, formatPrice } from "./dom";
 import { t, fmt } from "../i18n/es";
+import { flyToCart } from "./effects";
 
 export interface ClientProduct { id: string; name: string; price: number; img: string; cat: string; combo: string[] }
 interface Catalog {
@@ -51,11 +52,7 @@ export function dispatchMessage(now = new Date()) {
   return t.cart.dispatchNext;
 }
 
-function bump(source?: Element | null) {
-  const btn = $("[data-cart-open]");
-  if (!btn || !source || matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-  btn.animate([{ transform: "scale(1)" }, { transform: "scale(1.2) rotate(-8deg)" }, { transform: "scale(1)" }], { duration: 450, easing: "cubic-bezier(.34,1.56,.64,1)" });
-}
+function bump(source?: Element | null) { flyToCart(source); }
 
 /* ---------- Render ---------- */
 function lineItem(id: string, n: number) {

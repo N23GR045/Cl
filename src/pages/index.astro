@@ -2,6 +2,7 @@
 import Base from "../layouts/Base.astro";
 import Icon from "../components/Icon.astro";
 import Plant from "../components/Plant.astro";
+import GrowCycle from "../components/GrowCycle.astro";
 import ProductCard from "../components/ProductCard.astro";
 import JsonLd from "../components/JsonLd.astro";
 import { products, categories, findProduct } from "../data/catalog";
@@ -12,12 +13,7 @@ import { site, formatPrice } from "../data/site";
 const featuredIds = ["led-240", "armario-80", "nutri-gb", "extractor", "kit-fumador", "flor-og", "dwc", "led-480"];
 const featured = featuredIds.map((id) => findProduct(id)!).filter(Boolean);
 const kit = findProduct("kit-interior")!;
-const stages = [
-  { t: "Germinación", w: "Semanas 1–2", d: "La semilla se abre y saca sus primeras hojas. Luz suave y mucha humedad.", data: [["Luz", "18 h / 6 h"], ["Temp.", "22–25 °C"], ["Humedad", "70–80 %"]] },
-  { t: "Crecimiento", w: "Semanas 3–6", d: "La planta gana altura y hojas. El espectro azul mantiene la estructura compacta.", data: [["Luz", "18 h / 6 h"], ["Temp.", "22–28 °C"], ["Humedad", "55–70 %"]] },
-  { t: "Floración", w: "Semanas 7–14", d: "Con 12 horas de luz florece. El rojo domina y el abono cambia a fósforo y potasio.", data: [["Luz", "12 h / 12 h"], ["Temp.", "20–26 °C"], ["Humedad", "40–50 %"]] },
-  { t: "Cosecha y secado", w: "Semanas 15–16", d: "Se corta y se seca despacio, a oscuras, con aire suave y humedad controlada.", data: [["Luz", "Oscuridad"], ["Temp.", "18–21 °C"], ["Humedad", "55–62 %"]] },
-];
+const marquee = ["Envío discreto 24/48 h", "LED de espectro completo", "Asesoría de cultivadores", "Devolución en 30 días", "Pago con tarjeta o Bizum", "Tienda física en Valencia"];
 const storeLd = {
   "@context": "https://schema.org", "@type": "Store", name: site.name, description: site.description, url: site.url, telephone: site.phoneE164, email: site.email, image: new URL("/og.jpg", site.url).href, priceRange: "€€",
   address: { "@type": "PostalAddress", streetAddress: site.address.street, postalCode: site.address.postalCode, addressLocality: site.address.city, addressRegion: site.address.region, addressCountry: site.address.country },
@@ -32,16 +28,17 @@ const faqLd = { "@context": "https://schema.org", "@type": "FAQPage", mainEntity
   <!-- Hero -->
   <section class="hero" aria-labelledby="hero-title">
     <div class="hero__bg" aria-hidden="true"><img src="/img/sala-720.webp" srcset="/img/sala-720.webp 720w, /img/sala.webp 1440w" sizes="100vw" width="1440" height="810" alt="" decoding="async" fetchpriority="low" /></div>
+    <canvas class="spores" data-spores aria-hidden="true"></canvas>
     <div class="container hero__grid">
-      <div>
-        <p class="eyebrow">Grow shop · {site.address.city}</p>
-        <h1 id="hero-title">Cultiva bajo tu <span class="grad">propia luz.</span></h1>
-        <p class="lead">Luz LED, armarios, sustratos y nutrientes elegidos por cultivadores. Te ayudamos a montar tu espacio y a acertar a la primera.</p>
-        <div class="hero__cta">
-          <a class="btn btn--primary" href="/productos">Ver productos <Icon name="arrow" size={18} /></a>
-          <a class="btn" href="#asistente">¿Qué necesito? Test de 1 min</a>
+      <div class="hero__copy" data-hero-copy>
+        <p class="eyebrow hero-fade" style="--i:0">Grow shop · {site.address.city}</p>
+        <h1 id="hero-title"><span class="line"><span style="--i:0">Cultiva bajo</span></span> <span class="line"><span style="--i:1">tu <span class="grad">propia luz.</span></span></span></h1>
+        <p class="lead hero-fade" style="--i:1">Luz LED, armarios, sustratos y nutrientes elegidos por cultivadores. Te ayudamos a montar tu espacio y a acertar a la primera.</p>
+        <div class="hero__cta hero-fade" style="--i:2">
+          <a class="btn btn--primary magnetic" href="/productos">Ver productos <Icon name="arrow" size={18} /></a>
+          <a class="btn magnetic" href="#asistente">¿Qué necesito? Test de 1 min</a>
         </div>
-        <ul class="trust">
+        <ul class="trust hero-fade" style="--i:3">
           <li><Icon name="truck" />Envío discreto en 24/48 h</li>
           <li><Icon name="refresh" />30 días de devolución</li>
           <li><Icon name="shield" />Pago seguro</li>
@@ -50,6 +47,12 @@ const faqLd = { "@context": "https://schema.org", "@type": "FAQPage", mainEntity
       <div class="hero__art"><Plant /></div>
     </div>
   </section>
+
+  <div class="marquee">
+    <ul class="marquee__track" aria-label="Ventajas">
+      {[...marquee, ...marquee].map((m, i) => <li aria-hidden={i >= marquee.length ? "true" : undefined}>{m}</li>)}
+    </ul>
+  </div>
 
   <!-- Asistente -->
   <section class="section section--tight" id="asistente" aria-labelledby="quiz-title">
@@ -104,7 +107,7 @@ const faqLd = { "@context": "https://schema.org", "@type": "FAQPage", mainEntity
           <p class="muted mono">Por separado: {formatPrice(kit.old!)} · ahorras {formatPrice(kit.old! - kit.price)}</p>
           <ul class="kit__list">{kit.feats.slice(0, 4).map((f) => <li><Icon name="check" />{f}</li>)}</ul>
           <div class="hero__cta" style="margin-top:0">
-            <button class="btn btn--primary" type="button" data-add={kit.id}>Añadir el kit al carrito</button>
+            <button class="btn btn--primary magnetic" type="button" data-add={kit.id}>Añadir el kit al carrito</button>
             <a class="btn btn--ghost" href={`/productos/${kit.id}`}>Ver qué incluye</a>
           </div>
         </div>
@@ -114,21 +117,7 @@ const faqLd = { "@context": "https://schema.org", "@type": "FAQPage", mainEntity
   </section>
 
   <!-- Ciclo -->
-  <section class="section section--tight" aria-labelledby="cycle-title">
-    <div class="container">
-      <div class="section-head reveal"><p class="eyebrow">Guía rápida</p><h2 id="cycle-title">De semilla a cosecha, en 4 fases.</h2><p>Las condiciones que necesita la planta en cada etapa del cultivo de interior.</p></div>
-      <ol class="steps">
-        {stages.map((s, i) => (
-          <li class="step reveal" style={`--i:${i}`}>
-            <span class="step__num">0{i + 1} · {s.w}</span>
-            <h3>{s.t}</h3>
-            <p class="muted">{s.d}</p>
-            <dl>{s.data.map(([k, v]) => <><dt>{k}</dt><dd>{v}</dd></>)}</dl>
-          </li>
-        ))}
-      </ol>
-    </div>
-  </section>
+  <GrowCycle />
 
   <!-- Montaje -->
   <section class="section section--tight" id="montaje" aria-labelledby="setup-title">
@@ -158,13 +147,15 @@ const faqLd = { "@context": "https://schema.org", "@type": "FAQPage", mainEntity
         <h2 id="rev-title">Lo que dicen los cultivadores.</h2>
         {site.demoContent && <p><span class="badge badge--demo">Contenido de ejemplo</span> Estas opiniones son de muestra y se sustituirán por reseñas verificadas.</p>}
       </div>
+      <div class="reviews-marquee">
       <ul class="reviews">
-        {reviews.map((r, i) => (
-          <li class="reveal" style={`--i:${i % 3}`}>
+        {[...reviews, ...reviews].map((r, i) => (
+          <li class={i >= reviews.length ? "is-clone" : "reveal"} style={`--i:${i % 3}`} aria-hidden={i >= reviews.length ? "true" : undefined} inert={i >= reviews.length ? true : undefined}>
             <figure class="review"><span class="stars" role="img" aria-label="5 de 5 estrellas">★★★★★</span><blockquote><p>{r.text}</p></blockquote><figcaption>{r.author}</figcaption></figure>
           </li>
         ))}
       </ul>
+      </div>
     </div>
   </section>
 

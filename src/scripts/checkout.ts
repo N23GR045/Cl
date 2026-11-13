@@ -2,6 +2,7 @@ import { $, $$, formatPrice } from "./dom";
 import { t, fmt } from "../i18n/es";
 import { catalog, subtotal, discount, hasPromo, clear, count, getCart, promoCode } from "./cart";
 import { validate, liveValidation } from "./forms";
+import { leafBurst } from "./effects";
 
 let step = 1;
 const form = () => $<HTMLFormElement>("[data-co-form]");
@@ -100,7 +101,7 @@ export function initCheckout() {
     f.hidden = true; f.reset();
     const nav = $("[data-co-nav]"); if (nav) nav.hidden = true;
     $(".co-steps")?.setAttribute("hidden", "");
-    const done = $<HTMLElement>("[data-co-done]"); if (done) { done.hidden = false; done.focus(); }
+    const done = $<HTMLElement>("[data-co-done]"); if (done) { done.hidden = false; done.focus(); leafBurst($("h3", done)); }
     clear();
   });
   document.addEventListener("cart:closed", () => setTimeout(() => setView("cart"), 400));
