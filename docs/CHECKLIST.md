@@ -33,7 +33,7 @@ Las pruebas se ejecutan con `npm run verify`.
 | 26 | Internacionalización | 🟡 | Cadenas de la interfaz en `src/i18n/es.ts` con marcadores `{n}` (sin concatenar). Falta: los textos de contenido de las páginas siguen en las plantillas. Para un segundo idioma, usar el i18n de Astro (`/en/…`). |
 | 27 | Pruebas y checklist | ✅ | `npm run verify`: tipos, build, validación HTML y `tests/smoke.mjs`: consola, h1, títulos, alt, dimensiones, desbordamiento, enlaces, axe y flujos de asistente, filtros, compra y contacto. Integración continua en GitHub Actions. |
 | 28 | Documentación | ✅ | `README.md` y `docs/`. |
-| 29 | Despliegue | ✅ | `docs/DESPLIEGUE.md` y `netlify.toml`. Variable: `PUBLIC_SITE_URL`. |
+| 29 | Despliegue | ✅ | `docs/DESPLIEGUE.md` y `netlify.toml`. Variables: `PUBLIC_SITE_URL` y `STRIPE_SECRET_KEY`. |
 | 30 | Entrega final | ✅ | Repositorio, árbol en el README y este documento. |
 
 ## Pendiente del negocio (no técnico)
@@ -41,7 +41,7 @@ Las pruebas se ejecutan con `npm run verify`.
 | Tema | Estado |
 |---|---|
 | Datos reales de empresa, contacto y opiniones verificadas | ⏳ |
-| Pasarela de pago real (Stripe o Redsys) con función serverless | ⏳ (guía en DESPLIEGUE.md) |
+| Pasarela de pago real | ✅ programada (Stripe Checkout, con 7 pruebas). Falta tu clave `STRIPE_SECRET_KEY` y poner `demoCheckout: false` |
 | Revisión legal de textos y de la venta de CBD | ⏳ |
 | Fotos reales de producto (ahora son renders 3D) | ⏳ opcional |
 
@@ -49,4 +49,4 @@ Las pruebas se ejecutan con `npm run verify`.
 
 **Incluido:** portada, catálogo con filtros, búsqueda y orden; 8 páginas de categoría; 39 fichas de producto; carrito persistente con código de descuento y venta cruzada; asistente de compra; compra en 3 pasos (demo); contacto; newsletter; 4 páginas legales; 404; modo claro y oscuro; aviso de mayoría de edad.
 
-**Fuera de alcance:** cuentas de usuario, pago real, gestión de stock e inventario, panel de administración, reseñas verificadas, multidioma y analítica. Si se añadiera analítica, haría falta el banner de consentimiento.
+**Fuera de alcance:** cuentas de usuario, gestión de stock e inventario, panel de administración, reseñas verificadas, multidioma y analítica. Si se añadiera analítica, haría falta el banner de consentimiento.

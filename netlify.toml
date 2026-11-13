@@ -3,9 +3,12 @@
   command = "npm run build"
   publish = "dist"
 
+[functions]
+  directory = "netlify/functions"
+
 [build.environment]
   NODE_VERSION = "22"
-  # PUBLIC_SITE_URL se define en Site settings → Environment variables
+  # PUBLIC_SITE_URL y STRIPE_SECRET_KEY se definen en Site settings → Environment variables
 
 # Cabeceras de seguridad para todas las páginas.
 # El hash de script-src corresponde al script en línea del tema (src/layouts/Base.astro).

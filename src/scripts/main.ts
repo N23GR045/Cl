@@ -6,6 +6,7 @@ import { initCatalog } from "./catalog";
 import { initQuiz } from "./quiz";
 import { initProductPage } from "./pdp";
 import { initForms } from "./forms";
+import { clear } from "./cart";
 
 const safe = (name: string, fn: () => void) => {
   try { fn(); } catch (err) { console.warn(`[raiz-verde] ${name} no se pudo iniciar`, err); }
@@ -21,3 +22,5 @@ safe("ficha", initProductPage);
 safe("formularios", initForms);
 safe("revelado", initReveal);
 safe("edad", initAgeGate);
+// Vuelta desde la pasarela con el pago hecho: vacía el carrito.
+safe("pedido", () => { if (document.querySelector("[data-order-done]") && new URLSearchParams(location.search).has("sesion")) clear(); });

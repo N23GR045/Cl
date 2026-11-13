@@ -128,6 +128,28 @@ await p.click("[data-co-next]");
 ok(await p.isVisible("[data-co-done]"), "Compra: no muestra la confirmación");
 ok((await p.textContent("[data-cart-count]")) === "0", "Compra: no vacía el carrito");
 
+// Pago real (simulado): el cliente envía el pedido a /api/checkout y redirige a Stripe
+{
+  const pay = await ctx.newPage();
+  let sent = null;
+  await pay.route("**/productos/termo", async (route) => {
+    const res = await route.fetch();
+    route.fulfill({ response: res, body: (await res.text()).replace('"demoCheckout":true', '"demoCheckout":false') });
+  });
+  await pay.route("**/api/checkout", (route) => { sent = route.request().postDataJSON(); route.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify({ url: "https://checkout.stripe.com/c/pay/cs_test" }) }); });
+  await pay.route("https://checkout.stripe.com/**", (route) => route.fulfill({ status: 200, contentType: "text/html", body: "<title>Stripe</title>" }));
+  await pay.goto(BASE + "/productos/termo");
+  await pay.evaluate(() => { localStorage.removeItem("rv-cart"); localStorage.removeItem("rv-promo"); });
+  await pay.reload();
+  await pay.click("[data-pdp-buy]");
+  await pay.fill("#co-name", "Ana Pérez"); await pay.fill("#co-email", "ana@correo.com"); await pay.fill("#co-phone", "600123456"); await pay.click("[data-co-next]");
+  await pay.click("input[name=ship][value=store]"); await pay.click("[data-co-next]");
+  await Promise.all([pay.waitForURL(/checkout\.stripe\.com/, { timeout: 5000 }).catch(() => {}), pay.click("[data-co-next]")]);
+  ok(sent && sent.items?.[0]?.id === "termo" && sent.items[0].qty === 1 && sent.ship === "store" && !("price" in sent.items[0]), `Pago real: pedido enviado incorrecto ${JSON.stringify(sent)}`);
+  ok(/checkout\.stripe\.com/.test(pay.url()), "Pago real: no redirige a Stripe");
+  await pay.close();
+}
+
 await p.goto(BASE + "/contacto");
 await p.click("form[name=contacto] button[type=submit]");
 ok((await p.getAttribute("#c-email", "aria-invalid")) === "true", "Contacto: no valida el email vacío");

@@ -1,6 +1,6 @@
 import { $, $$, formatPrice } from "./dom";
 import { t, fmt } from "../i18n/es";
-import { catalog, subtotal, discount, hasPromo, clear, count } from "./cart";
+import { catalog, subtotal, discount, hasPromo, clear, count, getCart, promoCode } from "./cart";
 import { validate, liveValidation } from "./forms";
 
 let step = 1;
@@ -47,6 +47,30 @@ function showStep(n: number) {
   $<HTMLInputElement>(`[data-co-form] fieldset[data-step="${n}"] input:not([type=radio])`)?.focus({ preventScroll: true });
 }
 
+/** Pago real: la función de servidor recalcula precios y devuelve la URL de Stripe Checkout. */
+async function payOnline(f: HTMLFormElement) {
+  const btn = $<HTMLButtonElement>("[data-co-next]");
+  const err = $("[data-co-error]");
+  const data = new FormData(f);
+  const body = {
+    items: Object.entries(getCart()).map(([id, qty]) => ({ id, qty })),
+    promo: promoCode(),
+    ship: shipValue(),
+    customer: Object.fromEntries(["name", "email", "phone", "address", "zip", "city"].map((k) => [k, String(data.get(k) ?? "")])),
+  };
+  btn?.setAttribute("aria-busy", "true");
+  try {
+    const res = await fetch("/api/checkout", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
+    const out = (await res.json().catch(() => ({}))) as { url?: string; error?: string };
+    if (res.ok && out.url && /^https:\/\/checkout\.stripe\.com\//.test(out.url)) { location.assign(out.url); return; }
+    throw new Error(out.error || fmt(t.form.fail, { email: catalog.email, phone: catalog.phone }));
+  } catch (e) {
+    if (err) err.textContent = e instanceof Error && e.message ? e.message : fmt(t.form.fail, { email: catalog.email, phone: catalog.phone });
+  } finally {
+    btn?.removeAttribute("aria-busy");
+  }
+}
+
 export function initCheckout() {
   const f = form();
   if (!f) return;
@@ -67,7 +91,8 @@ export function initCheckout() {
     const fs = $(`fieldset[data-step="${step}"]`, f)!;
     if (!validate(fs)) { const err = $("[data-co-error]"); if (err) err.textContent = t.form.fix; return; }
     if (step < 3) { showStep(step + 1); return; }
-    // DEMO: aquí se crearía la sesión de pago (p. ej. Stripe Checkout desde una función serverless).
+    if (!catalog.demoCheckout) { void payOnline(f); return; }
+    // Modo demostración: confirma el pedido sin cobrar.
     const num = `RV-${String(Date.now()).slice(-6)}`;
     const extra = shipValue() === "store" ? t.checkout.pickupText : t.checkout.homeText;
     const text = $("[data-co-done-text]");

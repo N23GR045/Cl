@@ -48,7 +48,7 @@ Mientras `demoContent` y `demoCheckout` sean `true` en `src/data/site.ts`, la we
 - [ ] Datos de la empresa, NIF, dirección, teléfono y email (`site.ts`).
 - [ ] Opiniones reales y verificadas (`reviews.ts`), y luego `demoContent: false`.
 - [ ] Textos legales revisados por un profesional (`src/pages/legal/`).
-- [ ] Pasarela de pago real (ver `docs/DESPLIEGUE.md`), y luego `demoCheckout: false`.
+- [ ] Pago: el código de Stripe ya está hecho. Añade `STRIPE_SECRET_KEY` en el hosting y pon `demoCheckout: false` (ver `docs/DESPLIEGUE.md`).
 - [ ] Revisión legal de la venta de productos de CBD.
 
 ## Decisiones técnicas
@@ -59,6 +59,7 @@ Mientras `demoContent` y `demoCheckout` sean `true` en `src/data/site.ts`, la we
 - **Fuentes alojadas en el propio dominio** (`@fontsource`), con `font-display: swap`: más rápido y sin enviar la IP del visitante a Google (RGPD).
 - **Sin cookies no esenciales**: solo almacenamiento técnico, por eso no hay banner (ver `/legal/cookies`).
 - **Formularios** con Netlify Forms (sin backend ni claves) y honeypot antispam.
+- **Pago** con Stripe Checkout desde una función de servidor (`netlify/functions/checkout.mts`) que recalcula los precios: el navegador nunca decide cuánto se cobra.
 - **Modo claro y oscuro** según el sistema, con botón para elegir; ambos cumplen contraste AA.
 
 ## Estructura
@@ -84,6 +85,7 @@ Mientras `demoContent` y `demoCheckout` sean `true` en `src/data/site.ts`, la we
 │   ├── pages/              index, productos/, categoria/, contacto, legal/, 404, robots.txt
 │   ├── scripts/            main, dom, ui, cart, checkout, catalog, quiz, pdp, forms
 │   └── styles/             tokens, base, components, sections
-├── tests/smoke.mjs         Pruebas con Playwright + axe-core
+├── netlify/functions/      checkout.mts: pago con Stripe
+├── tests/                  smoke.mjs (Playwright + axe) y checkout-fn.test.mjs
 └── tools/                  Estudio 3D para regenerar las imágenes
 ```

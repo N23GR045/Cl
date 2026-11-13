@@ -6,7 +6,7 @@ interface Catalog {
   products: ClientProduct[];
   shipping: { freeFrom: number; cost: number; cutoffHour: number };
   promo: { code: string; percent: number };
-  phone: string; email: string;
+  phone: string; email: string; demoCheckout: boolean;
 }
 
 const raw = document.getElementById("catalog-data")?.textContent ?? "{}";
@@ -30,6 +30,7 @@ export const count = () => Object.values(cart).reduce((a, b) => a + b, 0);
 export const subtotal = () => Object.entries(cart).reduce((s, [id, n]) => s + (findP(id)?.price ?? 0) * n, 0);
 export const discount = (base = subtotal()) => (promo ? Math.round(base * catalog.promo.percent) / 100 : 0);
 export const hasPromo = () => promo;
+export const promoCode = () => (promo ? catalog.promo.code : "");
 export const onChange = (fn: () => void) => listeners.add(fn);
 
 function save() { store.set("rv-cart", cart); listeners.forEach((fn) => fn()); render(); }

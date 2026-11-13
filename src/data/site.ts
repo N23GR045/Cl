@@ -6,7 +6,8 @@ export const site = {
   tagline: "Grow shop en Valencia",
   description:
     "Iluminación LED, armarios, sustratos, nutrientes, hidroponía, accesorios de fumador y CBD. Envío discreto en 24/48 h y asesoría de cultivadores.",
-  url: import.meta.env.SITE ?? "https://www.raizverde.example",
+  // En Astro llega de astro.config (PUBLIC_SITE_URL); fuera de Astro (funciones de servidor) usa la variable de entorno.
+  url: ((import.meta as { env?: Record<string, string> }).env?.SITE ?? globalThis.process?.env?.PUBLIC_SITE_URL ?? "https://www.raizverde.example") as string,
   locale: "es_ES",
   lang: "es",
   phone: "960\u00a0000\u00a0000", // DEMO (espacios no separables)

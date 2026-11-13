@@ -16,9 +16,10 @@ Es la opción más completa sin escribir backend: **Netlify Forms** recibe los f
 
 | Variable | Obligatoria | Uso |
 |---|---|---|
-| `PUBLIC_SITE_URL` | Sí | Dominio público sin barra final. Canonical, sitemap, robots.txt y Open Graph. |
+| `PUBLIC_SITE_URL` | Sí | Dominio público sin barra final. Canonical, sitemap, robots.txt, Open Graph y vuelta desde Stripe. |
+| `STRIPE_SECRET_KEY` | Para cobrar | Clave secreta de Stripe. Solo en el servidor. |
 
-No hay más claves ni secretos. Cuando conectes un pago real, las claves irán **solo** en el servidor (ver abajo), nunca en el código del navegador.
+La clave de Stripe vive solo en el servidor (función de Netlify), nunca en el código del navegador.
 
 ## Otras opciones
 
@@ -26,16 +27,28 @@ No hay más claves ni secretos. Cuando conectes un pago real, las claves irán *
 - **GitHub Pages**: usa la acción oficial `withastro/action`. Sin cabeceras personalizadas ni formularios: usa un servicio externo de formularios.
 - **Hosting tradicional (Apache/Nginx)**: sube `dist/` por FTP o SFTP. Configura HTTPS, las cabeceras de seguridad de `netlify.toml` y que `/ruta` sirva `/ruta.html`. En Nginx: `try_files $uri $uri.html $uri/ =404;`.
 
-## Conectar un pago real (pendiente)
+## Activar el pago real con Stripe
 
-La compra actual es una demostración (`demoCheckout: true`). Para cobrar:
+El código ya está hecho: `netlify/functions/checkout.mts` (ruta `/api/checkout`).
 
-1. Crea una función serverless (por ejemplo `netlify/functions/checkout.ts`) que reciba el carrito, **recalcule precios en el servidor** a partir de `catalog.ts` y cree una sesión de Stripe Checkout o de Redsys.
-2. Guarda la clave secreta como variable de entorno del servidor: `STRIPE_SECRET_KEY` (nunca con prefijo `PUBLIC_`).
-3. En `src/scripts/checkout.ts`, sustituye el bloque marcado como `DEMO` por una llamada a esa función y la redirección al pago.
-4. Pon `demoCheckout: false` en `src/data/site.ts`.
+- Recalcula todos los precios en el servidor desde `src/data/catalog.ts`; ignora cualquier precio que llegue del navegador.
+- Valida el pedido: productos existentes, cantidades entre 1 y 99, email, teléfono y dirección.
+- Aplica el código de descuento y el envío, crea la sesión de Stripe Checkout y devuelve su URL.
+- Al terminar el pago, Stripe vuelve a `/pedido-confirmado`, que vacía el carrito.
 
-Las pasarelas suelen pedir requisitos extra a las tiendas de CBD: consúltalo antes.
+Para activarlo:
+
+1. Crea una cuenta en stripe.com y copia la **clave secreta** (`sk_live_…`; para pruebas, `sk_test_…`).
+2. En Netlify → **Environment variables**, añade `STRIPE_SECRET_KEY` con esa clave. No la pongas nunca en el código ni con prefijo `PUBLIC_`.
+3. En `src/data/site.ts`, cambia `demoCheckout: true` por `false` y vuelve a desplegar.
+4. Haz una compra de prueba con la clave `sk_test_` y la tarjeta 4242 4242 4242 4242.
+
+Mientras no exista la clave, la función responde «El pago online no está activado todavía» y la tienda no se rompe.
+
+**Siguientes pasos opcionales:**
+- Webhook `checkout.session.completed` para recibir los pedidos en tu email o ERP.
+- Bizum mediante Redsys, que necesita contrato con tu banco.
+- Las pasarelas pueden pedir requisitos extra a las tiendas que venden CBD: confírmalo con Stripe antes.
 
 ## Después de cada cambio
 
