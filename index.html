@@ -42,7 +42,7 @@
 }
 *, *::before, *::after { box-sizing: border-box; }
 [hidden] { display: none !important; }
-section[id] { scroll-margin-top: 72px; }
+section[id] { scroll-margin-top: 104px; }
 .cycle[id] { scroll-margin-top: 0; }
 html { scroll-behavior: smooth; }
 body {
@@ -457,6 +457,86 @@ main, .header, footer { position: relative; z-index: 3; }
 .faq summary:hover i { border-color: var(--fg); }
 .faq .ans { color: var(--muted); padding: 0 3rem 1.4rem 0; animation: ansIn .5s var(--ease); }
 @keyframes ansIn { from { opacity: 0; transform: translateY(-8px); } }
+
+/* ---------- Conversión ---------- */
+.promo-bar { display: flex; justify-content: center; align-items: center; gap: .5rem; flex-wrap: wrap; min-height: 32px; padding: .35rem var(--gutter-r) .35rem var(--gutter-l); background: var(--spectrum); color: #0a0c0e; font-size: .74rem; font-weight: 500; text-align: center; }
+.promo-bar b { background: #0a0c0e; color: var(--fg); padding: .1rem .45rem; border-radius: 6px; letter-spacing: .08em; }
+.promo-copy { all: unset; cursor: pointer; text-decoration: underline; }
+.hero-trust { list-style: none; padding: 0; margin: 1.6rem 0 0; display: flex; flex-wrap: wrap; gap: .5rem 1.4rem; color: var(--muted); font-size: .9rem; }
+.hero-trust li { display: flex; align-items: center; gap: .45rem; }
+.hero-trust li::before { content: ""; width: 16px; height: 16px; flex: none; border-radius: 50%; background: var(--leaf) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%230a0c0e' stroke-width='3.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 12l5 5 9-10'/%3E%3C/svg%3E") center/10px no-repeat; }
+.hero-trust .stars-li::before { display: none; }
+.hero-trust .stars-li b { color: var(--amber); letter-spacing: .1em; font-weight: 400; }
+/* Asistente */
+.quiz-sec { padding-block: clamp(70px, 9vw, 120px) 0; }
+.quiz { display: grid; grid-template-columns: .9fr 1.1fr; gap: clamp(1.5rem, 5vw, 4rem); align-items: center; padding: clamp(1.4rem, 4vw, 3rem); border-radius: 32px; background: radial-gradient(ellipse at 0% 0%, color-mix(in srgb, var(--magenta) 16%, transparent), transparent 60%), var(--surface); border: 1px solid var(--line); }
+.quiz-box { min-width: 0; min-height: 320px; display: flex; flex-direction: column; gap: 1rem; }
+.qz-top { display: flex; justify-content: space-between; align-items: center; color: var(--muted); }
+.qz-dots { display: flex; gap: 6px; }
+.qz-dots i { width: 26px; height: 4px; border-radius: 4px; background: var(--line); transition: background .4s; }
+.qz-dots i.on { background: var(--magenta); }
+.qz-q { font-family: var(--display); font-weight: 800; font-size: clamp(1.4rem, 2.6vw, 1.9rem); letter-spacing: -.02em; animation: stepIn .5s var(--ease); }
+.qz-opts { display: grid; gap: .6rem; }
+.qz-opt { text-align: left; display: flex; justify-content: space-between; align-items: center; gap: 1rem; padding: 1rem 1.2rem; border-radius: 18px; border: 1px solid var(--line); background: var(--bg); transition: border-color .3s, transform .3s var(--ease), background .3s; animation: stepIn .5s var(--ease) both; animation-delay: calc(var(--i) * 60ms); }
+.qz-opt:hover { border-color: var(--magenta); transform: translateX(4px); background: color-mix(in srgb, var(--magenta) 7%, var(--bg)); }
+.qz-opt strong { display: block; font-weight: 600; }
+.qz-opt small { color: var(--muted); }
+.qz-back { all: unset; cursor: pointer; color: var(--muted); font-size: .85rem; }
+.qz-back:hover { color: var(--fg); }
+.qz-list { list-style: none; padding: 0; margin: 0; display: grid; gap: .5rem; }
+.qz-list li { display: grid; grid-template-columns: 52px minmax(0, 1fr) auto; gap: .8rem; align-items: center; padding: .5rem; border-radius: 14px; background: var(--bg); border: 1px solid var(--line); animation: stepIn .5s var(--ease) both; animation-delay: calc(var(--i) * 70ms); }
+.qz-list img { width: 52px; height: 52px; border-radius: 10px; object-fit: cover; }
+.qz-list span { font-size: .92rem; }
+.qz-list b { font-variant-numeric: tabular-nums; }
+.qz-total { display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; flex-wrap: wrap; }
+.qz-total strong { font-family: var(--display); font-size: 2rem; font-weight: 800; font-variant-numeric: tabular-nums; }
+.qz-save { color: var(--leaf); }
+.qz-actions { display: flex; gap: .6rem; flex-wrap: wrap; }
+/* Tarjetas */
+.ship-tag { color: var(--leaf); font-size: .7rem; }
+/* Ficha: acciones y combinaciones */
+.qv-actions { display: grid; grid-template-columns: 1fr 1fr; gap: .6rem; }
+.qv-actions .btn { justify-content: center; }
+.trust-row { display: flex; flex-wrap: wrap; justify-content: center; gap: .3rem 1rem; color: var(--muted); font: .72rem var(--mono); }
+.trust-row span::before { content: "✓ "; color: var(--leaf); }
+.dispatch { color: var(--amber); font: .78rem var(--mono); text-align: center; }
+.combo { display: grid; gap: .4rem; padding-top: .6rem; border-top: 1px solid var(--line); }
+.combo p { color: var(--muted); font-size: .85rem; }
+.combo-item, .up-item { display: grid; grid-template-columns: 40px minmax(0, 1fr) auto; gap: .7rem; align-items: center; }
+.combo-item img, .up-item img { width: 40px; height: 40px; border-radius: 9px; object-fit: cover; }
+.combo-item span, .up-item span { font-size: .85rem; line-height: 1.25; }
+.mini-add { border: 1px solid var(--line); background: var(--surface-2); border-radius: 999px; padding: .4rem .75rem; font-size: .8rem; white-space: nowrap; transition: background .3s, color .3s; }
+.mini-add:hover { background: var(--fg); color: var(--bg); }
+/* Carrito */
+.upsell { display: grid; gap: .5rem; padding-bottom: .9rem; margin-bottom: .9rem; border-bottom: 1px solid var(--line); }
+.upsell > p { font: 500 .72rem var(--mono); text-transform: uppercase; letter-spacing: .1em; color: var(--muted); }
+.promo-form { display: flex; gap: .5rem; margin-bottom: .8rem; }
+.promo-form input { flex: 1; min-width: 0; padding: .65rem .9rem; border-radius: 999px; border: 1px solid var(--line); background: var(--bg); color: var(--fg); font: inherit; text-transform: uppercase; }
+.promo-form input:focus { outline: none; border-color: var(--magenta); }
+.promo-form button { border: 1px solid var(--line); background: var(--surface-2); border-radius: 999px; padding: 0 1rem; }
+.promo-ok { display: flex; justify-content: space-between; color: var(--leaf); font-size: .9rem; margin-bottom: .6rem; }
+.promo-ok button { all: unset; cursor: pointer; color: var(--muted); text-decoration: underline; font-size: .8rem; }
+.promo-msg { font-size: .82rem; color: var(--amber); min-height: 0; margin: -.4rem 0 .6rem; }
+.cart-foot .dispatch { margin-top: .7rem; }
+.cart-foot .trust-row { margin-top: .5rem; }
+.guest { color: var(--muted); font-size: .88rem; margin-top: -.3rem; }
+/* Barra móvil y ayuda */
+.mbar { position: fixed; left: 0; right: 0; bottom: 0; z-index: 90; display: none; padding: .7rem var(--gutter-r) calc(.7rem + env(safe-area-inset-bottom, 0px)) var(--gutter-l); background: rgba(10,12,14,.86); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); border-top: 1px solid var(--line); transform: translateY(110%); transition: transform .5s var(--ease); }
+.mbar.on { transform: none; }
+.mbar button { width: 100%; justify-content: space-between; }
+.help-fab { position: fixed; right: calc(var(--gutter-r) + 4px); bottom: calc(env(safe-area-inset-bottom, 0px) + 18px); z-index: 95; display: inline-flex; align-items: center; gap: .5rem; padding: .7rem 1rem; border-radius: 999px; border: 1px solid var(--line); background: var(--surface); box-shadow: 0 10px 30px rgba(0,0,0,.4); font-weight: 600; font-size: .9rem; transition: bottom .5s var(--ease), transform .3s var(--spring); }
+.help-fab:hover { transform: translateY(-2px); }
+.help-fab i { width: 8px; height: 8px; border-radius: 50%; background: var(--leaf); box-shadow: 0 0 0 4px rgba(111,207,127,.2); animation: pulse 2s infinite; }
+.help { position: fixed; right: calc(var(--gutter-r) + 4px); bottom: calc(env(safe-area-inset-bottom, 0px) + 74px); z-index: 96; width: min(340px, calc(100vw - 32px)); padding: 1.3rem; border-radius: 22px; background: var(--surface); border: 1px solid var(--line); box-shadow: 0 30px 80px rgba(0,0,0,.5); display: grid; gap: .7rem; animation: pop .5s var(--spring); transition: bottom .5s var(--ease); }
+.help h3 { font-size: 1.3rem; }
+.help p { color: var(--muted); font-size: .92rem; }
+.help .btn { justify-content: center; }
+.help-phone { font-family: var(--display); font-size: 1.4rem; font-weight: 800; user-select: all; }
+body.has-mbar .help-fab { bottom: calc(env(safe-area-inset-bottom, 0px) + 84px); }
+body.has-mbar .help { bottom: calc(env(safe-area-inset-bottom, 0px) + 140px); }
+.cart.open ~ .toast { top: calc(env(safe-area-inset-top, 0px) + 14px); bottom: auto; transform: translate(-50%, -220%); }
+.cart.open ~ .toast.show { transform: translate(-50%, 0); }
+body.has-mbar .toast { bottom: calc(92px + env(safe-area-inset-bottom, 0px)); }
 /* ---------- Cifras ---------- */
 .stats { display: grid; grid-template-columns: repeat(4, 1fr); border-block: 1px solid var(--line); }
 .stat { padding: 2.4rem 1rem; text-align: center; border-right: 1px solid var(--line); }
@@ -579,6 +659,10 @@ footer { border-top: 1px solid var(--line); padding-block: 4rem calc(2rem + env(
   .stat:nth-child(-n+2) { border-bottom: 1px solid var(--line); }
   .contact { grid-template-columns: 1fr; }
   .faq-wrap { grid-template-columns: 1fr; }
+  .quiz { grid-template-columns: 1fr; }
+  .mbar { display: block; }
+  .help-fab span { display: none; }
+  .help-fab { padding: .8rem; }
   .qv { place-items: end center; padding: 0; }
   .qv-card { grid-template-columns: 1fr; border-radius: 26px 26px 0 0; max-height: 92svh; }
   .qv-media img { max-height: 46svh; }
@@ -622,6 +706,8 @@ footer { border-top: 1px solid var(--line); padding-block: 4rem calc(2rem + env(
   .stage-desc { display: none; }
   .faq .ans { padding-right: 0; }
   .row2 { grid-template-columns: 1fr; }
+  .qv-actions { grid-template-columns: 1fr; }
+  .promo-bar .pb-extra { display: none; }
 }
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
@@ -662,6 +748,7 @@ footer { border-top: 1px solid var(--line); padding-block: 4rem calc(2rem + env(
 <div class="grain"></div>
 
 <header class="header" id="header">
+  <div class="promo-bar mono" id="promoBar"><span>−10 % en tu primer pedido con <b>RAIZ10</b></span><span class="pb-extra">· Envío gratis desde 49 € · Sale hoy si pides antes de las 14:00</span></div>
   <div class="wrap header-inner">
     <a href="#top" class="logo" aria-label="Raíz Verde, inicio">
       <svg viewBox="0 0 48 48" aria-hidden="true"><path d="M24 44V22M24 22c0-9 6-15 16-16-1 10-7 16-16 16Zm0 0C24 13 18 7 8 6c1 10 7 16 16 16Z" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -703,35 +790,33 @@ footer { border-top: 1px solid var(--line); padding-block: 4rem calc(2rem + env(
         <p class="lead fade" style="--i:1">Iluminación LED, armarios, sustratos y nutrientes elegidos por cultivadores. Te ayudamos a montar tu espacio y a acertar desde la primera semilla.</p>
         <div class="hero-cta fade" style="--i:2">
           <a href="#productos" class="btn btn-main magnetic">Ver productos <span class="arrow">→</span></a>
-          <a href="#ciclo" class="btn magnetic">Cómo crece una planta</a>
+          <a href="#asistente" class="btn magnetic">¿Qué necesito? Test de 1 min</a>
         </div>
+        <ul class="hero-trust fade" style="--i:3">
+          <li class="stars-li"><b>★★★★★</b> 4,9 · 3.200 opiniones</li>
+          <li>Envío discreto 24/48 h</li>
+          <li>30 días de devolución</li>
+        </ul>
       </div>
       <div class="hero-stage" id="heroStage" aria-hidden="true"></div>
     </div>
-    <div class="scroll-hint mono" aria-hidden="true">Desliza<i></i></div>
+    
   </section>
 
   <div class="marquee" aria-hidden="true">
     <div class="marquee-track" id="marquee"></div>
   </div>
 
-  <!-- CICLO -->
-  <section class="cycle" id="ciclo" data-stage="0" aria-label="Ciclo de cultivo">
-    <div class="cycle-sticky">
-      <div class="cycle-head wrap">
-        <p class="eyebrow mono">El ciclo, semana a semana</p>
-        <h2 class="h2">De semilla a cosecha.</h2>
-      </div>
-      <div class="cycle-stage" id="cycleStage" aria-hidden="true"></div>
-      <div class="cycle-info">
-        <div class="stage-steps" id="stageSteps"><div><i></i></div><div><i></i></div><div><i></i></div><div><i></i></div></div>
-        <div id="stageBox" aria-live="polite">
-          <p class="stage-num mono" id="stageNum"></p>
-          <h3 class="stage-title" id="stageTitle"></h3>
-          <p class="stage-desc" id="stageDesc"></p>
-          <dl class="stage-data" id="stageData"></dl>
-          <button class="stage-rec" id="stageRec"></button>
+  <!-- ASISTENTE -->
+  <section class="section quiz-sec" id="asistente" aria-label="Asistente de compra">
+    <div class="wrap">
+      <div class="quiz reveal">
+        <div>
+          <p class="eyebrow mono">¿Empiezas? Te ayudamos</p>
+          <h2 class="h2">Tu equipo ideal<br>en 3 preguntas.</h2>
+          <p class="sub">Sin registrarte. Te decimos qué necesitas exactamente y cuánto cuesta, con todo compatible entre sí. Lo añades al carrito con un toque.</p>
         </div>
+        <div class="quiz-box" id="quiz" aria-live="polite"></div>
       </div>
     </div>
   </section>
@@ -793,6 +878,27 @@ footer { border-top: 1px solid var(--line); padding-block: 4rem calc(2rem + env(
             <button class="btn btn-main magnetic" data-add="kit-interior">Añadir el kit al carrito <span class="arrow">→</span></button>
           </div>
           <figure class="kit-photo" id="kitPhoto"></figure>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CICLO -->
+  <section class="cycle" id="ciclo" data-stage="0" aria-label="Ciclo de cultivo">
+    <div class="cycle-sticky">
+      <div class="cycle-head wrap">
+        <p class="eyebrow mono">El ciclo, semana a semana</p>
+        <h2 class="h2">De semilla a cosecha.</h2>
+      </div>
+      <div class="cycle-stage" id="cycleStage" aria-hidden="true"></div>
+      <div class="cycle-info">
+        <div class="stage-steps" id="stageSteps"><div><i></i></div><div><i></i></div><div><i></i></div><div><i></i></div></div>
+        <div id="stageBox" aria-live="polite">
+          <p class="stage-num mono" id="stageNum"></p>
+          <h3 class="stage-title" id="stageTitle"></h3>
+          <p class="stage-desc" id="stageDesc"></p>
+          <dl class="stage-data" id="stageData"></dl>
+          <button class="stage-rec" id="stageRec"></button>
         </div>
       </div>
     </div>
@@ -929,8 +1035,13 @@ footer { border-top: 1px solid var(--line); padding-block: 4rem calc(2rem + env(
         <span class="price" id="qvPrice"></span>
         <div class="qty big" role="group" aria-label="Cantidad"><button type="button" id="qvMinus" aria-label="Quitar uno">−</button><span id="qvQty" aria-live="polite">1</span><button type="button" id="qvPlus" aria-label="Añadir uno">+</button></div>
       </div>
-      <button class="btn btn-main qv-add" id="qvAdd">Añadir al carrito <span class="arrow">→</span></button>
-      <p class="mono qv-ship">Envío en 24/48 h · Devolución en 30 días</p>
+      <div class="qv-actions">
+        <button class="btn btn-main qv-add" id="qvAdd">Añadir al carrito</button>
+        <button class="btn" id="qvNow">Comprar ahora <span class="arrow">→</span></button>
+      </div>
+      <p class="dispatch" id="qvDispatch"></p>
+      <div class="trust-row"><span>Pago seguro</span><span>Envío discreto</span><span>30 días de devolución</span><span>Garantía 3 años</span></div>
+      <div class="combo" id="qvCombo"></div>
     </div>
   </div>
 </div>
@@ -944,10 +1055,14 @@ footer { border-top: 1px solid var(--line); padding-block: 4rem calc(2rem + env(
   </div>
   <ul class="cart-items" id="cartItems"></ul>
   <div class="cart-foot">
+    <div class="upsell" id="upsell" hidden></div>
+    <div id="promoArea"></div>
     <p class="ship" id="ship"></p>
     <div class="ship-bar"><i id="shipBar"></i></div>
     <div class="total"><span>Total</span><strong id="cartTotal">0,00 €</strong></div>
     <button class="btn btn-main checkout" id="checkout">Finalizar compra</button>
+    <p class="dispatch" id="cartDispatch"></p>
+    <div class="trust-row"><span>Pago seguro</span><span>Sin registro</span><span>30 días de devolución</span></div>
   </div>
   <div class="co" id="co" hidden>
     <div class="co-steps" id="coSteps" aria-hidden="true"><span>1 · Datos</span><span>2 · Envío</span><span>3 · Pago</span></div>
@@ -955,6 +1070,7 @@ footer { border-top: 1px solid var(--line); padding-block: 4rem calc(2rem + env(
       <div class="co-scroll">
         <fieldset data-step="1">
           <legend>Tus datos</legend>
+          <p class="guest">Compras como invitado: no hace falta crear cuenta.</p>
           <label class="f" for="coName">Nombre y apellidos<input id="coName" autocomplete="name" required></label>
           <label class="f" for="coEmail">Email<input id="coEmail" type="email" autocomplete="email" required></label>
           <label class="f" for="coPhone">Teléfono<input id="coPhone" type="tel" autocomplete="tel" inputmode="tel" required></label>
@@ -996,6 +1112,16 @@ footer { border-top: 1px solid var(--line); padding-block: 4rem calc(2rem + env(
   </div>
 </aside>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
+<div class="mbar" id="mbar"><button class="btn btn-main" id="mbarBtn"><span id="mbarText">Ver carrito</span><span>Finalizar →</span></button></div>
+<button class="help-fab" id="helpFab" aria-expanded="false" aria-controls="help"><i aria-hidden="true"></i><span>¿Dudas? Te asesoramos</span><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M4 5h16v11H8l-4 4z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg></button>
+<div class="help" id="help" role="dialog" aria-label="Ayuda" hidden>
+  <h3>Te asesoramos gratis</h3>
+  <p>Llámanos o pásate por la tienda. Te decimos qué comprar según tu espacio y tu presupuesto.</p>
+  <p class="help-phone">960 000 000</p>
+  <p class="mono" style="font-size:.75rem">Lun–Vie 10:00–14:00 y 17:00–20:30 · Sáb 10:00–14:00</p>
+  <a class="btn btn-main" href="#asistente" id="helpQuiz">Hacer el test de 3 preguntas</a>
+  <a class="btn" href="#faq" id="helpFaq">Ver preguntas frecuentes</a>
+</div>
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"Store","name":"Raíz Verde Grow Shop","description":"Grow shop: iluminación LED, armarios, sustratos, nutrientes e hidroponía.","address":{"@type":"PostalAddress","streetAddress":"Calle de las Semillas 12","postalCode":"46001","addressLocality":"Valencia","addressCountry":"ES"},"openingHours":["Mo-Fr 10:00-14:00","Mo-Fr 17:00-20:30","Sa 10:00-14:00"],"priceRange":"€€"}</script>
 
 <script>
@@ -1084,6 +1210,16 @@ const INFO = {
   "dwc": ["Sistema de cultivo en agua oxigenada (DWC) con 4 cubos de 16 L conectados. Crecimiento muy rápido y riego sin complicaciones.", ["4 cubos de 16 L con macetas de rejilla", "Bomba de aire con 4 salidas", "Arcilla expandida incluida", "Indicador de nivel de agua"]],
   "phmeter": ["Dos medidores de bolsillo para controlar el pH y la conductividad (EC) del agua de riego.", ["pH ±0,01 con calibración automática", "EC 0–9,99 mS/cm", "Compensación de temperatura", "Soluciones de calibración incluidas"]],
 };
+const COMBO = {
+  "led-240": ["termo", "extractor"], "led-120": ["termo", "armario-80"], "armario-80": ["led-240", "extractor"], "armario-120": ["led-240", "extractor"],
+  "sustrato-50": ["nutri-gb", "phmeter"], "coco-50": ["nutri-gb", "phmeter"], "nutri-gb": ["phmeter", "sustrato-50"], "nutri-bio": ["sustrato-50", "termo"],
+  "extractor": ["termo", "armario-80"], "termo": ["phmeter", "extractor"], "dwc": ["phmeter", "nutri-gb"], "phmeter": ["nutri-gb", "dwc"], "kit-interior": ["phmeter", "coco-50"],
+};
+function dispatchMsg() {
+  const d = new Date(), day = d.getDay(), mins = d.getHours() * 60 + d.getMinutes();
+  if (day >= 1 && day <= 5 && mins < 14 * 60) { const left = 14 * 60 - mins; return `Pide en ${Math.floor(left / 60)} h ${left % 60} min y sale hoy`; }
+  return "Pide ahora y sale el próximo día laborable a primera hora";
+}
 const findP = (id) => PRODUCTS.find((p) => p.id === id) || EXTRA[id];
 const STAGES = [
   { t: "Germinación", w: "Semanas 1–2", d: "La semilla se abre y saca sus primeras hojas. Luz suave y mucha humedad para que la raíz arranque.",
@@ -1155,6 +1291,7 @@ $("#year").textContent = new Date().getFullYear();
 function startHero() { root.classList.add("hero-on"); }
 function afterIntro() {
   startHero();
+  setTimeout(() => { const n = Object.values(store.get("rv-cart", {})).reduce((a, b) => a + b, 0); if (n) toast(`Tu carrito te espera: ${n} ${n === 1 ? "producto" : "productos"}`); }, 1600);
   if (!store.get("rv-age-ok", false)) { $("#age").hidden = false; $("#ageYes").focus(); }
 }
 $("#ageYes").addEventListener("click", () => { store.set("rv-age-ok", true); $("#age").hidden = true; });
@@ -1163,7 +1300,9 @@ $("#ageNo").addEventListener("click", () => { $("#ageNoMsg").textContent = "Lo s
 (function intro() {
   const el = $("#intro");
   if (reduce) { el.remove(); afterIntro(); return; }
-  const pct = $("#introPct"), t0 = performance.now(), D = 2300;
+  let seen = false; try { seen = sessionStorage.getItem("rv-intro") === "1"; sessionStorage.setItem("rv-intro", "1"); } catch {}
+  if (seen) { el.remove(); afterIntro(); return; }
+  const pct = $("#introPct"), t0 = performance.now(), D = 1300;
   let done = false;
   const finish = () => {
     if (done) return; done = true;
@@ -1174,7 +1313,7 @@ $("#ageNo").addEventListener("click", () => { $("#ageNoMsg").textContent = "Lo s
   };
   const tick = (t) => { if (done) return; const k = clamp((t - t0) / D); pct.textContent = Math.round(k * 100) + "%"; k < 1 ? requestAnimationFrame(tick) : finish(); };
   requestAnimationFrame(tick);
-  setTimeout(finish, D + 600); // por si la pestaña está en segundo plano
+  setTimeout(finish, D + 400); // por si la pestaña está en segundo plano
   $("#introSkip").addEventListener("click", finish);
 })();
 
@@ -1250,6 +1389,7 @@ function onScroll() {
     heroCopy.style.opacity = clamp(1 - y / (innerHeight * .8));
   }
   updateCycle();
+  if (typeof syncMbar === "function") syncMbar();
   if (!reduce) {
     const rr = roomEl.getBoundingClientRect();
     if (rr.bottom > 0 && rr.top < innerHeight) {
@@ -1319,6 +1459,7 @@ function renderGrid(animate) {
         <span class="card-cat mono">${c.name}</span>
         <h3><button class="card-link" data-qv="${p.id}">${p.name}</button></h3>
         <span class="spec mono">${p.spec}</span>
+        ${p.price >= 49 ? '<span class="ship-tag mono">✓ Envío gratis</span>' : ""}
         <div class="card-foot">
           <span class="price">${fmt(p.price)}${p.old ? `<s>${fmt(p.old)}</s>` : ""}</span>
           <button class="add" data-add="${p.id}" aria-label="Añadir ${p.name} al carrito"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
@@ -1408,17 +1549,44 @@ nav.addEventListener("click", (e) => { if (e.target.tagName === "A") setMenu(fal
 /* ---------- Carrito ---------- */
 let cart = store.get("rv-cart", {});
 let lastAdded = null;
-const cartEl = $("#cart"), overlay = $("#overlay"), cartBtn = $("#cartBtn");
+const cartEl = $("#cart"), overlay = $("#overlay"), cartBtn = $("#cartBtn"), qv = $("#qv");
 const FREE = 49;
-function openCart() { $("#toast").classList.remove("show"); cartEl.classList.add("open"); cartEl.setAttribute("aria-hidden", "false"); overlay.classList.add("on"); $("#cartClose").focus(); }
+let promo = store.get("rv-promo", false);
+const disc = (t) => promo ? Math.round(t * 10) / 100 : 0;
+function suggestions() {
+  const inCart = Object.keys(cart);
+  const out = [];
+  inCart.forEach((id) => (COMBO[id] || []).forEach((c) => { if (!inCart.includes(c) && !out.includes(c)) out.push(c); }));
+  return out.slice(0, 2);
+}
+function openCart() { $("#mbar").classList.remove("on"); document.body.classList.remove("has-mbar"); $("#help").hidden = true; $("#toast").classList.remove("show"); cartEl.classList.add("open"); cartEl.setAttribute("aria-hidden", "false"); overlay.classList.add("on"); $("#cartClose").focus(); }
 function closeCart() { if (!cartEl.classList.contains("open")) return; cartEl.classList.remove("open"); cartEl.setAttribute("aria-hidden", "true"); overlay.classList.remove("on"); setTimeout(backToCart, 500); cartBtn.focus({ preventScroll: true }); }
 function save() { store.set("rv-cart", cart); renderCart(); }
+var mbarWanted = false;
+function updateMbar(count, total) {
+  $("#mbarText").textContent = `${count} ${count === 1 ? "producto" : "productos"} · ${fmt(total)}`;
+  mbarWanted = count > 0;
+  syncMbar();
+}
+function syncMbar() {
+  const on = mbarWanted && scrollY > 500 && !cartEl.classList.contains("open") && qv.hidden !== false;
+  $("#mbar").classList.toggle("on", on);
+  document.body.classList.toggle("has-mbar", on && innerWidth <= 820);
+}
 function renderCart() {
   const ids = Object.keys(cart).filter(findP);
   const count = ids.reduce((n, id) => n + cart[id], 0);
   const total = ids.reduce((s, id) => s + findP(id).price * cart[id], 0);
   $("#cartCount").textContent = count;
-  $("#cartTotal").textContent = fmt(total);
+  $("#cartTotal").textContent = fmt(total - disc(total));
+  const sug = suggestions();
+  $("#upsell").hidden = !sug.length;
+  $("#upsell").innerHTML = sug.length ? `<p>Completa tu cultivo</p>` + sug.map((id) => { const p = findP(id); return `<div class="up-item"><img src="${IMG[id]}" alt=""><span>${p.name}<br><b>${fmt(p.price)}</b></span><button class="mini-add" data-add="${id}" aria-label="Añadir ${p.name}">+ Añadir</button></div>`; }).join("") : "";
+  $("#promoArea").innerHTML = promo
+    ? `<div class="promo-ok"><span>RAIZ10 aplicado · −${fmt(disc(total))}</span><button id="promoRemove">Quitar</button></div>`
+    : `<form class="promo-form" id="promoForm"><label for="promoInput" class="sr-only">Código de descuento</label><input id="promoInput" placeholder="Código de descuento" autocomplete="off"><button type="submit">Aplicar</button></form><p class="promo-msg" id="promoMsg"></p>`;
+  $("#cartDispatch").textContent = total ? dispatchMsg() : "";
+  updateMbar(count, total - disc(total));
   $("#cartItems").innerHTML = ids.length ? ids.map((id) => {
     const p = findP(id), c = catOf(p.cat);
     return `<li class="cart-item${id === lastAdded ? " new" : ""}"><div class="thumb"><img src="${IMG[id]}" alt=""></div>
@@ -1430,6 +1598,14 @@ function renderCart() {
   $("#shipBar").style.setProperty("--p", clamp(total / FREE));
   $("#checkout").disabled = total === 0;
 }
+document.addEventListener("submit", (e) => {
+  if (e.target.id !== "promoForm") return;
+  e.preventDefault();
+  const v = $("#promoInput").value.trim().toUpperCase();
+  if (v === "RAIZ10") { promo = true; store.set("rv-promo", true); renderCart(); toast("Código RAIZ10 aplicado: −10 %"); }
+  else $("#promoMsg").textContent = v ? `El código «${v.replace(/[<>&"]/g, "")}» no es válido. Prueba con RAIZ10.` : "Escribe un código.";
+});
+document.addEventListener("click", (e) => { if (e.target.id === "promoRemove") { promo = false; store.set("rv-promo", false); renderCart(); } });
 function fly(from) {
   if (reduce || !from) return;
   const a = from.getBoundingClientRect(), b = cartBtn.getBoundingClientRect();
@@ -1455,7 +1631,7 @@ document.addEventListener("click", (e) => {
 cartBtn.addEventListener("click", openCart);
 $("#cartClose").addEventListener("click", closeCart);
 overlay.addEventListener("click", closeCart);
-addEventListener("keydown", (e) => { if (e.key === "Escape") { if (!qv.hidden) closeQV(); else closeCart(); setMenu(false); } });
+addEventListener("keydown", (e) => { if (e.key === "Escape") { if (!qv.hidden) closeQV(); else closeCart(); setMenu(false); $("#help").hidden = true; } });
 $("#checkout").addEventListener("click", openCheckout);
 renderCart();
 
@@ -1470,7 +1646,7 @@ function trapTab(e, box) {
 }
 
 /* ---------- Ficha rápida ---------- */
-const qv = $("#qv"); let qvId = null, qvQty = 1, qvFrom = null;
+let qvId = null, qvQty = 1, qvFrom = null;
 function openQV(id, card) {
   const p = findP(id), c = catOf(p.cat);
   qvId = id; qvQty = 1; qvFrom = card;
@@ -1482,6 +1658,9 @@ function openQV(id, card) {
   $("#qvFeats").innerHTML = INFO[id][1].map((t) => `<li>${t}</li>`).join("");
   $("#qvPrice").innerHTML = fmt(p.price) + (p.old ? `<s>${fmt(p.old)}</s>` : "");
   $("#qvQty").textContent = 1;
+  $("#qvDispatch").textContent = dispatchMsg();
+  const combo = COMBO[id] || [];
+  $("#qvCombo").innerHTML = combo.length ? `<p>Se combina bien con:</p>` + combo.map((cid) => { const cp = findP(cid); return `<div class="combo-item"><img src="${IMG[cid]}" alt=""><span>${cp.name}<br><b>${fmt(cp.price)}</b></span><button class="mini-add" data-add="${cid}" aria-label="Añadir ${cp.name}">+ Añadir</button></div>`; }).join("") : "";
   qv.hidden = false; document.body.style.overflow = "hidden";
   if (!reduce) {
     $(".qv-backdrop").animate([{ opacity: 0 }, { opacity: 1 }], { duration: 400 });
@@ -1505,6 +1684,10 @@ qv.addEventListener("click", (e) => { if (e.target.closest("[data-qvclose]")) cl
 qv.addEventListener("keydown", (e) => trapTab(e, $("#qvCard")));
 $("#qvMinus").addEventListener("click", () => { qvQty = Math.max(1, qvQty - 1); $("#qvQty").textContent = qvQty; });
 $("#qvPlus").addEventListener("click", () => { qvQty = Math.min(20, qvQty + 1); $("#qvQty").textContent = qvQty; });
+$("#qvNow").addEventListener("click", () => {
+  cart[qvId] = (cart[qvId] || 0) + qvQty; save(); closeQV();
+  setTimeout(() => { openCart(); openCheckout(); }, reduce ? 0 : 320);
+});
 $("#qvAdd").addEventListener("click", (e) => {
   cart[qvId] = (cart[qvId] || 0) + qvQty; lastAdded = qvId; save(); lastAdded = null;
   fly(e.currentTarget); toast(`Añadido: ${qvQty} × ${findP(qvId).name}`); header.classList.remove("hide"); closeQV();
@@ -1513,16 +1696,17 @@ $("#qvAdd").addEventListener("click", (e) => {
 /* ---------- Compra en 3 pasos ---------- */
 const co = $("#co"); let step = 1;
 const subtotal = () => Object.keys(cart).filter(findP).reduce((s, id) => s + findP(id).price * cart[id], 0);
+const grand = () => subtotal() - disc(subtotal()) + shipCost();
 const shipCost = () => ($("input[name=ship]:checked").value === "store" || subtotal() >= FREE) ? 0 : 4.95;
 function showStep(n) {
   step = n;
   $$("#coForm fieldset").forEach((fs) => { fs.hidden = +fs.dataset.step !== n; });
   $$("#coSteps span").forEach((sp, i) => { sp.className = i + 1 < n ? "done" : i + 1 === n ? "on" : ""; });
   $("#coBack").textContent = n === 1 ? "Volver al carrito" : "Atrás";
-  $("#coNext").textContent = n === 3 ? `Pagar ${fmt(subtotal() + shipCost())}` : "Continuar";
+  $("#coNext").textContent = n === 3 ? `Pagar ${fmt(grand())}` : "Continuar";
   $("#coErr").textContent = "";
   $("#shipHomePrice").textContent = subtotal() >= FREE ? "Gratis por superar 49 €" : "4,95 €";
-  if (n === 3) $("#coSummary").innerHTML = `<div><span>Productos</span><span>${fmt(subtotal())}</span></div><div><span>Envío</span><span>${shipCost() ? fmt(shipCost()) : "Gratis"}</span></div><div><span>Total</span><span>${fmt(subtotal() + shipCost())}</span></div>`;
+  if (n === 3) $("#coSummary").innerHTML = `<div><span>Productos</span><span>${fmt(subtotal())}</span></div>${promo ? `<div><span>Descuento RAIZ10</span><span>−${fmt(disc(subtotal()))}</span></div>` : ""}<div><span>Envío</span><span>${shipCost() ? fmt(shipCost()) : "Gratis"}</span></div><div><span>Total</span><span>${fmt(grand())}</span></div>`;
   const first = $(`#coForm fieldset[data-step="${n}"] input`); if (first) first.focus({ preventScroll: true });
 }
 function openCheckout() {
@@ -1549,15 +1733,72 @@ $("#coForm").addEventListener("submit", (e) => {
   e.preventDefault();
   if (!validate(step)) return;
   if (step < 3) return showStep(step + 1);
-  const total = subtotal() + shipCost(), num = "RV-" + String(Date.now()).slice(-6);
-  const store = $("input[name=ship]:checked").value === "store";
-  $("#coDoneText").textContent = `Pedido ${num} por ${fmt(total)} con ${$("input[name=pay]:checked").value.toLowerCase()}. ${store ? "Te avisamos cuando esté listo para recoger en la tienda." : "Lo recibirás en 24/48 h en un paquete discreto."} Esto es una demo: no se ha cobrado nada.`;
+  const total = grand(), num = "RV-" + String(Date.now()).slice(-6);
+  const pickup = $("input[name=ship]:checked").value === "store";
+  $("#coDoneText").textContent = `Pedido ${num} por ${fmt(total)} con ${$("input[name=pay]:checked").value.toLowerCase()}. ${pickup ? "Te avisamos cuando esté listo para recoger en la tienda." : "Lo recibirás en 24/48 h en un paquete discreto."} Esto es una demo: no se ha cobrado nada.`;
   $("#coForm").hidden = true; $("#coSteps").hidden = true; $("#coDone").hidden = false;
-  cart = {}; save(); burst($("#coDone h3"));
+  cart = {}; promo = false; store.set("rv-promo", false); save(); burst($("#coDone h3"));
   $("#coClose").focus();
 });
 $("#coClose").addEventListener("click", () => { closeCart(); });
 cartEl.addEventListener("keydown", (e) => trapTab(e, cartEl));
+
+/* ---------- Asistente de compra ---------- */
+const QZ = [
+  { k: "space", q: "¿Cuánto espacio tienes?", o: [["s", "Pequeño", "Un rincón o un armario de 60×60 cm"], ["m", "Mediano", "Hasta 80×80 cm · lo más habitual"], ["l", "Grande", "Una habitación o 120×120 cm"]] },
+  { k: "medium", q: "¿Dónde quieres cultivar?", o: [["soil", "En tierra", "Lo más sencillo para empezar"], ["coco", "En fibra de coco", "Más control y crecimiento rápido"], ["hydro", "En agua (hidroponía)", "El máximo rendimiento"]] },
+  { k: "have", q: "¿Qué tienes ya?", o: [["none", "Nada, empiezo de cero", "Te preparamos el equipo completo"], ["tent", "Ya tengo armario", "Solo te falta el resto"], ["both", "Armario y luz", "Completamos lo que falta"]] },
+];
+let qz = {}, qzStep = 0;
+function qzResult() {
+  const { space, medium, have } = qz;
+  if (space === "m" && medium === "soil" && have === "none") return { items: [["kit-interior", 1]], note: "El kit completo lleva todo lo que necesitas. Por separado costaría 389 €: te ahorras 90 €." };
+  const items = [];
+  if (have === "none") items.push([space === "l" ? "armario-120" : "armario-80", 1]);
+  if (have !== "both") items.push([space === "s" ? "led-120" : "led-240", space === "l" ? 2 : 1]);
+  if (have === "none") items.push(["extractor", 1], ["termo", 1]);
+  if (medium === "soil") items.push(["sustrato-50", space === "l" ? 2 : 1], ["nutri-gb", 1]);
+  if (medium === "coco") items.push(["coco-50", space === "l" ? 2 : 1], ["nutri-gb", 1], ["phmeter", 1]);
+  if (medium === "hydro") items.push(["dwc", 1], ["nutri-gb", 1], ["phmeter", 1]);
+  return { items, note: "Todo es compatible entre sí y cubre tu espacio. Puedes cambiar cantidades en el carrito." };
+}
+function renderQuiz() {
+  const box = $("#quiz");
+  if (qzStep < QZ.length) {
+    const st = QZ[qzStep];
+    box.innerHTML = `<div class="qz-top mono"><span>Pregunta ${qzStep + 1} de ${QZ.length}</span><span class="qz-dots">${QZ.map((_, i) => `<i class="${i <= qzStep ? "on" : ""}"></i>`).join("")}</span></div>
+      <p class="qz-q">${st.q}</p>
+      <div class="qz-opts">${st.o.map(([v, t, d], i) => `<button class="qz-opt" data-qz="${v}" style="--i:${i}"><span><strong>${t}</strong><small>${d}</small></span><span aria-hidden="true">→</span></button>`).join("")}</div>
+      ${qzStep ? '<button class="qz-back" id="qzBack">← Pregunta anterior</button>' : ""}`;
+    return;
+  }
+  const { items, note } = qzResult();
+  const total = items.reduce((s, [id, n]) => s + findP(id).price * n, 0);
+  box.innerHTML = `<div class="qz-top mono"><span>Tu equipo recomendado</span><span class="qz-dots">${QZ.map(() => '<i class="on"></i>').join("")}</span></div>
+    <ul class="qz-list">${items.map(([id, n], i) => `<li style="--i:${i}"><img src="${IMG[id]}" alt=""><span>${n > 1 ? n + " × " : ""}${findP(id).name}</span><b>${fmt(findP(id).price * n)}</b></li>`).join("")}</ul>
+    <div class="qz-total"><span class="qz-save">${note}</span><strong>${fmt(total)}</strong></div>
+    <p class="mono" style="color:var(--muted);font-size:.78rem">${total >= FREE ? "✓ Envío gratis incluido" : `Te faltan ${fmt(FREE - total)} para el envío gratis`} · Con RAIZ10 se queda en ${fmt(total - Math.round(total * 10) / 100)}</p>
+    <div class="qz-actions"><button class="btn btn-main" id="qzAdd">Añadir todo al carrito <span class="arrow">→</span></button><button class="btn" id="qzRestart">Empezar de nuevo</button></div>`;
+  $("#qzAdd").onclick = (e) => {
+    items.forEach(([id, n]) => { cart[id] = (cart[id] || 0) + n; }); save(); fly(e.currentTarget);
+    toast(`Equipo añadido: ${items.length} productos`); setTimeout(openCart, reduce ? 0 : 750);
+  };
+  $("#qzRestart").onclick = () => { qz = {}; qzStep = 0; renderQuiz(); };
+}
+$("#quiz").addEventListener("click", (e) => {
+  const o = e.target.closest("[data-qz]");
+  if (o) { qz[QZ[qzStep].k] = o.dataset.qz; qzStep++; renderQuiz(); return; }
+  if (e.target.closest("#qzBack")) { qzStep--; renderQuiz(); }
+});
+renderQuiz();
+
+/* ---------- Ayuda y barra móvil ---------- */
+const helpFab = $("#helpFab"), help = $("#help");
+helpFab.addEventListener("click", () => { help.hidden = !help.hidden; helpFab.setAttribute("aria-expanded", !help.hidden); });
+$$("#help a").forEach((a) => a.addEventListener("click", () => { help.hidden = true; helpFab.setAttribute("aria-expanded", "false"); }));
+document.addEventListener("click", (e) => { if (!help.hidden && !help.contains(e.target) && !helpFab.contains(e.target)) { help.hidden = true; helpFab.setAttribute("aria-expanded", "false"); } });
+$("#mbarBtn").addEventListener("click", openCart);
+addEventListener("resize", syncMbar);
 
 /* ---------- Newsletter ---------- */
 $("#news").addEventListener("submit", (e) => {
