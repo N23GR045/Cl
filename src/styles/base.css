@@ -13,7 +13,7 @@ h1 { font-size: var(--step-5); font-weight: 800; letter-spacing: -.045em; }
 h2 { font-size: var(--step-4); font-weight: 800; letter-spacing: -.035em; }
 h3 { font-size: var(--step-2); }
 h4 { font-size: var(--step-1); }
-p { margin: 0; max-width: var(--measure); }
+p { margin: 0; max-width: var(--measure); overflow-wrap: break-word; }
 a { color: inherit; text-underline-offset: .2em; }
 a:hover { text-decoration-thickness: 2px; }
 img, svg, video { display: block; max-width: 100%; height: auto; }

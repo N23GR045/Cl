@@ -31,7 +31,7 @@ Las pruebas se ejecutan con `npm run verify`.
 | 24 | Seguridad | ✅ | Sin `innerHTML` con datos, CSP estricta con hash (comprobada en las pruebas), HSTS, nosniff, `frame-ancestors 'none'`, honeypot, `rel="noopener noreferrer"`, saneo de `localStorage`, sin secretos. |
 | 25 | Privacidad y cookies | ✅ | No hay cookies no esenciales, así que no hace falta banner (art. 22.2 LSSI), explicado en `/legal/cookies`. Política de privacidad RGPD. |
 | 26 | Internacionalización | 🟡 | Cadenas de la interfaz en `src/i18n/es.ts` con marcadores `{n}` (sin concatenar). Falta: los textos de contenido de las páginas siguen en las plantillas. Para un segundo idioma, usar el i18n de Astro (`/en/…`). |
-| 27 | Pruebas y checklist | ✅ | `npm run verify`: tipos, build, validación HTML y `tests/smoke.mjs`: consola, h1, títulos, alt, dimensiones, desbordamiento, enlaces, axe y flujos de asistente, filtros, compra y contacto. Integración continua en GitHub Actions. |
+| 27 | Pruebas y checklist | ✅ | `npm run verify` (incluye `tests/layout.mjs`: textos superpuestos, cortados o fuera de pantalla en 8 anchos de 320 a 1440 px, y `LAYOUT_ALL=1` para las 56 páginas): tipos, build, validación HTML y `tests/smoke.mjs`: consola, h1, títulos, alt, dimensiones, desbordamiento, enlaces, axe y flujos de asistente, filtros, compra y contacto. Integración continua en GitHub Actions. |
 | 28 | Documentación | ✅ | `README.md` y `docs/`. |
 | 29 | Despliegue | ✅ | `docs/DESPLIEGUE.md` y `netlify.toml`. Variables: `PUBLIC_SITE_URL` y `STRIPE_SECRET_KEY`. |
 | 30 | Entrega final | ✅ | Repositorio, árbol en el README y este documento. |

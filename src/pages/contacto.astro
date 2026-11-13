@@ -22,7 +22,7 @@ const mapUrl = `https://www.openstreetmap.org/search?query=${encodeURIComponent(
 
       <form class="form" name="contacto" method="POST" action="/" data-netlify="true" netlify-honeypot="bot-field" data-remote novalidate aria-labelledby="form-title">
         <input type="hidden" name="form-name" value="contacto" />
-        <p class="hp"><label>No rellenes este campo <input type="text" name="bot-field" tabindex="-1" autocomplete="off" /></label></p>
+        <p class="hp" aria-hidden="true"><label>No rellenes este campo <input type="text" name="bot-field" tabindex="-1" autocomplete="off" /></label></p>
         <h2 id="form-title" style="font-size:var(--step-3)">Escríbenos</h2>
         <p class="muted" style="font-size:.9rem">Los campos marcados con * son obligatorios.</p>
         <fieldset style="border:0;padding:0;margin:0;display:grid;gap:1.25rem">

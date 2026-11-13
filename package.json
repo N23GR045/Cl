@@ -14,7 +14,8 @@
     "check": "astro check",
     "validate": "html-validate \"dist/**/*.html\"",
     "test": "node --test tests/checkout-fn.test.mjs && node tests/smoke.mjs",
-    "verify": "npm run check && npm run build && npm run validate && npm run test"
+    "verify": "npm run check && npm run build && npm run validate && npm run test && npm run test:layout",
+    "test:layout": "node tests/layout.mjs"
   },
   "dependencies": {
     "@astrojs/sitemap": "3.7.4",

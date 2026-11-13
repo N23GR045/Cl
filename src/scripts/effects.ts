@@ -89,7 +89,7 @@ function initScroll() {
       header.classList.toggle("is-hidden", !menuOpen && y > lastY && y > 400);
     }
     lastY = y;
-    if (heroCopy && y < vh * 1.2) { heroCopy.style.transform = `translateY(${y * .2}px)`; heroCopy.style.opacity = String(clamp(1 - y / (vh * .85))); }
+    if (heroCopy && y < vh * 1.2) heroCopy.style.opacity = String(clamp(1 - y / (vh * .9), .15));
 
     if (grow) {
       const r = grow.getBoundingClientRect();

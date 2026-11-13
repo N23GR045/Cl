@@ -20,7 +20,8 @@ npm install          # instala dependencias (versiones exactas)
 npm run dev          # servidor de desarrollo en http://localhost:4321
 npm run build        # genera el sitio en dist/
 npm run preview      # sirve dist/ para revisarlo
-npm run verify       # tipos + build + validación HTML + pruebas en navegador
+npm run verify       # tipos + build + validación HTML + pruebas en navegador + maquetación
+LAYOUT_ALL=1 npm run test:layout   # maquetación de las 56 páginas en móvil
 ```
 
 Copia `.env.example` a `.env` y pon tu dominio en `PUBLIC_SITE_URL` (lo usan canonical, sitemap, robots y Open Graph).

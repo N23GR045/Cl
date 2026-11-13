@@ -176,7 +176,7 @@ const faqLd = { "@context": "https://schema.org", "@type": "FAQPage", mainEntity
     <div class="container">
       <form class="form reveal" name="newsletter" method="POST" action="/" data-netlify="true" netlify-honeypot="bot-field" data-remote data-success={`Suscrito. Tu código de descuento es ${site.promo.code}.`} novalidate>
         <input type="hidden" name="form-name" value="newsletter" />
-        <p class="hp"><label>No rellenes este campo <input type="text" name="bot-field" tabindex="-1" autocomplete="off" /></label></p>
+        <p class="hp" aria-hidden="true"><label>No rellenes este campo <input type="text" name="bot-field" tabindex="-1" autocomplete="off" /></label></p>
         <div class="stack">
           <h2 id="news-title" style="font-size:var(--step-3)">{site.promo.percent} % de descuento en tu primer pedido.</h2>
           <p class="muted">Un email al mes con consejos de cultivo y ofertas. Te das de baja cuando quieras.</p>
