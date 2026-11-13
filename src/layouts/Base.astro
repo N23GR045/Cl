@@ -1,0 +1,60 @@
+---
+import "@fontsource-variable/bricolage-grotesque";
+import "@fontsource/instrument-sans/400.css";
+import "@fontsource/instrument-sans/600.css";
+import "@fontsource/jetbrains-mono/500.css";
+import "../styles/tokens.css";
+import "../styles/base.css";
+import "../styles/components.css";
+import "../styles/sections.css";
+import Seo, { type SeoProps } from "../components/Seo.astro";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import CartDrawer from "../components/CartDrawer.astro";
+import AgeGate from "../components/AgeGate.astro";
+import { products, categories } from "../data/catalog";
+import { site } from "../data/site";
+import { t } from "../i18n/es";
+
+type Props = SeoProps;
+const props = Astro.props as Props;
+// Datos mínimos que necesita el carrito en el navegador (sin descripciones largas).
+const clientCatalog = {
+  products: products.map(({ id, name, price, img, cat, combo }) => ({ id, name, price, img, cat, combo })),
+  categories: categories.map(({ id, name }) => ({ id, name })),
+  shipping: site.shipping, promo: site.promo, phone: site.phone, email: site.email,
+};
+---
+<!doctype html>
+<html lang={site.lang}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <Seo {...props} />
+    <meta name="theme-color" content="#0a0c0e" media="(prefers-color-scheme: dark)" />
+    <meta name="theme-color" content="#f6f5f0" media="(prefers-color-scheme: light)" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+    <!-- Aplica el tema guardado antes del primer pintado (evita parpadeo). Su hash está en la CSP. -->
+    <script is:inline>(function(){try{var t=localStorage.getItem("rv-theme");if(t==="light"||t==="dark")document.documentElement.dataset.theme=t}catch(e){}document.documentElement.classList.add("js")})();</script>
+    <slot name="head" />
+  </head>
+  <body>
+    <a class="sr-only sr-only--focusable skip" href="#main">{t.skip}</a>
+    <Header />
+    <main id="main" tabindex="-1">
+      <slot />
+    </main>
+    <Footer />
+    <CartDrawer />
+    <AgeGate />
+    <div class="mbar" data-mbar hidden><button class="btn btn--primary" type="button" data-cart-open><span data-mbar-text></span><span>Finalizar →</span></button></div>
+    <div class="toast" data-toast role="status" aria-live="polite" aria-atomic="true"></div>
+    <script type="application/json" id="catalog-data" set:html={JSON.stringify(clientCatalog).replace(/</g, "\\u003c")} />
+    <script>import "../scripts/main";</script>
+  </body>
+</html>
+<style is:global>
+  .skip:focus { position: fixed; left: 16px; top: 12px; z-index: 200; width: auto; height: auto; clip: auto; margin: 0; padding: .7rem 1rem; border-radius: 999px; background: var(--fg); color: var(--bg); font-weight: 600; white-space: normal; }
+  main:focus { outline: none; }
+</style>

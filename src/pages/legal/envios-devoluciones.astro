@@ -1,0 +1,18 @@
+---
+import Legal from "../../layouts/Legal.astro";
+import { site, formatPrice } from "../../data/site";
+---
+<Legal title="Envíos y devoluciones" description="Plazos y costes de envío, recogida en tienda, devoluciones en 30 días y garantía de 3 años." path="/legal/envios-devoluciones" updated="13/11/2026">
+  <h2>Envíos</h2>
+  <ul>
+    <li>Península: 24/48 h laborables. Baleares: 72 h.</li>
+    <li>Gratis a partir de {formatPrice(site.shipping.freeFrom)}; por debajo, {formatPrice(site.shipping.cost)}.</li>
+    <li>Los pedidos hechos antes de las {site.shipping.cutoffHour}:00 en día laborable salen el mismo día.</li>
+    <li>Embalaje neutro y discreto, sin logotipos.</li>
+    <li>Recogida gratuita en la tienda de {site.address.city}, lista en 2 horas.</li>
+  </ul>
+  <h2>Devoluciones</h2>
+  <p>Tienes 30 días naturales desde la entrega para devolver productos sin usar y en su embalaje original. Sustratos, abonos y productos de CBD abiertos no admiten devolución por motivos de higiene. Te reembolsamos en un máximo de 14 días.</p>
+  <h2>Garantía</h2>
+  <p>Los equipos eléctricos tienen 3 años de garantía legal.</p>
+</Legal>

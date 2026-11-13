@@ -1,0 +1,39 @@
+---
+import Icon from "./Icon.astro";
+import ProductCard from "./ProductCard.astro";
+import type { Product, Category } from "../data/catalog";
+import { t, fmt } from "../i18n/es";
+interface Props { items: Product[]; categories?: Category[]; active?: string }
+const { items, categories = [], active = "todos" } = Astro.props;
+---
+<div data-catalog>
+  <div class="toolbar">
+    {categories.length > 0 && (
+      <div class="chips" role="group" aria-label="Filtrar por categoría">
+        <button type="button" class="chip" data-filter="todos" aria-pressed={active === "todos" ? "true" : "false"}>{t.catalog.all}</button>
+        {categories.map((c) => <button type="button" class="chip" data-filter={c.id} aria-pressed={active === c.id ? "true" : "false"}>{c.name}</button>)}
+      </div>
+    )}
+    <div class="toolbar__row">
+      <div class="search">
+        <label for="q" class="sr-only">{t.catalog.search}</label>
+        <Icon name="search" />
+        <input class="input" id="q" type="search" placeholder={t.catalog.searchPh} autocomplete="off" enterkeyhint="search" />
+      </div>
+      <label for="sort" class="sr-only">{t.catalog.sort}</label>
+      <select class="select" id="sort">
+        <option value="rel">{t.catalog.sortRel}</option>
+        <option value="asc">{t.catalog.sortAsc}</option>
+        <option value="desc">{t.catalog.sortDesc}</option>
+      </select>
+      <p class="toolbar__count mono" data-count role="status" aria-live="polite">{fmt(t.catalog.count, { n: items.length })}</p>
+    </div>
+  </div>
+  <div class="grid-products" data-grid>
+    {items.map((p, i) => <ProductCard product={p} eager={i < 4} headingLevel={2} />)}
+  </div>
+  <div class="empty-state" data-empty hidden>
+    <p>{t.catalog.none}</p>
+    <button type="button" class="btn" data-reset>{t.catalog.reset}</button>
+  </div>
+</div>

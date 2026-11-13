@@ -1,0 +1,24 @@
+---
+import Base from "../../layouts/Base.astro";
+import Breadcrumbs from "../../components/Breadcrumbs.astro";
+import Catalog from "../../components/Catalog.astro";
+import { categories, productsIn, type Category } from "../../data/catalog";
+
+export function getStaticPaths() {
+  return categories.map((c) => ({ params: { slug: c.id }, props: { category: c } }));
+}
+const { category } = Astro.props as { category: Category };
+const items = productsIn(category.id);
+const cbd = category.id === "cbd";
+---
+<Base title={`${category.name} para cultivo`} description={`${category.name}: ${category.desc}. ${items.length} productos con envío discreto en 24/48 h y asesoría de cultivadores.`} path={`/categoria/${category.id}`} image={`/img/${category.cover}.webp`}>
+  <div class="container section--tight" style="padding-bottom:0">
+    <Breadcrumbs items={[{ label: "Inicio", href: "/" }, { label: "Productos", href: "/productos" }, { label: category.name }]} />
+    <div class="section-head" style="margin-top:1.5rem;margin-bottom:2rem">
+      <h1 style="font-size:var(--step-4)">{category.name}</h1>
+      <p>{category.desc}.</p>
+      {cbd && <p class="alert alert--warning">Productos de cáñamo con menos de un 0,2 % de THC, vendidos como artículo de coleccionismo o uso técnico. No aptos para consumo humano. Solo mayores de 18 años.</p>}
+    </div>
+    <Catalog items={items} />
+  </div>
+</Base>

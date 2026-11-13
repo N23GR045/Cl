@@ -1,0 +1,6 @@
+---
+// Datos estructurados schema.org. El contenido es nuestro (no del usuario), y se escapa "<" por seguridad.
+const { data } = Astro.props as { data: object };
+const json = JSON.stringify(data).replace(/</g, "\\u003c");
+---
+<script type="application/ld+json" set:html={json} />

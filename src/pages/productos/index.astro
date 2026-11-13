@@ -1,0 +1,20 @@
+---
+import Base from "../../layouts/Base.astro";
+import Breadcrumbs from "../../components/Breadcrumbs.astro";
+import Catalog from "../../components/Catalog.astro";
+import JsonLd from "../../components/JsonLd.astro";
+import { products, categories } from "../../data/catalog";
+import { site } from "../../data/site";
+const list = { "@context": "https://schema.org", "@type": "ItemList", itemListElement: products.map((p, i) => ({ "@type": "ListItem", position: i + 1, url: new URL(`/productos/${p.id}`, site.url).href, name: p.name })) };
+---
+<Base title="Todos los productos" description={`Catálogo de ${products.length} productos para cultivo de interior y exterior: LED, armarios, sustratos, nutrientes, clima, hidroponía, fumador y CBD.`} path="/productos">
+  <JsonLd slot="head" data={list} />
+  <div class="container section--tight" style="padding-bottom:0">
+    <Breadcrumbs items={[{ label: "Inicio", href: "/" }, { label: "Productos" }]} />
+    <div class="section-head" style="margin-top:1.5rem;margin-bottom:2rem">
+      <h1 style="font-size:var(--step-4)">Todos los productos</h1>
+      <p>Filtra por categoría, busca por nombre o característica y ordena por precio.</p>
+    </div>
+    <Catalog items={products} categories={categories} />
+  </div>
+</Base>

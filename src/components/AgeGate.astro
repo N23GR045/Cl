@@ -1,0 +1,14 @@
+---
+import { t } from "../i18n/es";
+---
+<dialog class="dialog" id="age-gate" aria-labelledby="age-title" aria-describedby="age-text">
+  <div class="stack" style="--space:1rem;text-align:center">
+    <h2 id="age-title" style="font-size:var(--step-3)">{t.age.title}</h2>
+    <p id="age-text" class="muted" style="margin-inline:auto">{t.age.text}</p>
+    <div style="display:grid;gap:.5rem">
+      <button class="btn btn--primary" type="button" data-age-yes autofocus>{t.age.yes}</button>
+      <button class="btn" type="button" data-age-no>{t.age.no}</button>
+    </div>
+    <p class="error-msg" data-age-msg role="status" style="justify-content:center"></p>
+  </div>
+</dialog>

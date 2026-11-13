@@ -1,0 +1,20 @@
+---
+import Legal from "../../layouts/Legal.astro";
+import { site } from "../../data/site";
+---
+<Legal title="Política de privacidad" description="Cómo tratamos tus datos personales conforme al RGPD y la LOPDGDD." path="/legal/privacidad" updated="13/11/2026">
+  <h2>Responsable</h2>
+  <p>{site.legalName} · {site.email}.</p>
+  <h2>Qué datos tratamos y para qué</h2>
+  <ul>
+    <li><strong>Formulario de contacto:</strong> nombre, email, teléfono opcional y mensaje, para responder a tu consulta. Base legal: tu consentimiento.</li>
+    <li><strong>Newsletter:</strong> email, para enviarte consejos y ofertas. Base legal: tu consentimiento, que puedes retirar en cualquier momento.</li>
+    <li><strong>Pedidos:</strong> datos de contacto y envío, para gestionar la compra. Base legal: ejecución del contrato.</li>
+  </ul>
+  <h2>Conservación</h2>
+  <p>Mientras dure la relación y, después, durante los plazos legales de prescripción.</p>
+  <h2>Encargados del tratamiento</h2>
+  <p>Proveedor de alojamiento y de formularios (por ejemplo, Netlify), pasarela de pago y empresa de transporte, con contratos conforme al RGPD.</p>
+  <h2>Tus derechos</h2>
+  <p>Puedes ejercer los derechos de acceso, rectificación, supresión, oposición, limitación y portabilidad escribiendo a {site.email}. También puedes reclamar ante la Agencia Española de Protección de Datos (aepd.es).</p>
+</Legal>

@@ -1,0 +1,40 @@
+---
+import Icon from "./Icon.astro";
+import { t } from "../i18n/es";
+import { site, formatPrice } from "../data/site";
+const path = Astro.url.pathname.replace(/\.html$/, "");
+const links = [
+  { href: "/productos", label: t.nav.products, match: (p: string) => p.startsWith("/productos") || p.startsWith("/categoria") },
+  { href: "/#asistente", label: t.nav.assistant },
+  { href: "/#montaje", label: t.nav.setup },
+  { href: "/#faq", label: t.nav.faq },
+  { href: "/contacto", label: t.nav.contact, match: (p: string) => p.startsWith("/contacto") },
+];
+---
+<p class="promo">−{site.promo.percent} % en tu primer pedido con <strong>{site.promo.code}</strong> · Envío gratis desde {formatPrice(site.shipping.freeFrom)}</p>
+<header class="header">
+  <div class="container header__inner">
+    <a href="/" class="logo" aria-label={`${site.name}, inicio`}><Icon name="leaf" size={30} />{site.name}</a>
+    <nav class="nav" id="nav" aria-label="Principal">
+      <ul class="nav__list">
+        {links.map((l) => <li><a class="nav__link" href={l.href} aria-current={l.match?.(path) ? "page" : undefined}>{l.label}</a></li>)}
+      </ul>
+    </nav>
+    <div class="header__actions">
+      <button class="icon-btn" type="button" data-theme-toggle aria-label={t.theme.toLight}><Icon name="sun" class="theme-sun" /><Icon name="moon" class="theme-moon" /></button>
+      <button class="icon-btn" type="button" data-cart-open aria-label={t.cart.open.replace("{n}", "0")} aria-controls="cart" aria-expanded="false">
+        <Icon name="cart" /><span class="cart-count" data-cart-count aria-hidden="true">0</span>
+      </button>
+      <button class="icon-btn menu-btn" type="button" data-menu aria-label={t.nav.menu} aria-controls="nav" aria-expanded="false"><Icon name="menu" /></button>
+    </div>
+  </div>
+</header>
+<style is:global>
+  .theme-moon { display: none; }
+  [data-theme="light"] .theme-sun { display: none; }
+  [data-theme="light"] .theme-moon { display: block; }
+  @media (prefers-color-scheme: light) {
+    :root:not([data-theme="dark"]) .theme-sun { display: none; }
+    :root:not([data-theme="dark"]) .theme-moon { display: block; }
+  }
+</style>

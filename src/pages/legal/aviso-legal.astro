@@ -1,0 +1,14 @@
+---
+import Legal from "../../layouts/Legal.astro";
+import { site } from "../../data/site";
+---
+<Legal title="Aviso legal" description="Datos identificativos del titular de la web y condiciones de uso." path="/legal/aviso-legal" updated="13/11/2026">
+  <h2>Titular</h2>
+  <p>{site.legalName}, con NIF {site.taxId} y domicilio en {site.address.street}, {site.address.postalCode} {site.address.city}. Email: {site.email}. Teléfono: {site.phone}.</p>
+  <h2>Condiciones de uso</h2>
+  <p>El acceso a esta web atribuye la condición de usuario e implica aceptar estas condiciones. La venta está dirigida exclusivamente a mayores de 18 años.</p>
+  <h2>Productos</h2>
+  <p>Los productos se destinan a jardinería y cultivo dentro del marco legal vigente. Los productos de cáñamo con CBD contienen menos de un 0,2 % de THC y se venden como artículo de coleccionismo o uso técnico, no aptos para consumo humano.</p>
+  <h2>Propiedad intelectual</h2>
+  <p>Los textos, el diseño y las imágenes de esta web pertenecen a {site.legalName} salvo indicación en contrario.</p>
+</Legal>

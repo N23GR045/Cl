@@ -1,0 +1,21 @@
+---
+// Planta bajo una lámpara LED: SVG ligero (≈3 KB) animado solo con CSS.
+const base = 432, top = 150, levels = 5, step = (base - top - 40) / levels;
+const leaf = (y: number, L: number) => `M200 ${y} C ${200 - L * .25} ${y - L * .42} ${200 - L * .75} ${y - L * .45} ${200 - L} ${y - L * .18} C ${200 - L * .7} ${y + L * .06} ${200 - L * .3} ${y + L * .1} 200 ${y} Z`;
+const leaves = Array.from({ length: levels }, (_, i) => ({ y: base - 46 - i * step, L: 128 - i * 14, d: (.6 + i * .16).toFixed(2) }));
+---
+<svg class="plant" viewBox="0 0 400 520" role="img" aria-label="Ilustración: una planta creciendo bajo una lámpara LED de cultivo">
+  <defs><linearGradient id="beam" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ff9be6" stop-opacity=".55" /><stop offset="1" stop-color="#ff9be6" stop-opacity="0" /></linearGradient></defs>
+  <polygon class="beam" points="110,30 290,30 400,500 0,500" fill="url(#beam)" />
+  <rect class="lamp" x="96" y="6" width="208" height="22" rx="6" />
+  <rect class="led" x="112" y="24" width="176" height="6" rx="3" />
+  <path class="stem" pathLength="1" d={`M200 ${base} C 195 ${base - 90} 206 ${top + 120} 200 ${top}`} />
+  {leaves.map(({ y, L, d }) => (
+    <>
+      <g class="leaf" style={`--d:${d}s`}><path class="blade" d={leaf(y, L)} /></g>
+      <g transform="translate(400 0) scale(-1 1)"><g class="leaf" style={`--d:${(+d + .08).toFixed(2)}s`}><path class="blade" d={leaf(y, L)} /></g></g>
+    </>
+  ))}
+  <path class="pot" d="M128 440h144l-16 76H144z" />
+  <rect class="rim" x="116" y="426" width="168" height="22" rx="7" />
+</svg>

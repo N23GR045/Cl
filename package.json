@@ -1,0 +1,32 @@
+{
+  "name": "raiz-verde",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Raíz Verde Grow Shop: web estática con Astro.",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "check": "astro check",
+    "validate": "html-validate \"dist/**/*.html\"",
+    "test": "node tests/smoke.mjs",
+    "verify": "npm run check && npm run build && npm run validate && npm run test"
+  },
+  "dependencies": {
+    "@astrojs/sitemap": "3.7.4",
+    "@fontsource-variable/bricolage-grotesque": "5.3.0",
+    "@fontsource/instrument-sans": "5.3.0",
+    "@fontsource/jetbrains-mono": "5.3.0",
+    "astro": "7.4.11"
+  },
+  "devDependencies": {
+    "@astrojs/check": "0.9.12",
+    "axe-core": "4.14.0",
+    "html-validate": "11.21.1",
+    "typescript": "6.0.3"
+  }
+}
