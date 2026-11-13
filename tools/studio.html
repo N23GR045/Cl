@@ -521,6 +521,172 @@ function pile(color, r, n, radius) {
   im.castShadow = true; im.receiveShadow = true; return im;
 }
 
+
+/* ---------- fumador y CBD ---------- */
+const glass = (c = 0xeaf4ff, o = {}) => phys({ color: c, roughness: .05, transmission: .92, thickness: .25, ior: 1.5, transparent: true, opacity: .55, side: THREE.DoubleSide, ...o });
+function grinder(color = 0x3f8a52) {
+  const g = new THREE.Group();
+  const al = std(color, .32, .85);
+  const body = new THREE.Group();
+  [[.0, .32], [.34, .22], [.58, .22]].forEach(([y, h], i) => { const c = mesh(new THREE.CylinderGeometry(.62, .62, h, 64), al); c.position.y = y + h / 2; body.add(c); const ring = mesh(new THREE.TorusGeometry(.62, .012, 6, 64), std(0x111111, .5)); ring.rotation.x = Math.PI / 2; ring.position.y = y + h; body.add(ring); });
+  g.add(body);
+  const lid = new THREE.Group();
+  const top = mesh(new THREE.CylinderGeometry(.62, .62, .26, 64), al); top.position.y = .13; lid.add(top);
+  const rim = mesh(new THREE.TorusGeometry(.62, .03, 10, 64), al); rim.rotation.x = Math.PI / 2; rim.position.y = .26; lid.add(rim);
+  const teeth = new THREE.InstancedMesh(new THREE.ConeGeometry(.04, .14, 4), std(0xd8dcdf, .3, 1), 40); const m = new THREE.Matrix4();
+  for (let i = 0; i < 40; i++) { const a = i * 2.39996, rr = .1 + Math.sqrt(i / 40) * .45; m.compose(new THREE.Vector3(Math.cos(a) * rr, -.07, Math.sin(a) * rr), new THREE.Quaternion().setFromEuler(new THREE.Euler(Math.PI, 0, 0)), new THREE.Vector3(1, 1, 1)); teeth.setMatrixAt(i, m); }
+  teeth.castShadow = true; lid.add(teeth);
+  lid.rotation.x = Math.PI; lid.rotation.z = -.35; lid.position.set(1.35, .4, .3);
+  const lidTop = mesh(new THREE.CircleGeometry(.6, 64), std(0xffffff, .3, .8, { map: label(512, 512, (x, w, h) => { x.fillStyle = "#" + color.toString(16).padStart(6, "0"); x.fillRect(0, 0, w, h); x.fillStyle = "rgba(255,255,255,.85)"; x.font = "bold 60px sans-serif"; x.textAlign = "center"; x.fillText("RAÍZ", 256, 250); x.fillText("VERDE", 256, 320); }) }));
+  g.add(lid);
+  const lid2 = mesh(new THREE.CylinderGeometry(.62, .62, .26, 64), al); lid2.position.set(0, .93, 0); g.add(lid2);
+  lidTop.rotation.x = -Math.PI / 2; lidTop.position.set(0, 1.065, 0); g.add(lidTop);
+  g.remove(lid);
+  const open = new THREE.Group(); open.add(top.clone()); open.add(rim.clone()); open.add(teeth.clone()); open.rotation.x = Math.PI; open.position.set(1.4, .26, .3); open.rotation.z = Math.PI; g.add(open);
+  return g;
+}
+function papers() {
+  const g = new THREE.Group();
+  const pk = (w, h, d, col, t1, t2) => { const b = new THREE.Group(); const box = mesh(new RoundedBoxGeometry(w, d, h, 2, .015), [std(col, .7), std(col, .7), std(0xffffff, .65, 0, { map: label(600, 300, (x, W, H) => { x.fillStyle = "#" + col.toString(16).padStart(6, "0"); x.fillRect(0, 0, W, H); x.fillStyle = "#f6f1e4"; x.font = "900 96px sans-serif"; x.fillText(t1, 30, 130); x.font = "bold 44px sans-serif"; x.fillText(t2, 34, 210); x.fillStyle = "#e7b94a"; x.fillRect(30, 240, 140, 10); }) }), std(col, .7), std(col, .7), std(col, .7)]); b.add(box); return b; };
+  const a = pk(1.5, .78, .08, 0x2c5a3b, "PAPERS", "King Size Slim · 32"); a.position.set(-.2, .04, 0); a.rotation.y = .25; g.add(a);
+  const b = pk(1.5, .78, .08, 0x8a5a3b, "PAPERS", "Sin blanquear · 32"); b.position.set(.15, .12, .35); b.rotation.y = -.15; g.add(b);
+  const t = pk(1.1, .5, .07, 0xe7b94a, "TIPS", "Filtros de cartón · 50"); t.position.set(.95, .035, -.5); t.rotation.y = .5; g.add(t);
+  for (let i = 0; i < 3; i++) { const sh = mesh(new THREE.PlaneGeometry(1.1, .5), std(0xf8f4ea, .8, 0, { side: THREE.DoubleSide, transparent: true, opacity: .96 })); sh.rotation.x = -Math.PI / 2; sh.rotation.z = .4 + i * .25; sh.position.set(-.9 + i * .12, .01 + i * .002, .75); g.add(sh); }
+  return g;
+}
+function tray() {
+  const g = new THREE.Group();
+  const art = label(1024, 640, (x, w, h) => { const gr = x.createLinearGradient(0, 0, w, h); gr.addColorStop(0, "#1d3a28"); gr.addColorStop(1, "#0f1d15"); x.fillStyle = gr; x.fillRect(0, 0, w, h); x.strokeStyle = "rgba(127,216,138,.35)"; x.lineWidth = 3; for (let i = 0; i < 9; i++) { x.save(); x.translate(120 + i * 105, 320 + Math.sin(i) * 160); x.rotate(i); for (let k = 0; k < 7; k++) { x.rotate(.45); x.beginPath(); x.ellipse(0, -40, 9, 40, 0, 0, 7); x.stroke(); } x.restore(); } x.fillStyle = "#e7b94a"; x.font = "bold 54px sans-serif"; x.fillText("RAÍZ VERDE", 60, 590); });
+  const base = mesh(new RoundedBoxGeometry(2.6, .05, 1.65, 4, .02), [std(0x222222, .4, .8), std(0x222222, .4, .8), std(0xffffff, .35, .6, { map: art }), std(0x222222, .4, .8), std(0x222222, .4, .8), std(0x222222, .4, .8)]); base.position.y = .025; g.add(base);
+  for (const [w, d, x, z] of [[2.6, .05, 0, .82], [2.6, .05, 0, -.82], [.05, 1.65, 1.3, 0], [.05, 1.65, -1.3, 0]]) { const e = mesh(new THREE.BoxGeometry(w, .12, d), std(0x1d3a28, .35, .8)); e.position.set(x, .06, z); g.add(e); }
+  return g;
+}
+function pipeWood() {
+  const g = new THREE.Group();
+  const wood = phys({ color: 0x6b3a1f, roughness: .3, clearcoat: .8, clearcoatRoughness: .15, map: canvasTex(256, 256, (x, w, h) => { x.fillStyle = "#6b3a1f"; x.fillRect(0, 0, w, h); for (let i = 0; i < 120; i++) { x.strokeStyle = `rgba(${Math.random() < .5 ? "40,18,6" : "160,90,50"},${Math.random() * .35})`; x.beginPath(); const y = Math.random() * h; x.moveTo(0, y); x.bezierCurveTo(w * .3, y + 12, w * .6, y - 12, w, y + 4); x.stroke(); } }) });
+  const pts = [[0, 0], [.28, .02], [.36, .2], [.38, .5], [.35, .7], [.3, .72], [.28, .25], [0, .23]].map(([a, b]) => new THREE.Vector2(a, b));
+  const bowl = mesh(new THREE.LatheGeometry(pts, 48), wood); bowl.position.set(-.6, .1, 0); g.add(bowl);
+  const ash = mesh(new THREE.CircleGeometry(.28, 32), std(0x1a0f08, 1)); ash.rotation.x = -Math.PI / 2; ash.position.set(-.6, .45, 0); g.add(ash);
+  const curve = new THREE.CatmullRomCurve3([new THREE.Vector3(-.3, .3, 0), new THREE.Vector3(.4, .32, 0), new THREE.Vector3(1.0, .5, 0), new THREE.Vector3(1.5, .72, 0)]);
+  g.add(mesh(new THREE.TubeGeometry(curve, 40, .09, 20), wood));
+  const band = mesh(new THREE.CylinderGeometry(.1, .1, .07, 24), std(0xd7dbe0, .2, 1)); band.rotation.z = Math.PI / 2 - .3; band.position.set(1.0, .5, 0); g.add(band);
+  const mc = new THREE.CatmullRomCurve3([new THREE.Vector3(1.03, .51, 0), new THREE.Vector3(1.5, .72, 0), new THREE.Vector3(1.95, .82, 0)]);
+  g.add(mesh(new THREE.TubeGeometry(mc, 30, .075, 16), phys({ color: 0x0c0c0c, roughness: .2, clearcoat: 1 })));
+  const stand = mesh(new THREE.TorusGeometry(.35, .04, 10, 40, Math.PI), std(0x8a4b25, .5)); stand.position.set(.6, 0, 0); g.add(stand);
+  return g;
+}
+function shisha() {
+  const g = new THREE.Group();
+  const vase = mesh(new THREE.LatheGeometry([[0, 0], [.55, 0], [.75, .4], [.7, .8], [.4, 1.15], [.2, 1.35], [.2, 1.45], [0, 1.45]].map(([a, b]) => new THREE.Vector2(a, b)), 64), phys({ color: 0x1f4fd1, roughness: .05, transmission: .7, thickness: .5, ior: 1.5 }));
+  g.add(vase);
+  const water = mesh(new THREE.CylinderGeometry(.68, .55, .55, 48), phys({ color: 0x7fb2ff, transmission: .8, roughness: .05, transparent: true, opacity: .5 })); water.position.y = .3; g.add(water);
+  const brass = std(0xc9a14a, .25, 1);
+  const col = [[.18, .2], [.12, .4], [.22, .1], [.1, .6], [.2, .12], [.09, .5]]; let y = 1.45;
+  col.forEach(([r, h]) => { const c = mesh(new THREE.CylinderGeometry(r, r * 1.1, h, 32), brass); c.position.y = y + h / 2; g.add(c); y += h; });
+  const tray2 = mesh(new THREE.CylinderGeometry(.5, .45, .05, 48), brass); tray2.position.y = y; g.add(tray2);
+  const bowl = mesh(new THREE.CylinderGeometry(.22, .12, .32, 32), std(0xb8582c, .7)); bowl.position.y = y + .18; g.add(bowl);
+  const foil = mesh(new THREE.CylinderGeometry(.23, .23, .02, 32), std(0xd9dde2, .3, 1)); foil.position.y = y + .35; g.add(foil);
+  const coal = mesh(new RoundedBoxGeometry(.16, .07, .16, 2, .02), std(0x222222, .8, 0, { emissive: 0xff4a10, emissiveIntensity: .7 })); coal.position.y = y + .4; g.add(coal);
+  const hc = new THREE.CatmullRomCurve3([new THREE.Vector3(.12, 1.8, 0), new THREE.Vector3(.5, 1.7, .1), new THREE.Vector3(1.1, .9, .4), new THREE.Vector3(1.3, .1, .9), new THREE.Vector3(1.0, .05, 1.4), new THREE.Vector3(.5, .3, 1.6)]);
+  g.add(mesh(new THREE.TubeGeometry(hc, 120, .045, 10), std(0x1b1b1f, .6)));
+  const handle = mesh(new THREE.CylinderGeometry(.05, .04, .5, 16), phys({ color: 0x8a4b25, roughness: .3, clearcoat: .7 })); handle.position.set(.35, .45, 1.65); handle.rotation.set(.3, 0, 1.1); g.add(handle);
+  return g;
+}
+function bong() {
+  const g = new THREE.Group();
+  const pts = [[0, 0], [.6, 0], [.62, .05], [.55, .5], [.25, 1.0], [.2, 1.1], [.2, 2.6], [.24, 2.65], [.24, 2.68], [.2, 2.68]].map(([a, b]) => new THREE.Vector2(a, b));
+  g.add(mesh(new THREE.LatheGeometry(pts, 64), glass(0xeaf4ff, { opacity: .45 })));
+  const water = mesh(new THREE.CylinderGeometry(.48, .58, .3, 48), phys({ color: 0x9fe0c9, transmission: .8, transparent: true, opacity: .45, roughness: .05 })); water.position.y = .16; g.add(water);
+  const deco = mesh(new THREE.TorusGeometry(.205, .02, 8, 48), phys({ color: 0x3f8a52, roughness: .2, clearcoat: 1 })); deco.rotation.x = Math.PI / 2; deco.position.y = 2.3; g.add(deco);
+  const logo = mesh(new THREE.PlaneGeometry(.3, .7), std(0xffffff, .3, 0, { transparent: true, map: label(200, 460, (x, w, h) => { x.clearRect(0, 0, w, h); x.save(); x.translate(w / 2, h / 2); x.rotate(-Math.PI / 2); x.fillStyle = "#7fd88a"; x.font = "bold 64px sans-serif"; x.textAlign = "center"; x.fillText("RAÍZ VERDE", 0, 22); x.restore(); }) })); logo.position.set(0, 1.7, .205); g.add(logo);
+  const stem = mesh(new THREE.CylinderGeometry(.06, .06, .8, 24), glass()); stem.position.set(.28, .55, 0); stem.rotation.z = -.75; g.add(stem);
+  const bowlB = mesh(new THREE.LatheGeometry([[0, 0], [.06, 0], [.16, .14], [.17, .2], [0, .2]].map(([a, b]) => new THREE.Vector2(a, b)), 32), glass(0xd4f0dd)); bowlB.position.set(.58, .85, 0); bowlB.rotation.z = -.75; g.add(bowlB);
+  return g;
+}
+function lighters() {
+  const g = new THREE.Group();
+  [0xe04fcf, 0x3f8a52, 0xe7b94a, 0x2d5bd6].forEach((c, i) => {
+    const l = new THREE.Group();
+    const b = mesh(new RoundedBoxGeometry(.32, .9, .14, 3, .05), phys({ color: c, roughness: .25, clearcoat: .8, transmission: .2 })); b.position.y = .45; l.add(b);
+    const hd = mesh(new RoundedBoxGeometry(.3, .2, .13, 2, .03), std(0xc0c4c8, .25, 1)); hd.position.y = 1.0; l.add(hd);
+    const wheel = mesh(new THREE.CylinderGeometry(.06, .06, .1, 20), std(0x555a60, .4, 1)); wheel.rotation.x = Math.PI / 2; wheel.position.set(.05, 1.08, 0); l.add(wheel);
+    l.position.set(-.6 + i * .42, 0, (i % 2) * .15); l.rotation.y = -.2 + i * .1; g.add(l);
+  });
+  return g;
+}
+function vaporizer() {
+  const g = new THREE.Group();
+  const body = mesh(new RoundedBoxGeometry(.7, 1.9, .42, 8, .2), phys({ color: 0x1b1e22, roughness: .3, clearcoat: .6 })); body.position.y = .95; body.rotation.z = .12; g.add(body);
+  const scr = mesh(new THREE.PlaneGeometry(.4, .3), std(0xffffff, .2, 0, { emissive: 0xffffff, emissiveIntensity: .7, emissiveMap: label(400, 300, (x, w, h) => { x.fillStyle = "#000"; x.fillRect(0, 0, w, h); x.fillStyle = "#7fd88a"; x.font = "bold 120px monospace"; x.fillText("195°", 40, 170); x.font = "bold 40px monospace"; x.fillStyle = "#e7b94a"; x.fillText("READY", 40, 250); }), map: label(4, 4, (x) => { x.fillStyle = "#000"; x.fillRect(0, 0, 4, 4); }) }));
+  scr.position.set(-.07, 1.15, .212); scr.rotation.z = .12; g.add(scr);
+  const mp = mesh(new THREE.CylinderGeometry(.09, .12, .35, 24), phys({ color: 0x2b2f34, roughness: .3, clearcoat: .5 })); mp.position.set(-.23, 2.0, 0); mp.rotation.z = .12; g.add(mp);
+  const btn = mesh(new THREE.CylinderGeometry(.06, .06, .03, 20), std(0x3f8a52, .4)); btn.rotation.x = Math.PI / 2; btn.position.set(.02, .7, .215); g.add(btn);
+  return g;
+}
+const budMats = [phys({ color: 0x5f8a32, roughness: .7, sheen: .3, sheenColor: new THREE.Color(0xe8ffd8) }), phys({ color: 0x77993f, roughness: .65, sheen: .35, sheenColor: new THREE.Color(0xf0ffe6) }), phys({ color: 0x4e7429, roughness: .75, sheen: .25, sheenColor: new THREE.Color(0xd8f5c0) }), phys({ color: 0x8a7a3a, roughness: .7, sheen: .3, sheenColor: new THREE.Color(0xfff0d0) })];
+function bud(scale = 1, seed = 1) {
+  const g = new THREE.Group(); let rnd = seed * 9301;
+  const R = () => { rnd = (rnd * 9301 + 49297) % 233280; return rnd / 233280; };
+  for (let i = 0; i < 46; i++) { const t = R(), a = R() * 6.28; const rr = (1 - Math.abs(t - .45) * 1.3) * .22; const geo = new THREE.IcosahedronGeometry(.07 + R() * .05, 1); const p = geo.attributes.position; for (let k = 0; k < p.count; k++) p.setXYZ(k, p.getX(k) * (1 + (R() - .5) * .4), p.getY(k) * (1.2 + (R() - .5) * .3), p.getZ(k) * (1 + (R() - .5) * .4)); geo.computeVertexNormals(); const c = mesh(geo, budMats[i % 4]); c.position.set(Math.cos(a) * rr, t * .7, Math.sin(a) * rr); g.add(c); }
+  const hair = new THREE.InstancedMesh(new THREE.CylinderGeometry(.004, .004, .08, 4), std(0xd9772b, .6), 70); const m = new THREE.Matrix4();
+  for (let i = 0; i < 70; i++) { const t = R(), a = R() * 6.28, rr = (1 - Math.abs(t - .45) * 1.3) * .26; m.compose(new THREE.Vector3(Math.cos(a) * rr, t * .7, Math.sin(a) * rr), new THREE.Quaternion().setFromEuler(new THREE.Euler(R() * 3, R() * 3, R() * 3)), new THREE.Vector3(1, 1, 1)); hair.setMatrixAt(i, m); }
+  g.add(hair);
+  for (let k = 0; k < 4; k++) { const lf = mesh(leafletGeo(.22), LEAF_GREENS[k % 5]); lf.position.y = .1 + k * .12; lf.rotation.set(-1.2, k * 1.6, 0); g.add(lf); }
+  g.scale.setScalar(scale); return g;
+}
+function jar(labelTxt, sub) {
+  const g = new THREE.Group();
+  g.add(mesh(new THREE.LatheGeometry([[0, 0], [.48, 0], [.5, .05], [.5, 1.0], [.42, 1.08], [0, 1.08]].map(([a, b]) => new THREE.Vector2(a, b)), 64), glass(0xf2fff4, { opacity: .35 })));
+  const lid = mesh(new THREE.CylinderGeometry(.47, .47, .22, 64), phys({ color: 0x15171a, roughness: .35, clearcoat: .5 })); lid.position.y = 1.19; g.add(lid);
+  const lb = mesh(new THREE.CylinderGeometry(.505, .505, .42, 64, 1, true, -Math.PI * .45, Math.PI * .9), std(0xffffff, .5, 0, { map: label(900, 380, (x, w, h) => { x.fillStyle = "#f4f1e8"; x.fillRect(0, 0, w, h); x.fillStyle = "#2c5a3b"; x.font = "bold 40px sans-serif"; x.textAlign = "center"; x.fillText("RAÍZ VERDE · CBD", w / 2, 80); x.fillStyle = "#14181c"; x.font = "900 76px sans-serif"; x.fillText(labelTxt, w / 2, 200); x.font = "38px monospace"; x.fillText(sub, w / 2, 280); x.fillStyle = "#e04fcf"; x.fillRect(w / 2 - 60, 310, 120, 8); }) }));
+  lb.position.y = .45; g.add(lb);
+  return g;
+}
+function hashBlocks() {
+  const g = new THREE.Group();
+  const paper = mesh(new THREE.PlaneGeometry(1.8, 1.4), std(0xe9dfc6, .9, 0, { side: THREE.DoubleSide })); paper.rotation.x = -Math.PI / 2; paper.rotation.z = .2; paper.position.y = .005; g.add(paper);
+  const hashMat = std(0xffffff, .8, 0, { map: noiseTex("#5a3a1e", 55, 128), bumpMap: noiseTex("#808080", 120, 128), bumpScale: .02 });
+  [[0, 0, .9, .14, .55, .1], [.65, .2, .5, .12, .4, -.5], [-.35, .45, .35, .1, .3, .8]].forEach(([x, z, w, h, d, ry]) => { const b = mesh(new RoundedBoxGeometry(w, h, d, 3, .04), hashMat); b.position.set(x, h / 2 + .01, z); b.rotation.y = ry; g.add(b); });
+  const tin = mesh(new THREE.CylinderGeometry(.42, .42, .16, 48), std(0xc0c4c8, .25, 1)); tin.position.set(-.85, .08, -.45); g.add(tin);
+  const tl = mesh(new THREE.CircleGeometry(.4, 48), std(0xffffff, .4, .5, { map: label(400, 400, (x, w, h) => { x.fillStyle = "#2c5a3b"; x.fillRect(0, 0, w, h); x.fillStyle = "#fff"; x.font = "bold 54px sans-serif"; x.textAlign = "center"; x.fillText("HASH", 200, 190); x.font = "bold 40px sans-serif"; x.fillText("CBD 5 g", 200, 250); }) })); tl.rotation.x = -Math.PI / 2; tl.position.set(-.85, .162, -.45); g.add(tl);
+  return g;
+}
+function dropper() {
+  const g = new THREE.Group();
+  g.add(mesh(new THREE.LatheGeometry([[0, 0], [.3, 0], [.32, .04], [.32, .82], [.22, .95], [.14, 1.0], [.14, 1.06], [0, 1.06]].map(([a, b]) => new THREE.Vector2(a, b)), 64), phys({ color: 0x7a3b0c, roughness: .08, transmission: .6, thickness: .4, ior: 1.5 })));
+  const oil = mesh(new THREE.CylinderGeometry(.29, .29, .55, 48), phys({ color: 0xc98a1f, roughness: .1, transmission: .4, transparent: true, opacity: .7 })); oil.position.y = .3; g.add(oil);
+  const cap = mesh(new THREE.CylinderGeometry(.16, .16, .22, 32), std(0x111111, .4)); cap.position.y = 1.16; g.add(cap);
+  const bulb = mesh(new THREE.SphereGeometry(.13, 24, 16, 0, Math.PI * 2, 0, Math.PI / 1.6), std(0x111111, .5)); bulb.scale.y = 1.6; bulb.position.y = 1.27; g.add(bulb);
+  const lb = mesh(new THREE.CylinderGeometry(.324, .324, .5, 64, 1, true, -Math.PI * .45, Math.PI * .9), std(0xffffff, .5, 0, { map: label(700, 420, (x, w, h) => { x.fillStyle = "#f4f1e8"; x.fillRect(0, 0, w, h); x.textAlign = "center"; x.fillStyle = "#2c5a3b"; x.font = "bold 40px sans-serif"; x.fillText("RAÍZ VERDE", w / 2, 80); x.fillStyle = "#14181c"; x.font = "900 110px sans-serif"; x.fillText("CBD 10 %", w / 2, 220); x.font = "40px monospace"; x.fillText("Aceite · 10 ml", w / 2, 300); x.fillStyle = "#e7b94a"; x.fillRect(w / 2 - 70, 335, 140, 8); }) }));
+  lb.position.y = .42; g.add(lb);
+  const box = mesh(new RoundedBoxGeometry(.75, 1.45, .75, 3, .02), [std(0xf4f1e8, .8), std(0xf4f1e8, .8), std(0xf4f1e8, .8), std(0xf4f1e8, .8), std(0xffffff, .8, 0, { map: label(500, 970, (x, w, h) => { x.fillStyle = "#2c5a3b"; x.fillRect(0, 0, w, h); x.fillStyle = "#f4f1e8"; x.font = "900 120px sans-serif"; x.textAlign = "center"; x.fillText("CBD", w / 2, 420); x.font = "bold 60px sans-serif"; x.fillText("10 %", w / 2, 510); x.font = "bold 40px sans-serif"; x.fillText("RAÍZ VERDE", w / 2, 860); }) }), std(0xf4f1e8, .8)]);
+  box.position.set(-.75, .725, -.45); box.rotation.y = .3; g.add(box);
+  return g;
+}
+function rosin() {
+  const g = new THREE.Group();
+  const j = mesh(new THREE.CylinderGeometry(.45, .45, .4, 64, 1, true), glass(0xffffff, { opacity: .35 })); j.position.y = .2; g.add(j);
+  const base = mesh(new THREE.CylinderGeometry(.45, .45, .04, 64), glass()); base.position.y = .02; g.add(base);
+  const wax = mesh(new THREE.SphereGeometry(.4, 48, 16, 0, Math.PI * 2, 0, Math.PI / 2.4), phys({ color: 0xe0a530, roughness: .15, transmission: .5, thickness: .4, clearcoat: 1, ior: 1.45 })); wax.scale.y = .35; wax.position.y = .05; g.add(wax);
+  const lid = mesh(new THREE.CylinderGeometry(.47, .47, .14, 64), phys({ color: 0x15171a, roughness: .35 })); lid.position.set(.95, .07, .2); g.add(lid);
+  const ll = mesh(new THREE.CircleGeometry(.4, 48), std(0xffffff, .5, 0, { map: label(400, 400, (x, w, h) => { x.fillStyle = "#14181c"; x.fillRect(0, 0, w, h); x.fillStyle = "#e7b94a"; x.font = "bold 56px sans-serif"; x.textAlign = "center"; x.fillText("ROSIN", 200, 190); x.fillStyle = "#fff"; x.font = "bold 38px sans-serif"; x.fillText("CBD · 1 g", 200, 250); }) })); ll.rotation.x = -Math.PI / 2; ll.position.set(.95, .142, .2); g.add(ll);
+  const tool = mesh(new THREE.CylinderGeometry(.02, .02, 1.2, 12), std(0xd7dbe0, .2, 1)); tool.rotation.z = Math.PI / 2; tool.rotation.y = .5; tool.position.set(-.2, .03, .7); g.add(tool);
+  return g;
+}
+function prerolls() {
+  const g = new THREE.Group();
+  for (let i = 0; i < 3; i++) {
+    const c = new THREE.Group();
+    const cone = mesh(new THREE.CylinderGeometry(.11, .07, 1.3, 32, 1, true), std(0xf6f1e4, .85, 0, { side: THREE.DoubleSide })); c.add(cone);
+    const tip = mesh(new THREE.CylinderGeometry(.07, .07, .22, 24), std(0xd9b383, .7)); tip.position.y = -.76; c.add(tip);
+    const twist = mesh(new THREE.ConeGeometry(.11, .14, 24), std(0xf6f1e4, .85)); twist.position.y = .72; c.add(twist);
+    c.rotation.set(Math.PI / 2, 0, -.3 + i * .25); c.position.set(-.5 + i * .4, .11, i * .15); g.add(c);
+  }
+  const tube = mesh(new THREE.CylinderGeometry(.16, .16, 1.6, 32), phys({ color: 0x14181c, roughness: .3, clearcoat: .6 })); tube.position.set(.9, .8, -.5); g.add(tube);
+  const tl = mesh(new THREE.CylinderGeometry(.162, .162, .6, 32, 1, true, -Math.PI * .5, Math.PI), std(0xffffff, .5, 0, { map: label(500, 600, (x, w, h) => { x.fillStyle = "#2c5a3b"; x.fillRect(0, 0, w, h); x.save(); x.translate(w / 2, h / 2); x.rotate(-Math.PI / 2); x.fillStyle = "#fff"; x.font = "900 90px sans-serif"; x.textAlign = "center"; x.fillText("PRE-ROLL", 0, 0); x.font = "bold 50px sans-serif"; x.fillText("CBD · 3 uds", 0, 70); x.restore(); }) })); tl.position.set(.9, .9, -.5); g.add(tl);
+  return g;
+}
+
 /* ---------- catálogo de tomas ---------- */
 const SHOTS = {
   "led-240": { accent: "#ffb547", build: () => { const p = ledPanel(); p.position.y = 1.6; p.rotation.x = -.62; p.rotation.y = -.3; return p; }, dir: [0.2, -0.32, 1.6], fit: .95, target: [0, 1.6, 0], bloom: .55, keyPos: [-3, 5, 5] },
@@ -546,6 +712,21 @@ const SHOTS = {
   "clip-fan": { accent: "#6fd3e0", build: () => clipFan(), dir: [0.35, 0.2, 1.6], fit: 1.05, bloom: 0 },
   "arcilla": { accent: "#5b8cff", build: () => { const g = new THREE.Group(); const b = bag({ w: .9, h: 1.25, d: .36, color: "#7a3f25", title: "ARCILLA", sub: "Expandida · 8–16 mm", vol: "10 L" }); b.rotation.y = .3; g.add(b); const p = pile(0xb5643a, .06, 140, .45); p.position.set(-.85, 0, .45); g.add(p); return g; }, dir: [-0.3, 0.3, 1.6], fit: 1.0, bloom: 0 },
   "bomba": { accent: "#5b8cff", build: () => { const p = airPump(); p.rotation.y = -.2; return p; }, dir: [0.2, 0.7, 1.5], fit: 1.0, bloom: 0 },
+  "grinder": { accent: "#7fd88a", build: () => { const g = grinder(); g.rotation.y = -.3; return g; }, dir: [0.3, 0.55, 1.6], fit: 1.1, bloom: 0 },
+  "papel": { accent: "#e7b94a", build: () => papers(), dir: [0.2, 0.9, 1.4], fit: 1.0, bloom: 0 },
+  "bandeja": { accent: "#7fd88a", build: () => { const g = new THREE.Group(); g.add(tray()); const gr = grinder(0x2d5bd6); gr.scale.setScalar(.38); gr.position.set(.7, .06, -.25); g.add(gr); const pp = papers(); pp.scale.setScalar(.45); pp.position.set(-.5, .07, .1); g.add(pp); return g; }, dir: [0.2, 1.0, 1.3], fit: 1.0, bloom: 0 },
+  "pipa": { accent: "#e7b94a", build: () => { const p = pipeWood(); p.rotation.y = -.4; return p; }, dir: [0.2, 0.45, 1.6], fit: 1.05, bloom: 0 },
+  "cachimba": { accent: "#5b8cff", build: () => { const s2 = shisha(); s2.rotation.y = .3; return s2; }, dir: [0.25, 0.25, 1.6], fit: 1.0, bloom: .3 },
+  "bong": { accent: "#7fd88a", build: () => bong(), dir: [0.3, 0.25, 1.6], fit: 1.05, bloom: 0 },
+  "mecheros": { accent: "#e04fcf", build: () => lighters(), dir: [0.1, 0.3, 1.6], fit: 1.15, bloom: 0 },
+  "vapo": { accent: "#7fd88a", build: () => { const v = vaporizer(); v.rotation.y = -.3; return v; }, dir: [0.2, 0.25, 1.6], fit: 1.2, bloom: .4 },
+  "kit-fumador": { accent: "#e7b94a", build: () => { const g = new THREE.Group(); g.add(tray()); const gr = grinder(0x3f8a52); gr.scale.setScalar(.4); gr.position.set(.75, .06, -.2); g.add(gr); const pp = papers(); pp.scale.setScalar(.45); pp.position.set(-.55, .07, .05); g.add(pp); const l = lighters(); l.scale.setScalar(.5); l.position.set(.2, .06, .9); g.add(l); return g; }, dir: [0.25, 0.95, 1.3], fit: 1.0, bloom: 0 },
+  "flor-lemon": { accent: "#7fd88a", build: () => { const g = new THREE.Group(); const j = jar("LEMON HAZE", "CBD 18 % · 3 g"); g.add(j); [[.85, .35, .9], [1.15, -.1, .75], [.6, .75, .7]].forEach(([x, z, sc], i) => { const b = bud(sc, i + 2); b.rotation.z = Math.PI / 2 * .9; b.position.set(x, .2, z); g.add(b); }); return g; }, dir: [0.35, 0.35, 1.6], fit: 1.05, bloom: 0 },
+  "flor-og": { accent: "#7fd88a", build: () => { const g = new THREE.Group(); const j = jar("OG KUSH", "CBD 15 % · 10 g"); j.scale.setScalar(1.1); g.add(j); [[-.95, .4, 1.0], [-1.2, -.2, .8], [.95, .5, .85]].forEach(([x, z, sc], i) => { const b = bud(sc, i + 7); b.rotation.z = Math.PI / 2 * .9; b.rotation.y = i; b.position.set(x, .2, z); g.add(b); }); return g; }, dir: [-0.3, 0.35, 1.6], fit: 1.05, bloom: 0 },
+  "hash-cbd": { accent: "#e7b94a", build: () => hashBlocks(), dir: [0.2, 0.85, 1.4], fit: 1.0, bloom: 0 },
+  "aceite-cbd": { accent: "#e7b94a", build: () => { const d = dropper(); d.rotation.y = -.2; return d; }, dir: [0.2, 0.25, 1.6], fit: 1.15, bloom: 0 },
+  "rosin-cbd": { accent: "#e7b94a", build: () => rosin(), dir: [0.2, 0.8, 1.4], fit: 1.1, bloom: 0 },
+  "preroll-cbd": { accent: "#7fd88a", build: () => prerolls(), dir: [0.25, 0.65, 1.5], fit: 1.05, bloom: 0 },
   "sala": { size: [1600, 900], accent: "#e04fcf", build: () => growRoom(), cam: { pos: [0.6, 1.6, 5.4], target: [0, 1.8, -1], fov: 50 }, bloom: .3, hemiI: .06, keyI: 0, exposure: .75 },
   "tienda": { size: [1600, 900], accent: "#ffb547", build: () => shop(), cam: { pos: [0.9, 2.5, 7.2], target: [-.2, 2.3, -2], fov: 50 }, bloom: .45, hemiI: .2, keyI: 45, exposure: .95, floorColor: 0x2a2018 },
   "kit": { accent: "#e04fcf", build: () => { const k = kitBox(); k.rotation.y = -.2; return k; }, dir: [0.25, 0.35, 1.6], fit: 1.0, bloom: 0 },
