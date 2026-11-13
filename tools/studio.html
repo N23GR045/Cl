@@ -200,7 +200,7 @@ function tent({ w = 1.6, d = 1.6, h = 3.2, doors = 1 } = {}) {
   // panel LED interior encendido
   const led = mesh(new THREE.BoxGeometry(w * .7, .04, d * .55), phys({ color: 0xffd8f2, emissive: 0xffc6ea, emissiveIntensity: 1.6 })); led.position.set(0, h - .55, 0); g.add(led);
   const light = new THREE.PointLight(0xff9de0, 9, 6, 1.6); light.position.set(0, h - .8, .1); g.add(light);
-  const plant = bushyPlant(1.05); const pot = mesh(new THREE.CylinderGeometry(.32, .26, .45, 24), std(0x1a1a1a, .8)); pot.position.y = .26;
+  const plant = bushyPlant(1.05 * Math.min(1, w / 1.6), 0, w < 1.5 ? .62 : 1); const pot = mesh(new THREE.CylinderGeometry(.32, .26, .45, 24), std(0x1a1a1a, .8)); pot.position.y = .26;
   plant.position.y = .45; const pg = new THREE.Group(); pg.add(pot, plant); pg.position.set(0, 0, 0); g.add(pg);
   // logo
   const logo = mesh(new THREE.PlaneGeometry(.6, .16), std(0xffffff, .6, 0, { map: label(600, 160, (x, w, h) => { x.fillStyle = "#0f1113"; x.fillRect(0, 0, w, h); x.fillStyle = "#7fd88a"; x.font = "bold 70px sans-serif"; x.fillText("RAÍZ VERDE", 20, 100); }), transparent: false }));
@@ -464,6 +464,63 @@ function shop() {
   return g;
 }
 
+
+/* ---------- productos nuevos ---------- */
+function timerDev() {
+  const g = new THREE.Group();
+  const body = mesh(new RoundedBoxGeometry(1.0, 1.45, .55, 6, .1), phys({ color: 0xf2f2ef, roughness: .35, clearcoat: .4 })); body.position.y = .73; g.add(body);
+  const lcd = mesh(new THREE.PlaneGeometry(.72, .42), std(0xffffff, .2, 0, { map: label(720, 420, (x, w, h) => {
+    const gr = x.createLinearGradient(0, 0, 0, h); gr.addColorStop(0, "#c6d1c2"); gr.addColorStop(1, "#aab7a6"); x.fillStyle = gr; x.fillRect(0, 0, w, h);
+    x.fillStyle = "#162016"; x.font = "bold 170px monospace"; x.fillText("18:00", 40, 220); x.font = "bold 54px monospace"; x.fillText("ON", 40, 330); x.fillText("PROG 1", 360, 330); x.font = "bold 40px monospace"; x.fillText("LU MA MI JU VI SA DO", 40, 395);
+  }) }));
+  lcd.position.set(0, 1.08, .277); g.add(lcd);
+  for (let i = 0; i < 4; i++) { const b = mesh(new RoundedBoxGeometry(.17, .09, .05, 2, .02), std(0x3a3f45, .5)); b.position.set(-.3 + i * .2, .75, .28); g.add(b); }
+  const sock = mesh(new THREE.CylinderGeometry(.26, .26, .04, 40), std(0xe2e2de, .4)); sock.rotation.x = Math.PI / 2; sock.position.set(0, .36, .28); g.add(sock);
+  for (const sx of [-.09, .09]) { const hole = mesh(new THREE.CylinderGeometry(.035, .035, .02, 16), std(0x111111, .8)); hole.rotation.x = Math.PI / 2; hole.position.set(sx, .36, .3); g.add(hole); }
+  const logo = mesh(new THREE.PlaneGeometry(.5, .08), std(0xffffff, .5, 0, { transparent: true, map: label(500, 80, (x, w, h) => { x.clearRect(0, 0, w, h); x.fillStyle = "#2c5a3b"; x.font = "bold 50px sans-serif"; x.fillText("RAÍZ VERDE", 10, 60); }) }));
+  logo.position.set(0, 1.36, .278); g.add(logo);
+  return g;
+}
+function clipFan() {
+  const g = new THREE.Group();
+  const fan = new THREE.Group(); fan.position.set(0, 1.25, 0);
+  const wire = std(0xf0f0ee, .35, .2);
+  for (const rr of [.2, .38, .56, .74]) { const t = mesh(new THREE.TorusGeometry(rr, .012, 8, 64), wire); fan.add(t); const t2 = t.clone(); t2.position.z = -.3; fan.add(t2); }
+  const rim = mesh(new THREE.TorusGeometry(.76, .035, 12, 64), phys({ color: 0xf4f4f2, roughness: .3, clearcoat: .5 })); rim.position.z = -.15; rim.scale.z = 4; fan.add(rim);
+  for (let i = 0; i < 16; i++) { const sp = mesh(new THREE.BoxGeometry(.01, .74, .01), wire); sp.rotation.z = i / 16 * Math.PI * 2; sp.position.set(Math.sin(-i / 16 * Math.PI * 2) * .37, Math.cos(i / 16 * Math.PI * 2) * .37, 0); fan.add(sp); }
+  const badge = mesh(new THREE.CylinderGeometry(.13, .13, .03, 32), std(0x2c5a3b, .4)); badge.rotation.x = Math.PI / 2; badge.position.z = .02; fan.add(badge);
+  for (let i = 0; i < 3; i++) { const bl = mesh(new THREE.CircleGeometry(.3, 24, 0, 1.0), phys({ color: 0xdfe7ea, roughness: .2, transmission: .4, thickness: .05, side: THREE.DoubleSide })); bl.rotation.z = i * 2.09; bl.position.z = -.15; bl.rotation.y = .25; fan.add(bl); }
+  const motor = mesh(new THREE.CylinderGeometry(.2, .22, .3, 32), phys({ color: 0xf4f4f2, roughness: .3, clearcoat: .5 })); motor.rotation.x = Math.PI / 2; motor.position.z = -.42; fan.add(motor);
+  fan.rotation.y = -.35; fan.rotation.x = -.1; g.add(fan);
+  const arm = mesh(new THREE.CylinderGeometry(.05, .05, .55, 16), std(0xeeeeec, .35)); arm.position.set(0, .66, -.35); g.add(arm);
+  const clip = new THREE.Group(); clip.position.set(0, .3, -.35);
+  const j1 = mesh(new RoundedBoxGeometry(.5, .12, .7, 3, .05), std(0x1b1d20, .45)); j1.position.y = .1; j1.rotation.x = -.15; clip.add(j1);
+  const j2 = mesh(new RoundedBoxGeometry(.5, .12, .7, 3, .05), std(0x1b1d20, .45)); j2.position.y = -.12; j2.rotation.x = .15; clip.add(j2);
+  const spring = mesh(new THREE.TorusGeometry(.08, .02, 8, 24), std(0xb9bdc1, .3, 1)); spring.rotation.y = Math.PI / 2; spring.position.z = -.3; clip.add(spring);
+  g.add(clip);
+  const pole = mesh(new THREE.CylinderGeometry(.06, .06, 2.4, 16), std(0x9aa0a6, .3, 1)); pole.position.set(0, 1.2, -.62); pole.userData.nofit = true; g.add(pole);
+  return g;
+}
+function airPump() {
+  const g = new THREE.Group();
+  const body = mesh(new RoundedBoxGeometry(1.2, .45, .78, 5, .14), phys({ color: 0x24282d, roughness: .4, clearcoat: .3 })); body.position.y = .23; g.add(body);
+  const top = mesh(new THREE.PlaneGeometry(.7, .2), std(0xffffff, .5, 0, { transparent: true, map: label(700, 200, (x, w, h) => { x.clearRect(0, 0, w, h); x.fillStyle = "#7fd88a"; x.font = "bold 70px sans-serif"; x.fillText("RAÍZ VERDE", 10, 90); x.fillStyle = "#cfd6d0"; x.font = "44px monospace"; x.fillText("AIR 4 · 6 W", 10, 170); }) }));
+  top.rotation.x = -Math.PI / 2; top.position.set(-.05, .456, 0); g.add(top);
+  const stones = [[-1.5, .9], [-.6, 1.5], [.6, 1.5], [1.5, .9]];
+  stones.forEach(([sx, sz], i) => {
+    const nz = mesh(new THREE.CylinderGeometry(.04, .04, .14, 12), std(0x9aa0a6, .3, 1)); nz.rotation.x = Math.PI / 2; nz.position.set(-.36 + i * .24, .2, .44); g.add(nz);
+    const curve = new THREE.CatmullRomCurve3([new THREE.Vector3(-.36 + i * .24, .2, .5), new THREE.Vector3(-.36 + i * .24, .25, .9), new THREE.Vector3(sx * .6, .1, sz * .8), new THREE.Vector3(sx, .07, sz)]);
+    g.add(mesh(new THREE.TubeGeometry(curve, 50, .025, 8), phys({ color: 0xd8f0ff, roughness: .1, transmission: .6, thickness: .1 })));
+    const st = mesh(new THREE.CylinderGeometry(.12, .12, .24, 24), std(0xffffff, 1, 0, { map: noiseTex("#8a8f93", 60, 64) })); st.rotation.z = Math.PI / 2; st.rotation.y = Math.atan2(sx, sz); st.position.set(sx, .12, sz); g.add(st);
+  });
+  return g;
+}
+function pile(color, r, n, radius) {
+  const im = new THREE.InstancedMesh(new THREE.SphereGeometry(r, 10, 8), std(color, .85), n); const m = new THREE.Matrix4();
+  for (let k = 0; k < n; k++) { const a = Math.random() * 6.28, d = Math.sqrt(Math.random()) * radius, y = (1 - d / radius) * radius * .45 * Math.random() + r; m.makeTranslation(Math.cos(a) * d, y, Math.sin(a) * d); im.setMatrixAt(k, m); }
+  im.castShadow = true; im.receiveShadow = true; return im;
+}
+
 /* ---------- catálogo de tomas ---------- */
 const SHOTS = {
   "led-240": { accent: "#ffb547", build: () => { const p = ledPanel(); p.position.y = 1.6; p.rotation.x = -.62; p.rotation.y = -.3; return p; }, dir: [0.2, -0.32, 1.6], fit: .95, target: [0, 1.6, 0], bloom: .55, keyPos: [-3, 5, 5] },
@@ -478,6 +535,17 @@ const SHOTS = {
   "termo": { accent: "#6fd3e0", build: () => { const t = thermo(); t.rotation.y = -.25; return t; }, dir: [0.15, 0.3, 1.6], fit: 1.05, target: null, bloom: 0 },
   "dwc": { accent: "#5b8cff", build: () => { const d = dwc(); d.rotation.y = .3; return d; }, dir: [0.3, 0.75, 1.5], fit: 1.0, bloom: .3 },
   "phmeter": { accent: "#5b8cff", build: () => phPens(), dir: [0.25, 0.9, 1.4], fit: 1.0, bloom: 0 },
+  "led-480": { accent: "#ffb547", build: () => { const p = ledPanel({ w: 2.6, d: 1.6, rows: 16, cols: 28 }); p.position.y = 1.6; p.rotation.x = -.62; p.rotation.y = -.2; return p; }, dir: [0.15, -0.32, 1.6], fit: .95, target: [0, 1.6, 0], bloom: .55 },
+  "timer": { accent: "#ffb547", build: () => { const t = timerDev(); t.rotation.y = -.35; return t; }, dir: [0.2, 0.3, 1.6], fit: 1.15, bloom: 0 },
+  "armario-60": { accent: "#b9c6dc", build: () => { const t = tent({ w: 1.2, d: 1.2, h: 2.8 }); t.rotation.y = -.4; return t; }, dir: [0.3, 0.35, 1.6], fit: 1.0, bloom: .22 },
+  "macetas": { accent: "#d39a62", build: () => { const g = new THREE.Group(); const fab = std(0xffffff, .95, 0, { map: noiseTex("#3a3d41", 34, 128, [5, 2]), side: THREE.DoubleSide }); const mk = (x, z, y = 0, ry = 0) => { const p = new THREE.Group(); const w = mesh(new THREE.CylinderGeometry(.52, .46, .62, 40, 1, true), fab); w.position.y = .31; p.add(w); const bt = mesh(new THREE.CircleGeometry(.46, 40), fab); bt.rotation.x = -Math.PI / 2; bt.position.y = .02; p.add(bt); const rim = mesh(new THREE.TorusGeometry(.52, .025, 8, 48), std(0x2a2c2f, .9)); rim.rotation.x = Math.PI / 2; rim.position.y = .62; p.add(rim); for (const sd of [-1, 1]) { const h = mesh(new THREE.TorusGeometry(.11, .022, 8, 24, Math.PI), std(0x1f2124, .9)); h.position.set(sd * .5, .6, 0); h.rotation.y = Math.PI / 2; p.add(h); } p.position.set(x, y, z); p.rotation.y = ry; g.add(p); return p; }; mk(-.4, 0); mk(-.4, 0, .1, .4); mk(-.4, 0, .2, .9); mk(.75, .45, 0, .3); const tag = mesh(new THREE.PlaneGeometry(.42, .24), std(0xffffff, .6, 0, { map: label(420, 240, (x, w, h) => { x.fillStyle = "#e7b94a"; x.fillRect(0, 0, w, h); x.fillStyle = "#111"; x.font = "900 74px sans-serif"; x.fillText("11 L", 24, 100); x.font = "bold 46px sans-serif"; x.fillText("PACK × 5", 24, 180); }) })); tag.position.set(.75, .32, .97); tag.rotation.y = .3; g.add(tag); return g; }, dir: [0.3, 0.75, 1.6], fit: 1.05, bloom: 0 },
+  "perlita": { accent: "#d39a62", build: () => { const g = new THREE.Group(); const b = bag({ w: .9, h: 1.25, d: .36, color: "#4f6b85", title: "PERLITA", sub: "Drenaje y aireación", vol: "10 L" }); b.rotation.y = -.3; g.add(b); const p = pile(0xf3f1ea, .035, 260, .38); p.position.set(.8, 0, .45); g.add(p); return g; }, dir: [0.3, 0.3, 1.6], fit: 1.0, bloom: 0 },
+  "root": { accent: "#e04fcf", build: () => { const g = new THREE.Group(); const a = bottle({ h: .8, r: .19, color: "#c98a2b", title: "ROOT", sub: "Estimulador de raíces", npk: "Algas + aminoácidos", vol: "250 ml" }); g.add(a); const pot = mesh(new THREE.CylinderGeometry(.17, .13, .24, 24), std(0x222426, .9)); pot.position.set(.45, .12, .2); g.add(pot); const p = bushyPlant(.32, 2); p.position.set(.45, .22, .2); g.add(p); return g; }, dir: [0.15, 0.25, 1.6], fit: 1.1, bloom: 0 },
+  "pk": { accent: "#e04fcf", build: () => { const a = bottle({ h: .95, r: .22, color: "#3b5bd6", title: "PK 13/14", sub: "Potenciador de floración", npk: "P 13 · K 14", vol: "500 ml" }); a.rotation.y = .15; return a; }, dir: [0.15, 0.25, 1.6], fit: 1.2, bloom: 0 },
+  "calmag": { accent: "#e04fcf", build: () => { const a = bottle({ color: "#6f7a86", title: "CAL-MAG", sub: "Calcio y magnesio", npk: "Ca 4 % · Mg 2 %", vol: "1 L" }); a.rotation.y = -.15; return a; }, dir: [-0.15, 0.25, 1.6], fit: 1.2, bloom: 0 },
+  "clip-fan": { accent: "#6fd3e0", build: () => clipFan(), dir: [0.35, 0.2, 1.6], fit: 1.05, bloom: 0 },
+  "arcilla": { accent: "#5b8cff", build: () => { const g = new THREE.Group(); const b = bag({ w: .9, h: 1.25, d: .36, color: "#7a3f25", title: "ARCILLA", sub: "Expandida · 8–16 mm", vol: "10 L" }); b.rotation.y = .3; g.add(b); const p = pile(0xb5643a, .06, 140, .45); p.position.set(-.85, 0, .45); g.add(p); return g; }, dir: [-0.3, 0.3, 1.6], fit: 1.0, bloom: 0 },
+  "bomba": { accent: "#5b8cff", build: () => { const p = airPump(); p.rotation.y = -.2; return p; }, dir: [0.2, 0.7, 1.5], fit: 1.0, bloom: 0 },
   "sala": { size: [1600, 900], accent: "#e04fcf", build: () => growRoom(), cam: { pos: [0.6, 1.6, 5.4], target: [0, 1.8, -1], fov: 50 }, bloom: .3, hemiI: .06, keyI: 0, exposure: .75 },
   "tienda": { size: [1600, 900], accent: "#ffb547", build: () => shop(), cam: { pos: [0.9, 2.5, 7.2], target: [-.2, 2.3, -2], fov: 50 }, bloom: .45, hemiI: .2, keyI: 45, exposure: .95, floorColor: 0x2a2018 },
   "kit": { accent: "#e04fcf", build: () => { const k = kitBox(); k.rotation.y = -.2; return k; }, dir: [0.25, 0.35, 1.6], fit: 1.0, bloom: 0 },
