@@ -1,0 +1,49 @@
+---
+// Ciclo de cultivo. Sin movimiento: lista de 4 fases. Con movimiento: escena fija donde la planta crece con el scroll.
+const stages = [
+  { t: "Germinación", w: "Semanas 1–2", d: "La semilla se abre y saca sus primeras hojas. Luz suave y mucha humedad.", data: [["Luz", "18 h / 6 h"], ["Temp.", "22–25 °C"], ["Humedad", "70–80 %"]] },
+  { t: "Crecimiento", w: "Semanas 3–6", d: "La planta gana altura y hojas. El espectro azul mantiene la estructura compacta.", data: [["Luz", "18 h / 6 h"], ["Temp.", "22–28 °C"], ["Humedad", "55–70 %"]] },
+  { t: "Floración", w: "Semanas 7–14", d: "Con 12 horas de luz florece. El rojo domina y el abono cambia a fósforo y potasio.", data: [["Luz", "12 h / 12 h"], ["Temp.", "20–26 °C"], ["Humedad", "40–50 %"]] },
+  { t: "Cosecha y secado", w: "Semanas 15–16", d: "Se corta y se seca despacio, a oscuras, con aire suave y humedad controlada.", data: [["Luz", "Oscuridad"], ["Temp.", "18–21 °C"], ["Humedad", "55–62 %"]] },
+];
+const base = 432, top = 150, levels = 6, step = (base - top - 40) / levels;
+const leaf = (y: number, L: number) => `M200 ${y} C ${200 - L * .25} ${y - L * .42} ${200 - L * .75} ${y - L * .45} ${200 - L} ${y - L * .18} C ${200 - L * .7} ${y + L * .06} ${200 - L * .3} ${y + L * .1} 200 ${y} Z`;
+const leaves = Array.from({ length: levels }, (_, i) => ({ i, y: base - 46 - i * step, L: 128 - i * 12 }));
+const buds = [[200, top - 4, 16], [186, top + 10, 12], [214, top + 10, 12], [200, top + 22, 13], ...leaves.slice(1).map(({ i, y }) => [200 + (i % 2 ? 9 : -9), y - 6, 9 - i * .5])];
+---
+<section class="grow section--tight" id="ciclo" data-grow data-stage="0" aria-labelledby="cycle-title">
+  <div class="grow__sticky">
+    <div class="grow__visual" aria-hidden="true">
+      <svg class="grow-plant" viewBox="0 0 400 520">
+        <defs><linearGradient id="grow-beam" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-opacity=".55" /><stop offset="1" stop-opacity="0" /></linearGradient></defs>
+        <polygon class="beam" points="110,30 290,30 400,500 0,500" fill="url(#grow-beam)" />
+        <rect class="lamp" x="96" y="6" width="208" height="22" rx="6" />
+        <rect class="led" x="112" y="24" width="176" height="6" rx="3" />
+        <path class="stem" pathLength="1" d={`M200 ${base} C 195 ${base - 90} 206 ${top + 120} 200 ${top}`} />
+        {leaves.map(({ i, y, L }) => (
+          <>
+            <g class="leaf" data-i={i}><path class="blade" d={leaf(y, L)} /></g>
+            <g transform="translate(400 0) scale(-1 1)"><g class="leaf" data-i={i}><path class="blade" d={leaf(y, L)} /></g></g>
+          </>
+        ))}
+        {buds.map(([x, y, r]) => <circle class="bud" cx={x} cy={y} r={r} />)}
+        <path class="pot" d="M128 440h144l-16 76H144z" />
+        <rect class="rim" x="116" y="426" width="168" height="22" rx="7" />
+      </svg>
+    </div>
+    <div class="grow__info container">
+      <div class="section-head reveal"><p class="eyebrow">Guía rápida</p><h2 id="cycle-title">De semilla a cosecha, en 4 fases.</h2><p>Las condiciones que necesita la planta en cada etapa del cultivo de interior.</p></div>
+      <div class="grow__bar" aria-hidden="true">{stages.map(() => <i />)}</div>
+      <ol class="steps" aria-live="polite">
+        {stages.map((s, i) => (
+          <li class={`step reveal${i === 0 ? " is-active" : ""}`} style={`--i:${i}`} data-stage-item={i}>
+            <span class="step__num">0{i + 1} / 04 · {s.w}</span>
+            <h3>{s.t}</h3>
+            <p class="muted">{s.d}</p>
+            <dl>{s.data.map(([k, v]) => <div><dt>{k}</dt><dd>{v}</dd></div>)}</dl>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </div>
+</section>

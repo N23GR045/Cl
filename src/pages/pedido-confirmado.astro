@@ -1,0 +1,14 @@
+---
+import Base from "../layouts/Base.astro";
+import Icon from "../components/Icon.astro";
+import { site } from "../data/site";
+---
+<Base title="Pedido confirmado" description="Gracias por tu compra. Te hemos enviado la confirmación por email y preparamos tu pedido en un paquete discreto." path="/pedido-confirmado" noindex>
+  <div class="container notfound" data-order-done>
+    <div class="co-done__icon"><Icon name="check" /></div>
+    <h1 style="font-size:var(--step-4)">¡Gracias por tu pedido!</h1>
+    <p class="lead" style="margin-inline:auto">Hemos recibido el pago. Te llegará la confirmación por email y lo enviamos en 24/48 h en un paquete discreto.</p>
+    <p class="muted">¿Dudas con tu pedido? Llámanos al {site.phone} o escribe a {site.email}.</p>
+    <p><a class="btn btn--primary" href="/productos">Seguir comprando</a></p>
+  </div>
+</Base>

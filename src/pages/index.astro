@@ -1,0 +1,196 @@
+---
+import Base from "../layouts/Base.astro";
+import Icon from "../components/Icon.astro";
+import Plant from "../components/Plant.astro";
+import GrowCycle from "../components/GrowCycle.astro";
+import ProductCard from "../components/ProductCard.astro";
+import JsonLd from "../components/JsonLd.astro";
+import { products, categories, findProduct } from "../data/catalog";
+import { reviews } from "../data/reviews";
+import { faq } from "../data/faq";
+import { site, formatPrice } from "../data/site";
+
+const featuredIds = ["led-240", "armario-80", "nutri-gb", "extractor", "kit-fumador", "flor-og", "dwc", "led-480"];
+const featured = featuredIds.map((id) => findProduct(id)!).filter(Boolean);
+const kit = findProduct("kit-interior")!;
+const marquee = ["Envío discreto 24/48 h", "LED de espectro completo", "Asesoría de cultivadores", "Devolución en 30 días", "Pago con tarjeta o Bizum", "Tienda física en Valencia"];
+const storeLd = {
+  "@context": "https://schema.org", "@type": "Store", name: site.name, description: site.description, url: site.url, telephone: site.phoneE164, email: site.email, image: new URL("/og.jpg", site.url).href, priceRange: "€€",
+  address: { "@type": "PostalAddress", streetAddress: site.address.street, postalCode: site.address.postalCode, addressLocality: site.address.city, addressRegion: site.address.region, addressCountry: site.address.country },
+  openingHours: site.hours.flatMap((h) => h.schema),
+};
+const faqLd = { "@context": "https://schema.org", "@type": "FAQPage", mainEntity: faq.map((f) => ({ "@type": "Question", name: f.q, acceptedAnswer: { "@type": "Answer", text: f.a } })) };
+---
+<Base title={`${site.name} · Grow shop en Valencia`} description={site.description} path="/">
+  <JsonLd slot="head" data={storeLd} />
+  <JsonLd slot="head" data={faqLd} />
+
+  <!-- Hero -->
+  <section class="hero" aria-labelledby="hero-title">
+    <div class="hero__bg" aria-hidden="true"><img src="/img/sala-720.webp" srcset="/img/sala-720.webp 720w, /img/sala.webp 1440w" sizes="100vw" width="1440" height="810" alt="" decoding="async" fetchpriority="low" /></div>
+    <canvas class="spores" data-spores aria-hidden="true"></canvas>
+    <div class="container hero__grid">
+      <div class="hero__copy" data-hero-copy>
+        <p class="eyebrow hero-fade" style="--i:0">Grow shop · {site.address.city}</p>
+        <h1 id="hero-title"><span class="line"><span style="--i:0">Cultiva bajo</span></span> <span class="line"><span style="--i:1">tu <span class="grad">propia luz.</span></span></span></h1>
+        <p class="lead hero-fade" style="--i:1">Luz LED, armarios, sustratos y nutrientes elegidos por cultivadores. Te ayudamos a montar tu espacio y a acertar a la primera.</p>
+        <div class="hero__cta hero-fade" style="--i:2">
+          <a class="btn btn--primary magnetic" href="/productos">Ver productos <Icon name="arrow" size={18} /></a>
+          <a class="btn magnetic" href="#asistente">¿Qué necesito? Test de 1 min</a>
+        </div>
+        <ul class="trust hero-fade" style="--i:3">
+          <li><Icon name="truck" />Envío discreto en 24/48 h</li>
+          <li><Icon name="refresh" />30 días de devolución</li>
+          <li><Icon name="shield" />Pago seguro</li>
+        </ul>
+      </div>
+      <div class="hero__art"><Plant /></div>
+    </div>
+  </section>
+
+  <div class="marquee">
+    <ul class="marquee__track" aria-label="Ventajas">
+      {[...marquee, ...marquee].map((m, i) => <li aria-hidden={i >= marquee.length ? "true" : undefined}>{m}</li>)}
+    </ul>
+  </div>
+
+  <!-- Asistente -->
+  <section class="section section--tight" id="asistente" aria-labelledby="quiz-title">
+    <div class="container">
+      <div class="quiz reveal">
+        <div class="stack">
+          <p class="eyebrow">¿Empiezas? Te ayudamos</p>
+          <h2 id="quiz-title">Tu equipo ideal en 3 preguntas.</h2>
+          <p class="lead">Sin registrarte. Te decimos qué necesitas y cuánto cuesta, con todo compatible entre sí.</p>
+        </div>
+        <div class="quiz__box" data-quiz aria-live="polite">
+          <noscript><p class="alert">Activa JavaScript para usar el asistente o <a href="/productos">mira todos los productos</a>.</p></noscript>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Categorías -->
+  <section class="section section--tight" aria-labelledby="cats-title">
+    <div class="container">
+      <div class="section-head reveal"><p class="eyebrow">Categorías</p><h2 id="cats-title">Todo lo que pide tu sala de cultivo.</h2></div>
+      <ul class="cats">
+        {categories.map((c, i) => (
+          <li class="reveal" style={`--i:${i % 4}`}>
+            <a class="cat" href={`/categoria/${c.id}`}>
+              <img src={`/img/${c.cover}-360.webp`} srcset={`/img/${c.cover}-360.webp 360w, /img/${c.cover}.webp 720w`} sizes="(min-width: 820px) 25vw, 50vw" width="360" height="295" alt="" loading="lazy" decoding="async" />
+              <strong>{c.name}</strong><span>{c.desc}</span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <!-- Destacados -->
+  <section class="section section--tight" aria-labelledby="feat-title">
+    <div class="container">
+      <div class="section-head reveal"><p class="eyebrow">Lo más vendido</p><h2 id="feat-title">Productos destacados</h2></div>
+      <div class="grid-products">{featured.map((p) => <ProductCard product={p} />)}</div>
+      <p style="text-align:center;margin-top:2rem"><a class="btn" href="/productos">Ver los {products.length} productos <Icon name="arrow" size={18} /></a></p>
+    </div>
+  </section>
+
+  <!-- Kit -->
+  <section class="section section--tight" aria-labelledby="kit-title">
+    <div class="container">
+      <div class="kit reveal">
+        <div class="stack" style="--space:1.25rem">
+          <p class="eyebrow">Kit completo · listo en 30 min</p>
+          <h2 id="kit-title">Tu primer cultivo de interior, en una caja.</h2>
+          <p class="kit__price tabular">{formatPrice(kit.price)}</p>
+          <p class="muted mono">Por separado: {formatPrice(kit.old!)} · ahorras {formatPrice(kit.old! - kit.price)}</p>
+          <ul class="kit__list">{kit.feats.slice(0, 4).map((f) => <li><Icon name="check" />{f}</li>)}</ul>
+          <div class="hero__cta" style="margin-top:0">
+            <button class="btn btn--primary magnetic" type="button" data-add={kit.id}>Añadir el kit al carrito</button>
+            <a class="btn btn--ghost" href={`/productos/${kit.id}`}>Ver qué incluye</a>
+          </div>
+        </div>
+        <img src="/img/kit.webp" width="720" height="591" alt="Kit de cultivo interior: caja con nutrientes Grow y Bloom y termohigrómetro" loading="lazy" decoding="async" />
+      </div>
+    </div>
+  </section>
+
+  <!-- Ciclo -->
+  <GrowCycle />
+
+  <!-- Montaje -->
+  <section class="section section--tight" id="montaje" aria-labelledby="setup-title">
+    <div class="container">
+      <div class="setup reveal">
+        <img src="/img/sala-720.webp" srcset="/img/sala-720.webp 720w, /img/sala.webp 1440w" sizes="(min-width: 1240px) 1200px, 100vw" width="1440" height="810" alt="Sala de cultivo con cinco plantas en macetas de tela bajo dos paneles LED y paredes reflectantes" loading="lazy" decoding="async" />
+        <div class="setup__copy">
+          <p class="eyebrow" style="color:#cdd5cf">Montaje y asesoría</p>
+          <h2 id="setup-title">Te ayudamos a montar tu sala.</h2>
+          <p>Cuéntanos tu espacio y te proponemos luz, ventilación y riego a medida. Sin coste, por teléfono o en la tienda.</p>
+          <ul class="setup__points">
+            <li><strong>Cálculo de luz</strong><span>Vatios y PPFD por m²</span></li>
+            <li><strong>Plan de ventilación</strong><span>m³/h según el volumen</span></li>
+            <li><strong>Montaje a domicilio</strong><span>{site.address.city} y alrededores</span></li>
+          </ul>
+          <p><a class="btn btn--primary" href="/contacto?tema=montaje">Pedir asesoría gratis</a></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Opiniones -->
+  <section class="section section--tight" aria-labelledby="rev-title">
+    <div class="container">
+      <div class="section-head reveal">
+        <p class="eyebrow">Opiniones</p>
+        <h2 id="rev-title">Lo que dicen los cultivadores.</h2>
+        {site.demoContent && <p><span class="badge badge--demo">Contenido de ejemplo</span> Estas opiniones son de muestra y se sustituirán por reseñas verificadas.</p>}
+      </div>
+      <div class="reviews-marquee">
+      <ul class="reviews">
+        {[...reviews, ...reviews].map((r, i) => (
+          <li class={i >= reviews.length ? "is-clone" : "reveal"} style={`--i:${i % 3}`} aria-hidden={i >= reviews.length ? "true" : undefined} inert={i >= reviews.length ? true : undefined}>
+            <figure class="review"><span class="stars" role="img" aria-label="5 de 5 estrellas">★★★★★</span><blockquote><p>{r.text}</p></blockquote><figcaption>{r.author}</figcaption></figure>
+          </li>
+        ))}
+      </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="section section--tight" id="faq" aria-labelledby="faq-title">
+    <div class="container faq">
+      <div class="stack reveal">
+        <p class="eyebrow">Preguntas frecuentes</p>
+        <h2 id="faq-title">Lo que más nos preguntáis.</h2>
+        <p class="lead">¿No encuentras tu duda? <a href="/contacto">Escríbenos</a> y te contestamos en el día.</p>
+      </div>
+      <div class="reveal">{faq.map((f) => <details><summary>{f.q}</summary><p>{f.a}</p></details>)}</div>
+    </div>
+  </section>
+
+  <!-- Newsletter -->
+  <section class="section section--tight" aria-labelledby="news-title">
+    <div class="container">
+      <form class="form reveal" name="newsletter" method="POST" action="/" data-netlify="true" netlify-honeypot="bot-field" data-remote data-success={`Suscrito. Tu código de descuento es ${site.promo.code}.`} novalidate>
+        <input type="hidden" name="form-name" value="newsletter" />
+        <p class="hp" aria-hidden="true"><label>No rellenes este campo <input type="text" name="bot-field" tabindex="-1" autocomplete="off" /></label></p>
+        <div class="stack">
+          <h2 id="news-title" style="font-size:var(--step-3)">{site.promo.percent} % de descuento en tu primer pedido.</h2>
+          <p class="muted">Un email al mes con consejos de cultivo y ofertas. Te das de baja cuando quieras.</p>
+        </div>
+        <div class="form__row">
+          <div class="field"><label for="news-email">Email</label><input class="input" id="news-email" name="email" type="email" autocomplete="email" inputmode="email" required placeholder="nombre@correo.com" aria-describedby="news-email-err" /><p class="error-msg" id="news-email-err"></p></div>
+          <div class="field" style="align-self:end"><button class="btn btn--primary btn--block" type="submit">Suscribirme</button></div>
+        </div>
+        <div class="field">
+          <div class="check"><input type="checkbox" id="news-consent" name="consent" required aria-describedby="news-consent-err" /><label for="news-consent">Acepto recibir emails de {site.name} y la <a href="/legal/privacidad">política de privacidad</a>.</label></div>
+          <p class="error-msg" id="news-consent-err"></p>
+        </div>
+        <div data-form-status tabindex="-1" class="sr-only" role="status"></div>
+      </form>
+    </div>
+  </section>
+</Base>

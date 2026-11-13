@@ -1,0 +1,61 @@
+---
+import Base from "../layouts/Base.astro";
+import Breadcrumbs from "../components/Breadcrumbs.astro";
+import { site } from "../data/site";
+const mapUrl = `https://www.openstreetmap.org/search?query=${encodeURIComponent(`${site.address.street}, ${site.address.postalCode} ${site.address.city}`)}`;
+---
+<Base title="Contacto y tienda física" description={`Visítanos en ${site.address.street}, ${site.address.city}, o escríbenos. Asesoría gratuita para montar tu sala de cultivo.`} path="/contacto">
+  <div class="container section--tight">
+    <Breadcrumbs items={[{ label: "Inicio", href: "/" }, { label: "Contacto" }]} />
+    <div class="contact" style="margin-top:1.5rem">
+      <div class="stack" style="--space:1.25rem">
+        <h1 style="font-size:var(--step-4)">Hablemos.</h1>
+        <p class="lead">Te asesoramos gratis para elegir equipo o montar tu sala. Respondemos en menos de 24 h laborables.</p>
+        <dl class="info-list">
+          <div><dt>Dirección</dt><dd>{site.address.street}<br />{site.address.postalCode} {site.address.city} · <a href={mapUrl} rel="noopener noreferrer" target="_blank">Ver en el mapa<span class="sr-only"> (se abre en una pestaña nueva)</span></a></dd></div>
+          <div><dt>Horario</dt><dd>{site.hours.map((h) => <>{h.days}: {h.time}<br /></>)}</dd></div>
+          <div><dt>Teléfono</dt><dd><a href={`tel:${site.phoneE164}`}>{site.phone}</a></dd></div>
+          <div><dt>Email</dt><dd><a href={`mailto:${site.email}`}>{site.email}</a></dd></div>
+        </dl>
+        {site.demoContent && <p class="alert alert--warning">Datos de contacto de ejemplo: sustitúyelos en <code>src/data/site.ts</code>.</p>}
+      </div>
+
+      <form class="form" name="contacto" method="POST" action="/" data-netlify="true" netlify-honeypot="bot-field" data-remote novalidate aria-labelledby="form-title">
+        <input type="hidden" name="form-name" value="contacto" />
+        <p class="hp" aria-hidden="true"><label>No rellenes este campo <input type="text" name="bot-field" tabindex="-1" autocomplete="off" /></label></p>
+        <h2 id="form-title" style="font-size:var(--step-3)">Escríbenos</h2>
+        <p class="muted" style="font-size:.9rem">Los campos marcados con * son obligatorios.</p>
+        <fieldset style="border:0;padding:0;margin:0;display:grid;gap:1.25rem">
+          <legend class="sr-only">Tus datos</legend>
+          <div class="form__row">
+            <div class="field"><label for="c-name">Nombre *</label><input class="input" id="c-name" type="text" name="nombre" autocomplete="name" required minlength="2" aria-describedby="c-name-err" /><p class="error-msg" id="c-name-err"></p></div>
+            <div class="field"><label for="c-phone">Teléfono <span class="muted">(opcional)</span></label><input class="input" id="c-phone" name="telefono" type="tel" autocomplete="tel" inputmode="tel" data-rule="phone" placeholder="600 000 000" aria-describedby="c-phone-err" /><p class="error-msg" id="c-phone-err"></p></div>
+          </div>
+          <div class="field"><label for="c-email">Email *</label><input class="input" id="c-email" name="email" type="email" autocomplete="email" inputmode="email" required placeholder="nombre@correo.com" aria-describedby="c-email-hint c-email-err" /><p class="hint" id="c-email-hint">Te responderemos a esta dirección.</p><p class="error-msg" id="c-email-err"></p></div>
+        </fieldset>
+        <fieldset style="border:0;padding:0;margin:0;display:grid;gap:1.25rem">
+          <legend class="sr-only">Tu consulta</legend>
+          <div class="field">
+            <label for="c-topic">Tema *</label>
+            <select class="select" id="c-topic" name="tema" required data-from-query="tema" aria-describedby="c-topic-err">
+              <option value="">Elige un tema</option>
+              <option value="montaje">Asesoría para montar mi sala</option>
+              <option value="producto">Duda sobre un producto</option>
+              <option value="pedido">Estado de un pedido</option>
+              <option value="devolucion">Devolución o garantía</option>
+              <option value="otro">Otro</option>
+            </select>
+            <p class="error-msg" id="c-topic-err"></p>
+          </div>
+          <div class="field"><label for="c-msg">Mensaje *</label><textarea class="textarea" id="c-msg" name="mensaje" required minlength="10" maxlength="2000" placeholder="Cuéntanos tu espacio (medidas), qué quieres cultivar y tu presupuesto aproximado." aria-describedby="c-msg-err"></textarea><p class="error-msg" id="c-msg-err"></p></div>
+        </fieldset>
+        <div class="field">
+          <div class="check"><input type="checkbox" id="c-consent" name="consentimiento" required aria-describedby="c-consent-err" /><label for="c-consent">He leído la <a href="/legal/privacidad">política de privacidad</a> y acepto que tratéis mis datos para responderme. *</label></div>
+          <p class="error-msg" id="c-consent-err"></p>
+        </div>
+        <button class="btn btn--primary" type="submit">Enviar mensaje</button>
+        <div data-form-status tabindex="-1" class="sr-only" role="status"></div>
+      </form>
+    </div>
+  </div>
+</Base>

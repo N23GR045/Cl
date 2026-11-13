@@ -1,0 +1,21 @@
+---
+import Icon from "./Icon.astro";
+import { site } from "../data/site";
+import { categories } from "../data/catalog";
+const year = new Date().getFullYear();
+---
+<footer class="footer">
+  <div class="container">
+    <div class="footer__grid">
+      <div>
+        <a href="/" class="logo"><Icon name="leaf" size={30} />{site.name}</a>
+        <p class="footer__legal">Venta exclusiva a mayores de 18 años. Productos de jardinería y cultivo dentro del marco legal vigente. Los productos de CBD contienen menos de un 0,2 % de THC y se venden como artículo de coleccionismo o uso técnico, no aptos para consumo humano.</p>
+      </div>
+      <nav aria-labelledby="f-shop"><h2 id="f-shop">Tienda</h2><ul>{categories.map((c) => <li><a href={`/categoria/${c.id}`}>{c.name}</a></li>)}</ul></nav>
+      <nav aria-labelledby="f-help"><h2 id="f-help">Ayuda</h2><ul><li><a href="/#faq">Preguntas frecuentes</a></li><li><a href="/legal/envios-devoluciones">Envíos y devoluciones</a></li><li><a href="/contacto">Contacto</a></li></ul></nav>
+      <nav aria-labelledby="f-legal"><h2 id="f-legal">Legal</h2><ul><li><a href="/legal/aviso-legal">Aviso legal</a></li><li><a href="/legal/privacidad">Privacidad</a></li><li><a href="/legal/cookies">Cookies</a></li></ul></nav>
+    </div>
+    <p class="giant" data-giant aria-hidden="true">{site.name}</p>
+    <div class="footer__bottom"><span>© {year} {site.legalName}</span><span>{site.address.street}, {site.address.postalCode} {site.address.city}</span></div>
+  </div>
+</footer>

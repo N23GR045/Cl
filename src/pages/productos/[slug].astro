@@ -1,0 +1,75 @@
+---
+import Base from "../../layouts/Base.astro";
+import Breadcrumbs from "../../components/Breadcrumbs.astro";
+import ProductCard from "../../components/ProductCard.astro";
+import JsonLd from "../../components/JsonLd.astro";
+import Icon from "../../components/Icon.astro";
+import { products, findCategory, findProduct, isCbd, type Product } from "../../data/catalog";
+import { site, formatPrice } from "../../data/site";
+
+export function getStaticPaths() {
+  return products.map((p) => ({ params: { slug: p.id }, props: { product: p } }));
+}
+const { product: p } = Astro.props as { product: Product };
+const cat = findCategory(p.cat)!;
+const combos = p.combo.map((id) => findProduct(id)).filter((x): x is Product => !!x);
+const description = `${p.name} (${p.spec}) por ${formatPrice(p.price)}. ${p.desc}`.slice(0, 158);
+const ld = {
+  "@context": "https://schema.org", "@type": "Product", name: p.name, description: p.desc, sku: p.id, category: cat.name,
+  image: new URL(`/img/${p.img}.webp`, site.url).href, brand: { "@type": "Brand", name: site.name },
+  offers: { "@type": "Offer", url: new URL(`/productos/${p.id}`, site.url).href, priceCurrency: "EUR", price: p.price.toFixed(2), availability: "https://schema.org/InStock", itemCondition: "https://schema.org/NewCondition",
+    shippingDetails: { "@type": "OfferShippingDetails", shippingDestination: { "@type": "DefinedRegion", addressCountry: "ES" }, shippingRate: { "@type": "MonetaryAmount", currency: "EUR", value: p.price >= site.shipping.freeFrom ? 0 : site.shipping.cost } } },
+};
+---
+<Base title={p.name} description={description} path={`/productos/${p.id}`} image={`/img/${p.img}.webp`} type="product">
+  <JsonLd slot="head" data={ld} />
+  <div class="container section--tight" style="padding-bottom:0">
+    <Breadcrumbs items={[{ label: "Inicio", href: "/" }, { label: cat.name, href: `/categoria/${cat.id}` }, { label: p.name }]} />
+    <div class="pdp" data-pdp={p.id}>
+      <div class="pdp__media">
+        <img src={`/img/${p.img}.webp`} width="720" height="591" alt={p.alt} fetchpriority="high" decoding="async" />
+      </div>
+      <div class="pdp__info">
+        <p class="eyebrow"><a href={`/categoria/${cat.id}`} style="text-decoration:none">{cat.name}</a></p>
+        <h1>{p.name}</h1>
+        <p class="mono muted">{p.spec}</p>
+        {p.badge && <p><span class="badge">{p.badge}</span></p>}
+        <p class="lead">{p.desc}</p>
+        {isCbd(p) && <p class="alert alert--warning">Producto de cáñamo con THC &lt; 0,2 %. Artículo de coleccionismo o uso técnico, no apto para consumo humano. Venta solo a mayores de 18 años.</p>}
+
+        <div class="pdp__buy">
+          <div class="pdp__price">
+            <span class="price">{formatPrice(p.price)}</span>
+            {p.old && <s class="muted"><span class="sr-only">Precio anterior: </span>{formatPrice(p.old)}</s>}
+            {p.old && <span class="badge badge--success">Ahorras {formatPrice(p.old - p.price)}</span>}
+          </div>
+          <p class="muted" style="font-size:.9rem">IVA incluido · {p.price >= site.shipping.freeFrom ? "Envío gratis" : `Envío ${formatPrice(site.shipping.cost)} (gratis desde ${formatPrice(site.shipping.freeFrom)})`}</p>
+          <div class="pdp__row" style="align-items:center">
+            <div class="qty" role="group" aria-label="Cantidad">
+              <button type="button" data-pdp-minus aria-label="Quitar uno">−</button>
+              <output data-pdp-qty aria-live="polite">1</output>
+              <button type="button" data-pdp-plus aria-label="Añadir uno">+</button>
+            </div>
+          </div>
+          <div class="pdp__row">
+            <button type="button" class="btn btn--primary" data-pdp-add>Añadir al carrito</button>
+            <button type="button" class="btn" data-pdp-buy>Comprar ahora</button>
+          </div>
+          <ul class="assurances"><li>Pago seguro</li><li>Envío discreto</li><li>30 días de devolución</li>{["iluminacion", "clima", "hidroponia", "fumador"].includes(p.cat) && <li>Garantía de 3 años</li>}</ul>
+        </div>
+
+        <section aria-labelledby="feats-title" class="stack" style="--space:.75rem">
+          <h2 id="feats-title" style="font-size:var(--step-2)">Características</h2>
+          <ul class="feats">{p.feats.map((f) => <li><Icon name="check" />{f}</li>)}</ul>
+        </section>
+      </div>
+    </div>
+
+    {combos.length > 0 && (
+      <section class="section--tight" aria-labelledby="combo-title">
+        <h2 id="combo-title" style="font-size:var(--step-3);margin-bottom:1.5rem">Se combina bien con</h2>
+        <div class="grid-products">{combos.map((c) => <ProductCard product={c} />)}</div>
+      </section>
+    )}
+  </div>
+</Base>

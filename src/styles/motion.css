@@ -1,0 +1,150 @@
+/*
+  Animaciones y efectos. Solo se aplican con html.motion, que el script en línea añade si el
+  usuario NO pide movimiento reducido. Sin JS o con movimiento reducido, todo se ve estático y completo.
+*/
+@property --light { syntax: "<color>"; inherits: true; initial-value: #9cc4ff; }
+@property --angle { syntax: "<angle>"; inherits: false; initial-value: 0deg; }
+
+/* ---------- Intro cinematográfica (primera visita a la portada en la sesión) ---------- */
+.intro { display: none; }
+html.has-intro .intro {
+  position: fixed; inset: 0; z-index: 300; display: grid; place-content: center; justify-items: center; gap: var(--space-4);
+  background: #0a0c0e; color: #eef2ec; text-align: center;
+  clip-path: inset(0 0 0 0); animation: introOut 1s cubic-bezier(.77, 0, .18, 1) 2.4s forwards; /* salida garantizada aunque falle el JS */
+}
+html.has-intro .intro.is-out { animation: introOut .9s cubic-bezier(.77, 0, .18, 1) forwards; }
+@keyframes introOut { to { clip-path: inset(0 0 100% 0); visibility: hidden; } }
+.intro__sprout { width: 88px; height: 88px; color: #7fd88a; }
+.intro__sprout path { stroke-dasharray: 1; stroke-dashoffset: 1; animation: draw 1.3s var(--ease) .15s forwards; }
+.intro__word { display: flex; overflow: hidden; font: 800 clamp(2.4rem, 9vw, 5.5rem) / 1.05 var(--font-display); letter-spacing: -.03em; max-width: none; }
+.intro__word span { display: inline-block; translate: 0 110%; animation: rise .9s var(--ease) forwards; animation-delay: calc(.45s + var(--i) * 55ms); }
+.intro__bar { width: min(280px, 70vw); height: 2px; background: #2a3138; overflow: hidden; border-radius: 2px; }
+.intro__bar i { display: block; height: 100%; background: var(--spectrum); transform-origin: left; scale: 0 1; animation: barGrow 1.9s var(--ease) .3s forwards; }
+.intro__meta { color: #a3ada6; }
+.intro__skip { position: absolute; right: calc(var(--gutter-r) + 8px); bottom: calc(env(safe-area-inset-bottom, 0px) + 20px); background: none; border: 1px solid #2a3138; border-radius: var(--radius-pill); padding: .5rem 1rem; color: #a3ada6; min-height: 40px; }
+.intro__skip:hover { color: #eef2ec; border-color: #eef2ec; }
+@keyframes rise { to { translate: 0 0; } }
+@keyframes barGrow { to { scale: 1 1; } }
+
+/* Retraso común: con intro, la portada empieza a animarse cuando se levanta el telón */
+:root { --intro-delay: 0s; }
+html.has-intro { --intro-delay: 1.9s; }
+
+/* ---------- Barra de progreso y resplandor del cursor ---------- */
+.scroll-progress, .cursor-glow { display: none; }
+.motion .scroll-progress { display: block; position: fixed; top: 0; left: 0; right: 0; height: 3px; z-index: 70; background: var(--spectrum); transform-origin: left; scale: var(--p, 0) 1; pointer-events: none; }
+@media (pointer: fine) {
+  .motion .cursor-glow { display: block; position: fixed; left: 0; top: 0; width: 520px; height: 520px; margin: -260px 0 0 -260px; z-index: 1; pointer-events: none; opacity: 0; transition: opacity .6s;
+    background: radial-gradient(circle, color-mix(in srgb, var(--accent) 14%, transparent), color-mix(in srgb, var(--blue) 6%, transparent) 40%, transparent 70%); }
+  .motion .cursor-glow.is-on { opacity: 1; }
+}
+.motion .header { transition: translate .45s var(--ease), background var(--dur); }
+.motion .header.is-hidden { translate: 0 -100%; }
+
+/* ---------- Hero ---------- */
+.motion .hero h1 .line { display: block; overflow: hidden; padding: .04em 0 .16em; margin-bottom: -.1em; }
+.motion .hero h1 .line > span { display: inline-block; translate: 0 108%; animation: rise 1.1s var(--ease) forwards; animation-delay: calc(var(--intro-delay) + .1s + var(--i) * 110ms); }
+.motion .hero .hero-fade { opacity: 0; translate: 0 18px; animation: fadeUp .9s var(--ease) forwards; animation-delay: calc(var(--intro-delay) + .55s + var(--i) * 120ms); }
+@keyframes fadeUp { to { opacity: 1; translate: 0 0; } }
+
+.motion .hero__art { translate: calc(var(--mx, 0) * -14px) calc(var(--my, 0) * -10px); transition: translate .8s var(--ease); }
+.motion .plant .stem { animation-delay: calc(var(--intro-delay) + .2s); }
+.motion .plant .leaf { animation-delay: calc(var(--intro-delay) + var(--d)); }
+.motion .plant .beam { animation-delay: var(--intro-delay); }
+.motion .plant .leaf .blade { transform-box: fill-box; transform-origin: 100% 85%; animation: sway 6s ease-in-out infinite; animation-delay: calc(var(--intro-delay) + var(--d) + 1s); }
+@keyframes sway { 50% { rotate: -4deg; } }
+.spores { display: none; }
+.motion .spores { display: block; position: absolute; inset: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; }
+
+/* ---------- Cinta de ventajas ---------- */
+.marquee { overflow: hidden; border-block: 1px solid var(--line); background: var(--surface); padding-block: var(--space-4); }
+.marquee__track { display: flex; flex-wrap: wrap; justify-content: center; gap: var(--space-2) var(--space-6); list-style: none; margin: 0; padding: 0 var(--gutter-r) 0 var(--gutter-l); }
+.marquee__track li { font: 600 var(--step-1) var(--font-display); white-space: nowrap; display: inline-flex; align-items: center; gap: var(--space-6); }
+.marquee__track li::after { content: "✦"; color: var(--accent); font-size: .8em; }
+.marquee__track [aria-hidden="true"] { display: none; }
+.motion .marquee__track { flex-wrap: nowrap; justify-content: flex-start; width: max-content; padding: 0; animation: slide 40s linear infinite; }
+.motion .marquee__track [aria-hidden="true"] { display: inline-flex; }
+.motion .marquee:hover .marquee__track { animation-play-state: paused; }
+@keyframes slide { to { translate: -50% 0; } }
+
+/* ---------- Ciclo de cultivo guiado por el scroll ---------- */
+.grow { --light: #9cc4ff; --h: 0; transition: --light 1s var(--ease); }
+.grow[data-stage="1"] { --light: #6f97ff; }
+.grow[data-stage="2"] { --light: #ff5c92; }
+.grow[data-stage="3"] { --light: #ffb547; }
+.grow__visual { display: none; }
+.motion .grow { height: 420vh; position: relative; }
+.motion .grow__sticky { position: sticky; top: 0; height: 100vh; height: 100svh; overflow: hidden; display: grid; grid-template-columns: 1fr 1fr; align-items: center; gap: var(--space-6);
+  background: radial-gradient(ellipse 60% 70% at 28% 0%, color-mix(in srgb, var(--light) 28%, transparent), transparent 70%), var(--bg); }
+.motion .grow__visual { display: grid; place-items: end center; height: 100%; padding-top: calc(var(--header-h) + 80px); min-width: 0; }
+.motion .grow__visual svg { height: min(74svh, 620px); width: auto; max-width: 100%; overflow: visible; }
+.grow-plant .stem { fill: none; stroke: #4f9a5f; stroke-width: 7; stroke-linecap: round; stroke-dasharray: 1; stroke-dashoffset: .94; }
+.grow-plant .blade { fill: color-mix(in srgb, #6fcf7f calc(100% - var(--h) * 75%), #c99a3c); }
+.grow-plant .bud { fill: color-mix(in srgb, #f3d27a calc(100% - var(--h) * 60%), #b8743a); transform-box: fill-box; transform-origin: center; scale: 0; transition: scale .5s var(--ease); }
+.grow-plant .leaf { transform-box: fill-box; transform-origin: 100% 85%; scale: 0; transition: scale .5s var(--ease); }
+.grow-plant .beam stop { stop-color: var(--light); }
+.grow-plant .beam { transition: opacity 1s; }
+.grow[data-stage="3"] .grow-plant .beam { opacity: .25; }
+.grow-plant .led { fill: var(--light); }
+.grow-plant .lamp { fill: #1d2329; }
+.grow-plant .pot { fill: #7a4f33; }
+.grow-plant .rim { fill: #94603e; }
+.motion .grow__info { padding-right: var(--gutter-r); min-width: 0; }
+.motion .grow .steps { display: block; }
+.motion .grow .step { display: none; background: none; border: 0; padding: 0; }
+.motion .grow .step.is-active { display: grid; animation: stageIn .6s var(--ease); }
+.motion .grow .step h3 { font-size: var(--step-4); font-weight: 800; letter-spacing: -.04em; }
+.motion .grow .step__num { color: var(--light); }
+.motion .grow .step dl { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1px; background: var(--line); border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; margin-top: var(--space-4); }
+.motion .grow .step dl > div { display: block; background: var(--surface); padding: var(--space-3); }
+.motion .grow .step dt { font: 500 .72rem var(--font-mono); text-transform: uppercase; letter-spacing: .08em; }
+.motion .grow .step dd { font-size: var(--step-1); }
+.grow__bar { display: none; }
+.motion .grow__bar { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; margin-bottom: var(--space-5); }
+.motion .grow__bar i { height: 3px; border-radius: 3px; background: var(--line); overflow: hidden; position: relative; }
+.motion .grow__bar i::after { content: ""; position: absolute; inset: 0; background: var(--light); transform-origin: left; scale: var(--f, 0) 1; }
+@keyframes stageIn { from { opacity: 0; translate: 0 18px; filter: blur(6px); } }
+@media (max-width: 819px) {
+  .motion .grow__sticky { grid-template-columns: 1fr; grid-template-rows: 46% 54%; gap: 0; }
+  .motion .grow__visual { padding-top: calc(var(--header-h) + 40px); }
+  .motion .grow__visual svg { height: calc(46svh - var(--header-h) - 50px); }
+  .motion .grow__info { padding: var(--space-3) var(--gutter-r) var(--space-3) var(--gutter-l); align-self: start; }
+  .motion .grow .step h3 { font-size: var(--step-3); }
+  .motion .grow .step > p { display: none; }
+  .motion .grow .section-head { display: none; }
+}
+
+/* ---------- Kit: borde con el espectro girando y destello ---------- */
+.motion .kit::before { background: conic-gradient(from var(--angle), #6f97ff, #e05fd0, #ffb547, #6f97ff); animation: spin 8s linear infinite; }
+@keyframes spin { to { --angle: 360deg; } }
+.motion .kit::after { content: ""; position: absolute; inset: 0; pointer-events: none; background: linear-gradient(110deg, transparent 35%, rgb(255 255 255 / .07) 50%, transparent 65%); translate: -100% 0; animation: sweep 5s var(--ease) 1s infinite; }
+@keyframes sweep { 40%, 100% { translate: 100% 0; } }
+
+/* ---------- Montaje: telón + parallax ---------- */
+.motion .setup { clip-path: inset(var(--clip, 0%) round var(--radius-lg)); }
+.motion .setup img { scale: 1.12; translate: 0 var(--py, 0px); }
+
+/* ---------- Tarjetas: inclinación 3D y reflejo ---------- */
+@media (pointer: fine) {
+  .motion .card { transform: perspective(900px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)); transition: transform .6s var(--ease), border-color var(--dur), translate var(--dur) var(--ease); }
+  .motion .card::after { content: ""; position: absolute; inset: 0; pointer-events: none; opacity: 0; transition: opacity .4s; background: radial-gradient(380px circle at var(--gx, 50%) var(--gy, 0%), rgb(255 255 255 / .12), transparent 50%); }
+  .motion .card:hover::after { opacity: 1; }
+  .motion .magnetic { transition: transform .4s var(--ease), background var(--dur), color var(--dur), border-color var(--dur); }
+}
+
+/* ---------- Bola que vuela al carrito y hojas de celebración ---------- */
+.fly-dot { position: fixed; left: 0; top: 0; z-index: 400; width: 16px; height: 16px; margin: -8px 0 0 -8px; border-radius: 50%; background: var(--spectrum); box-shadow: 0 0 20px var(--accent); pointer-events: none; }
+.leaf-bit { position: fixed; left: 0; top: 0; z-index: 400; width: 10px; height: 14px; border-radius: 0 100% 0 100%; pointer-events: none; }
+
+/* ---------- Opiniones en cinta ---------- */
+.motion .reviews-marquee { overflow: hidden; -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent); mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent); }
+.motion .reviews-marquee .reviews { display: flex; width: max-content; gap: var(--space-3); animation: slide 55s linear infinite; }
+.motion .reviews-marquee .reviews > li { width: min(360px, 80vw); flex: none; }
+.motion .reviews-marquee:hover .reviews, .motion .reviews-marquee:focus-within .reviews { animation-play-state: paused; }
+.reviews .is-clone { display: none; }
+.motion .reviews .is-clone { display: block; }
+
+/* ---------- Pie: texto gigante que se rellena ---------- */
+.giant { margin: var(--space-7) 0 0; text-align: center; white-space: nowrap; overflow: hidden; font: 800 clamp(3.5rem, 16vw, 14rem) / .85 var(--font-display); letter-spacing: -.06em; color: transparent;
+  -webkit-text-stroke: 1px color-mix(in srgb, var(--fg) 22%, transparent); background: var(--spectrum) no-repeat; background-size: var(--fill, 100%) 100%; -webkit-background-clip: text; background-clip: text; max-width: none; }
+.motion .giant { --fill: 0%; }

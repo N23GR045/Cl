@@ -1,0 +1,17 @@
+---
+import Base from "./Base.astro";
+import Breadcrumbs from "../components/Breadcrumbs.astro";
+interface Props { title: string; description: string; path: string; updated: string }
+const { title, description, path, updated } = Astro.props;
+---
+<Base title={title} description={description} path={path}>
+  <div class="container section--tight">
+    <Breadcrumbs items={[{ label: "Inicio", href: "/" }, { label: title }]} />
+    <article class="prose" style="margin-top:1.5rem">
+      <h1 style="font-size:var(--step-4)">{title}</h1>
+      <p class="muted mono">Última actualización: {updated}</p>
+      <p class="alert alert--warning">Plantilla orientativa. Debe revisarla un profesional y completarse con los datos reales de la empresa antes de publicar.</p>
+      <slot />
+    </article>
+  </div>
+</Base>

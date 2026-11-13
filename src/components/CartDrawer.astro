@@ -1,0 +1,81 @@
+---
+import Icon from "./Icon.astro";
+import { t } from "../i18n/es";
+import { site } from "../data/site";
+---
+<div class="overlay" data-cart-overlay hidden></div>
+<aside class="drawer" id="cart" aria-labelledby="cart-title" role="dialog" aria-modal="true" tabindex="-1">
+  <div class="drawer__head">
+    <h2 id="cart-title" data-cart-title>{t.cart.title}</h2>
+    <button class="icon-btn" type="button" data-cart-close aria-label={t.cart.close}><Icon name="close" /></button>
+  </div>
+
+  <!-- Vista: carrito -->
+  <div class="drawer__body" data-view="cart">
+    <ul class="cart-list" data-cart-list role="list" style="list-style:none;margin:0;padding:0"></ul>
+    <p class="cart-empty" data-cart-empty>{t.cart.empty}<br />{t.cart.emptyHint}</p>
+  </div>
+  <div class="drawer__foot" data-view="cart" data-cart-foot>
+    <div class="upsell" data-upsell hidden><p class="mono muted">{t.cart.complete}</p><ul data-upsell-list role="list" style="list-style:none;margin:0;padding:0;display:grid;gap:.5rem"></ul></div>
+    <form class="promo-form" data-promo-form novalidate>
+      <label for="promo-input" class="sr-only">{t.cart.promoPh}</label>
+      <input class="input" id="promo-input" type="text" name="promo" placeholder={t.cart.promoPh} autocomplete="off" aria-describedby="promo-msg" />
+      <button class="btn btn--sm" type="submit">{t.cart.promoApply}</button>
+    </form>
+    <p class="error-msg" id="promo-msg" data-promo-msg role="status"></p>
+    <div class="alert alert--success" data-promo-ok hidden><span data-promo-ok-text></span> <button class="link-btn" type="button" data-promo-remove>{t.cart.promoRemove}</button></div>
+    <p class="muted" data-ship-text style="font-size:.85rem"></p>
+    <div class="ship-bar" aria-hidden="true"><i data-ship-bar></i></div>
+    <div class="total-row"><span>{t.cart.total}</span><strong data-cart-total>0,00 €</strong></div>
+    <button class="btn btn--primary btn--block" type="button" data-checkout>{t.cart.checkout}</button>
+    <p class="dispatch" data-dispatch></p>
+    <ul class="assurances"><li>Pago seguro</li><li>Sin registro</li><li>30 días de devolución</li></ul>
+  </div>
+
+  <!-- Vista: compra en 3 pasos -->
+  <div class="drawer__body co" data-view="checkout" hidden>
+    <ol class="co-steps" aria-label="Pasos de la compra">{t.checkout.steps.map((s, i) => <li data-step-label={i + 1}>{i + 1} · {s}</li>)}</ol>
+    <form id="co-form" novalidate data-co-form>
+      <fieldset data-step="1">
+        <legend>Tus datos</legend>
+        <p class="muted">{t.checkout.guest}</p>
+        <div class="field"><label for="co-name">Nombre y apellidos</label><input class="input" id="co-name" type="text" name="name" autocomplete="name" required minlength="3" aria-describedby="co-name-err" /><p class="error-msg" id="co-name-err"></p></div>
+        <div class="field"><label for="co-email">Email</label><input class="input" id="co-email" name="email" type="email" autocomplete="email" inputmode="email" required aria-describedby="co-email-hint co-email-err" placeholder="nombre@correo.com" /><p class="hint" id="co-email-hint">Te enviaremos aquí la confirmación.</p><p class="error-msg" id="co-email-err"></p></div>
+        <div class="field"><label for="co-phone">Teléfono</label><input class="input" id="co-phone" name="phone" type="tel" autocomplete="tel" inputmode="tel" required data-rule="phone" aria-describedby="co-phone-err" placeholder="600 000 000" /><p class="error-msg" id="co-phone-err"></p></div>
+      </fieldset>
+      <fieldset data-step="2" hidden>
+        <legend>Envío</legend>
+        <label class="option"><input type="radio" name="ship" value="home" checked /><span><strong>A domicilio · 24/48 h</strong><small data-ship-home-price></small></span></label>
+        <label class="option"><input type="radio" name="ship" value="store" /><span><strong>Recoger en tienda</strong><small>Gratis · listo en 2 horas</small></span></label>
+        <div data-address style="display:grid;gap:1rem">
+          <div class="field"><label for="co-addr">Dirección</label><input class="input" id="co-addr" type="text" name="address" autocomplete="address-line1" required minlength="5" aria-describedby="co-addr-err" placeholder="Calle, número, piso" /><p class="error-msg" id="co-addr-err"></p></div>
+          <div class="form__row">
+            <div class="field"><label for="co-zip">Código postal</label><input class="input" id="co-zip" type="text" name="zip" autocomplete="postal-code" inputmode="numeric" maxlength="5" required data-rule="zip" aria-describedby="co-zip-err" /><p class="error-msg" id="co-zip-err"></p></div>
+            <div class="field"><label for="co-city">Ciudad</label><input class="input" id="co-city" type="text" name="city" autocomplete="address-level2" required minlength="2" aria-describedby="co-city-err" /><p class="error-msg" id="co-city-err"></p></div>
+          </div>
+        </div>
+      </fieldset>
+      <fieldset data-step="3" hidden>
+        <legend>Pago</legend>
+        <label class="option"><input type="radio" name="pay" value="Tarjeta" checked /><span><strong>Tarjeta</strong><small>Pasarela segura del banco</small></span></label>
+        <label class="option"><input type="radio" name="pay" value="Bizum" /><span><strong>Bizum</strong><small>Confirmas el pago en tu app</small></span></label>
+        <label class="option"><input type="radio" name="pay" value="Transferencia" /><span><strong>Transferencia</strong><small>Enviamos al recibir el pago</small></span></label>
+        <dl class="summary" data-summary></dl>
+        {site.demoCheckout && <p class="alert alert--warning">{t.checkout.demo}</p>}
+      </fieldset>
+      <p class="error-msg" data-co-error role="alert" style="margin-top:1rem"></p>
+    </form>
+    <div class="co-done" data-co-done hidden tabindex="-1">
+      <div class="co-done__icon"><Icon name="check" /></div>
+      <h3>{t.checkout.done}</h3>
+      <p class="muted" data-co-done-text></p>
+      <button class="btn btn--primary" type="button" data-cart-close>{t.checkout.keep}</button>
+    </div>
+  </div>
+  <div class="drawer__foot" data-view="checkout" data-co-nav hidden>
+    <div style="display:flex;gap:.5rem">
+      <button class="btn" type="button" data-co-back style="flex:1">{t.checkout.backCart}</button>
+      <button class="btn btn--primary" type="submit" form="co-form" data-co-next style="flex:1">{t.checkout.next}</button>
+    </div>
+  </div>
+</aside>

@@ -1,0 +1,11 @@
+---
+import Base from "../layouts/Base.astro";
+---
+<Base title="Página no encontrada" description="La página que buscas no existe o ha cambiado de dirección." path="/404" noindex>
+  <div class="container notfound">
+    <p class="big grad" aria-hidden="true">404</p>
+    <h1 style="font-size:var(--step-3)">Esta página no ha germinado.</h1>
+    <p class="muted">Puede que el enlace esté mal escrito o que el producto ya no exista.</p>
+    <p><a class="btn btn--primary" href="/productos">Ver productos</a> <a class="btn" href="/">Ir al inicio</a></p>
+  </div>
+</Base>

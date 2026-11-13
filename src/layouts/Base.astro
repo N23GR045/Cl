@@ -1,0 +1,70 @@
+---
+import "@fontsource-variable/bricolage-grotesque";
+import "@fontsource/instrument-sans/400.css";
+import "@fontsource/instrument-sans/600.css";
+import "@fontsource/jetbrains-mono/500.css";
+import "../styles/tokens.css";
+import "../styles/base.css";
+import "../styles/components.css";
+import "../styles/sections.css";
+import "../styles/motion.css";
+import Seo, { type SeoProps } from "../components/Seo.astro";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import CartDrawer from "../components/CartDrawer.astro";
+import AgeGate from "../components/AgeGate.astro";
+import { products, categories } from "../data/catalog";
+import { site } from "../data/site";
+import { t } from "../i18n/es";
+
+type Props = SeoProps;
+const props = Astro.props as Props;
+// Datos mínimos que necesita el carrito en el navegador (sin descripciones largas).
+const clientCatalog = {
+  products: products.map(({ id, name, price, img, cat, combo }) => ({ id, name, price, img, cat, combo })),
+  categories: categories.map(({ id, name }) => ({ id, name })),
+  shipping: site.shipping, promo: site.promo, phone: site.phone, email: site.email, demoCheckout: site.demoCheckout,
+};
+---
+<!doctype html>
+<html lang={site.lang}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <Seo {...props} />
+    <meta name="theme-color" content="#0a0c0e" media="(prefers-color-scheme: dark)" />
+    <meta name="theme-color" content="#f6f5f0" media="(prefers-color-scheme: light)" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+    <!-- Antes del primer pintado: tema guardado, clase "motion" (si se permite movimiento) e "has-intro" (primera visita a la portada en la sesión). Su hash está en la CSP. -->
+    <script is:inline>(function(){var d=document.documentElement;try{var t=localStorage.getItem("rv-theme");if(t==="light"||t==="dark")d.dataset.theme=t}catch(e){}d.classList.add("js");if(!matchMedia("(prefers-reduced-motion: reduce)").matches){d.classList.add("motion");try{if(location.pathname==="/"&&!sessionStorage.getItem("rv-intro")){d.classList.add("has-intro");sessionStorage.setItem("rv-intro","1")}}catch(e){}}})();</script>
+    <slot name="head" />
+  </head>
+  <body>
+    <div class="intro" id="intro" aria-hidden="true">
+      <svg class="intro__sprout" viewBox="0 0 48 48"><path pathLength="1" d="M24 44V22M24 22c0-9 6-15 16-16-1 10-7 16-16 16Zm0 0C24 13 18 7 8 6c1 10 7 16 16 16Z" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" /></svg>
+      <p class="intro__word">{[...site.name].map((ch, i) => <span style={`--i:${i}`}>{ch === " " ? "\u00a0" : ch}</span>)}</p>
+      <div class="intro__bar"><i></i></div>
+      <p class="intro__meta mono">Encendiendo LED <span data-intro-pct>0%</span></p>
+      <button type="button" class="intro__skip mono" data-intro-skip tabindex="-1">Saltar intro →</button>
+    </div>
+    <div class="scroll-progress" data-progress aria-hidden="true"></div>
+    <div class="cursor-glow" data-glow aria-hidden="true"></div>
+    <a class="sr-only sr-only--focusable skip" href="#main">{t.skip}</a>
+    <Header />
+    <main id="main" tabindex="-1">
+      <slot />
+    </main>
+    <Footer />
+    <CartDrawer />
+    <AgeGate />
+    <div class="mbar" data-mbar hidden><button class="btn btn--primary" type="button" data-cart-open><span data-mbar-text></span><span>Finalizar →</span></button></div>
+    <div class="toast" data-toast role="status" aria-live="polite" aria-atomic="true"></div>
+    <script type="application/json" id="catalog-data" set:html={JSON.stringify(clientCatalog).replace(/</g, "\\u003c")} />
+    <script>import "../scripts/main";</script>
+  </body>
+</html>
+<style is:global>
+  .skip:focus { position: fixed; left: 16px; top: 12px; z-index: 200; width: auto; height: auto; clip: auto; margin: 0; padding: .7rem 1rem; border-radius: 999px; background: var(--fg); color: var(--bg); font-weight: 600; white-space: normal; }
+  main:focus { outline: none; }
+</style>
