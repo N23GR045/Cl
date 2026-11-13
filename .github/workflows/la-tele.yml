@@ -1,0 +1,63 @@
+name: La Tele (APK para Fire TV)
+
+on:
+  push:
+    branches: [la-tele]
+    paths: ["la-tele/**", ".github/workflows/la-tele.yml"]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  apk:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: "8.9"
+
+      - name: Clave de firma (si está en los Secrets)
+        env:
+          KS_B64: ${{ secrets.LATELE_KEYSTORE_B64 }}
+        run: |
+          if [ -n "$KS_B64" ]; then
+            echo "$KS_B64" | base64 -d > "$RUNNER_TEMP/latele.jks"
+            echo "LATELE_KEYSTORE=$RUNNER_TEMP/latele.jks" >> "$GITHUB_ENV"
+          else
+            echo "::warning::Sin LATELE_KEYSTORE_B64: se firma con la clave de depuración (las actualizaciones pedirán desinstalar antes)."
+          fi
+
+      - name: Tests y APK
+        working-directory: la-tele
+        env:
+          LATELE_KS_PASS: ${{ secrets.LATELE_KS_PASS }}
+          LATELE_KEY_ALIAS: ${{ secrets.LATELE_KEY_ALIAS }}
+          LATELE_KEY_PASS: ${{ secrets.LATELE_KEY_PASS }}
+        run: gradle testReleaseUnitTest assembleRelease --stacktrace
+
+      - name: Preparar APK
+        run: cp la-tele/app/build/outputs/apk/release/app-release.apk LaTele.apk
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: LaTele
+          path: LaTele.apk
+
+      - name: Publicar en Releases (para instalar con Downloader)
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: la-tele-v${{ github.run_number }}
+          name: La Tele v1.0.${{ github.run_number }}
+          make_latest: true
+          files: LaTele.apk
+          body: |
+            APK de La Tele para Fire TV.
+            Enlace fijo para Downloader: https://github.com/${{ github.repository }}/releases/latest/download/LaTele.apk
