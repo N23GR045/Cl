@@ -11,6 +11,7 @@ Televisión sencillísima para el Fire TV (pensada para mayores): se abre direct
 | ☰ | **Modo nieto**: elegir qué canales aparecen |
 
 - Canales con emisión directa: La 1, La 2, TRECE, 24h, Teledeporte, Clan, Euronews y autonómicas (se activan en modo nieto).
+- Más canales gratis (Pluto TV, Rakuten TV, Samsung TV Plus, locales) de [iptv-org](https://github.com/iptv-org/iptv), dominio público: se activan en modo nieto. Se descartan reenvíos de canales de pago o que solo se emiten en su app.
 - Fuente: [TDTChannels](https://github.com/LaQuay/TDTChannels) (Apache-2.0), solo emisiones oficiales en abierto. La lista y la guía se actualizan solas.
 - Antena 3, laSexta, Telecinco, Cuatro y Telemadrid no tienen emisión directa pública: se abren en Atresplayer, Mediaset Infinity o Telemadrid (gratis).
 

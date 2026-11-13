@@ -31,6 +31,10 @@ class Repositorio(private val ctx: Context) {
 
     private val prefs = ctx.getSharedPreferences("latele", Context.MODE_PRIVATE)
     private val cacheLista = File(ctx.filesDir, "tv.m3u8")
+    private val cacheExtra = File(ctx.filesDir, "extra.m3u")
+
+    /** Canales gratis de la comunidad (iptv-org): ocultos hasta que se activan en el modo nieto. */
+    @Volatile private var extras: List<Canal> = emptyList()
 
     /** URLs actualizadas por identificador de guía (tvg-id), leídas de la lista oficial. */
     @Volatile private var urlsFrescas: Map<String, List<String>> = emptyMap()
@@ -40,11 +44,26 @@ class Repositorio(private val ctx: Context) {
 
     init {
         if (cacheLista.exists()) runCatching { urlsFrescas = parsearM3u(cacheLista.readText()) }
+        if (cacheExtra.exists()) runCatching { extras = filtrarExtras(parsearCanales(cacheExtra.readText())) }
     }
 
     fun todos(): List<Canal> = CanalesIncluidos.lista.map { c ->
         val frescas = c.epg?.let { urlsFrescas[it] }.orEmpty()
         if (c.esApp || frescas.isEmpty()) c else c.copy(urls = (frescas + c.urls).distinct())
+    } + extras
+
+    /** Descarga la lista de canales gratis de la comunidad. Si falla, se queda la copia guardada. */
+    fun actualizarExtras() {
+        for (url in URLS_EXTRA) {
+            val ok = runCatching {
+                val texto = descargar(url).use { it.bufferedReader().readText() }
+                val lista = filtrarExtras(parsearCanales(texto))
+                if (lista.isEmpty()) error("vacía")
+                extras = lista
+                cacheExtra.writeText(texto)
+            }.isSuccess
+            if (ok) return
+        }
     }
 
     fun visibles(): List<Canal> = todos().filter { esVisible(it) }
@@ -139,6 +158,84 @@ class Repositorio(private val ctx: Context) {
         const val USER_AGENT = "Mozilla/5.0 (Linux; Android 9; AFTMM) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120 Safari/537.36 LaTele/1.0"
 
         private val formato = SimpleDateFormat("yyyyMMddHHmmss Z", Locale.US)
+
+        /** Lista de iptv-org para España (dominio público): TDT en abierto, Pluto TV, Rakuten TV, Samsung TV Plus… */
+        val URLS_EXTRA = listOf(
+            "https://iptv-org.github.io/iptv/countries/es.m3u",
+            "https://raw.githubusercontent.com/iptv-org/iptv/master/streams/es.m3u",
+        )
+
+        /**
+         * Canales que solo se emiten de forma oficial dentro de sus apps: cualquier enlace directo a ellos
+         * en una lista de la comunidad es un reenvío no oficial, así que no se aceptan.
+         */
+        private val PROTEGIDOS = listOf(
+            "antena 3", "antena3", "lasexta", "la sexta", "telecinco", "cuatro", "neox", "nova", "mega",
+            "atreseries", "fdf", "energy", "divinity", "be mad", "bemad", "boing", "telemadrid", "la otra",
+            "movistar", "dazn", "laliga", "gol", "eurosport",
+            // canales de pago: en listas de la comunidad suelen ser reenvíos
+            "axn", "amc", "calle 13", "cosmo", "hbo", "sky", "tnt", "syfy", "warner", "fox", "comedy central",
+            "discovery", "national geographic", "nat geo", "hollywood", "canal+", "canal plus", "barca tv", "barça tv",
+        )
+
+        private val ADULTOS = Regex("(?i)xxx|adult|erotic|porn|\\+18")
+
+        fun normalizar(n: String) = java.text.Normalizer.normalize(n.lowercase(), java.text.Normalizer.Form.NFD)
+            .replace(Regex("\\p{M}+"), "")
+            .replace(Regex("\\b(hd|fhd|uhd|sd|4k)\\b"), "")
+            .replace(Regex("[^a-z0-9]+"), " ").trim()
+
+        /** Quita repetidos de la lista incluida, canales protegidos y contenido adulto. */
+        fun filtrarExtras(lista: List<Canal>): List<Canal> {
+            val ya = CanalesIncluidos.lista.map { normalizar(it.nombre) }.toSet()
+            return lista.filter { c ->
+                val n = normalizar(c.nombre)
+                n.isNotEmpty() && n !in ya &&
+                    PROTEGIDOS.none { p -> val q = normalizar(p); n == q || n.startsWith("$q ") } &&
+                    !ADULTOS.containsMatchIn(c.nombre + " " + c.grupo)
+            }.distinctBy { normalizar(it.nombre) }
+        }
+
+        /** Nombre del canal: lo que va tras la primera coma que no está entre comillas. */
+        fun nombreExtinf(l: String): String? {
+            var comillas = false
+            l.forEachIndexed { i, ch ->
+                if (ch == '"') comillas = !comillas
+                else if (ch == ',' && !comillas) return l.substring(i + 1).trim()
+            }
+            return null
+        }
+
+        /** Lee una lista M3U completa: nombre, grupo, id de guía y enlaces (los repetidos por nombre se juntan). */
+        fun parsearCanales(texto: String): List<Canal> {
+            data class Tmp(val nombre: String, val grupo: String, val epg: String?, val urls: MutableList<String>)
+            val res = LinkedHashMap<String, Tmp>()
+            var info: Triple<String, String, String?>? = null
+            texto.removePrefix("\uFEFF").lineSequence().forEach { bruta ->
+                val l = bruta.trim()
+                when {
+                    l.startsWith("#EXTINF", ignoreCase = true) -> {
+                        val nombre = nombreExtinf(l)?.ifBlank { null }
+                            ?: Regex("""tvg-name\s*=\s*"([^"]+)"""").find(l)?.groupValues?.get(1)
+                        val limpio = nombre?.replace(Regex("""\s*[\(\[][^\)\]]*[\)\]]"""), "")?.trim()
+                        val grupo = Regex("""group-title\s*=\s*"([^"]*)"""").find(l)?.groupValues?.get(1)
+                            ?.split(";")?.firstOrNull()?.trim()?.ifBlank { null } ?: "Más canales"
+                        val id = Regex("""tvg-id\s*=\s*"?([^"\s,]+)"?""").find(l)?.groupValues?.get(1)
+                        info = if (limpio.isNullOrBlank()) null else Triple(limpio, grupo, id)
+                    }
+                    l.isEmpty() || l.startsWith("#") -> Unit
+                    else -> {
+                        val i = info
+                        if (i != null && l.startsWith("http")) {
+                            val t = res.getOrPut(normalizar(i.first)) { Tmp(i.first, i.second, i.third, mutableListOf()) }
+                            if (l !in t.urls) t.urls.add(l)
+                        }
+                        info = null
+                    }
+                }
+            }
+            return res.values.map { Canal(it.nombre, it.urls, it.epg, null, null, it.grupo, false) }
+        }
 
         fun fecha(s: String?): Long = runCatching {
             synchronized(formato) { formato.parse(s!!.trim())!!.time }

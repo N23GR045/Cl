@@ -115,6 +115,7 @@ class MainActivity : Activity() {
     private fun actualizarEnSegundoPlano() {
         Thread {
             repo.actualizarLista()
+            repo.actualizarExtras()
             runOnUiThread { recargarCanales() }
             repo.actualizarGuia()
             runOnUiThread { if (banner.visibility == View.VISIBLE) rellenarBanner(canales.getOrNull(actual)) }
@@ -377,7 +378,7 @@ class MainActivity : Activity() {
         modoNieto = nieto
         ocultar(banner)
         listaTitulo.text = if (nieto)
-            "Modo nieto · OK marca o quita canales · ☰ para salir"
+            "Modo nieto · OK marca o quita canales (${repo.todos().size}) · ☰ salir"
         else "Canales · elige con las flechas y pulsa OK"
         listaRejilla.removeAllViews()
         val fuente = if (nieto) repo.todos() else canales

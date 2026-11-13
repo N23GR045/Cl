@@ -35,4 +35,22 @@ class ListaTest {
         l.forEach { c -> assertTrue(c.nombre, c.esApp || c.urls.isNotEmpty()) }
         assertEquals(l.size, l.map { it.nombre }.toSet().size)
     }
+
+    @Test fun canalesDeLaComunidadFiltrados() {
+        val m3u = "#EXTM3U\n" +
+            "#EXTINF:-1 tvg-id=\"Cine.es\" group-title=\"Movies;Series\",Pluto TV Cine (720p) [Not 24/7]\n" +
+            "https://a/cine.m3u8\n" +
+            "#EXTINF:-1 group-title=\"General, varios\",Canal Cocina, el bueno\n" +
+            "https://a/cocina.m3u8\n" +
+            "#EXTINF:-1,Antena 3 HD\nhttp://1.2.3.4:8000/a3.m3u8\n" +
+            "#EXTINF:-1,AXN Movies\nhttp://x/axn.m3u8\n" +
+            "#EXTINF:-1,La 1 HD\nhttps://a/otra-la1.m3u8\n" +
+            "#EXTINF:-1 group-title=\"XXX\",Algo\nhttps://a/x.m3u8\n" +
+            "#EXTINF:-1,Pluto TV Cine\nhttps://a/cine2.m3u8\n"
+        val l = Repositorio.filtrarExtras(Repositorio.parsearCanales(m3u))
+        assertEquals(listOf("Pluto TV Cine", "Canal Cocina, el bueno"), l.map { it.nombre })
+        assertEquals("Movies", l[0].grupo)
+        assertEquals(listOf("https://a/cine.m3u8", "https://a/cine2.m3u8"), l[0].urls)
+        assertTrue(l.none { it.visiblePorDefecto })
+    }
 }
