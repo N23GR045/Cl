@@ -57,6 +57,7 @@ jobs:
           tag_name: la-tele-v${{ github.run_number }}
           name: La Tele v1.0.${{ github.run_number }}
           make_latest: true
+          target_commitish: ${{ github.sha }}
           files: LaTele.apk
           body: |
             APK de La Tele para Fire TV.
