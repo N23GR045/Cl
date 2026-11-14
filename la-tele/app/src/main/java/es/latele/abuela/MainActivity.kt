@@ -11,8 +11,10 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.util.TypedValue
+import android.view.GestureDetector
 import android.view.Gravity
 import android.view.KeyEvent
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
@@ -76,6 +78,7 @@ class MainActivity : Activity() {
     private lateinit var listaTitulo: TextView
     private lateinit var listaRejilla: GridLayout
     private var modoNieto = false
+    private lateinit var gestos: GestureDetector
 
     private val horaFmt = SimpleDateFormat("HH:mm", Locale("es", "ES"))
 
@@ -93,6 +96,16 @@ class MainActivity : Activity() {
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         repo = Repositorio(this)
         construirVista()
+        gestos = GestureDetector(this, object : GestureDetector.SimpleOnGestureListener() {
+            override fun onDown(e: MotionEvent) = true
+            override fun onSingleTapUp(e: MotionEvent): Boolean { tocar(); return true }
+            override fun onLongPress(e: MotionEvent) { abrirLista(true) }
+            override fun onFling(e1: MotionEvent?, e2: MotionEvent, vx: Float, vy: Float): Boolean {
+                if (Math.abs(vy) < Math.abs(vx) || Math.abs(vy) < 600f) return false
+                zapear(if (vy < 0) +1 else -1)
+                return true
+            }
+        })
         canales = repo.visibles().ifEmpty { repo.todos().take(1) }
         actualizarEnSegundoPlano()
     }
@@ -275,6 +288,25 @@ class MainActivity : Activity() {
         return null
     }
 
+    // ---------- Pantalla táctil (móvil o tablet) ----------
+    // Deslizar arriba/abajo cambia de canal · tocar muestra el rótulo y, con el rótulo visible, la lista
+    // · mantener pulsado abre el modo nieto. En la lista, el toque normal elige o marca.
+
+    override fun dispatchTouchEvent(ev: MotionEvent): Boolean {
+        if (lista.visibility == View.VISIBLE) return super.dispatchTouchEvent(ev)
+        gestos.onTouchEvent(ev)
+        return true
+    }
+
+    private fun tocar() {
+        val c = canales.getOrNull(actual) ?: return
+        when {
+            c.esApp -> abrirApp(c)
+            banner.visibility == View.VISIBLE && banner.alpha > 0.5f -> abrirLista(false)
+            else -> mostrarBanner(c)
+        }
+    }
+
     // ---------- Mando ----------
 
     override fun dispatchKeyEvent(e: KeyEvent): Boolean {
@@ -378,8 +410,8 @@ class MainActivity : Activity() {
         modoNieto = nieto
         ocultar(banner)
         listaTitulo.text = if (nieto)
-            "Modo nieto · OK marca o quita canales (${repo.todos().size}) · ☰ salir"
-        else "Canales · elige con las flechas y pulsa OK"
+            "Modo nieto · OK o toque marca/quita (${repo.todos().size}) · ☰ o Atrás para salir"
+        else "Canales · elige con las flechas y OK, o tócalo"
         listaRejilla.removeAllViews()
         val fuente = if (nieto) repo.todos() else canales
         var foco: View? = null
