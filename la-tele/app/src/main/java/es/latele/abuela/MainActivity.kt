@@ -136,8 +136,7 @@ class MainActivity : Activity() {
     override fun onStart() {
         super.onStart()
         crearPlayer()
-        val i = canales.indexOfFirst { it.nombre == ultimoDelLado() }.coerceAtLeast(0)
-        sintonizar(i)
+        sintonizar(indiceInicial())
         tickReloj.run()
     }
 
@@ -176,6 +175,12 @@ class MainActivity : Activity() {
         if (esCine) repo.visiblesCine().ifEmpty { repo.visibles() }
         else repo.visibles().ifEmpty { repo.todos().take(1) }
 
+    /** El último canal visto en este lado; si no hay, el primero en directo (no una app). */
+    private fun indiceInicial(): Int {
+        val i = canales.indexOfFirst { it.nombre == ultimoDelLado() }
+        return if (i >= 0) i else canales.indexOfFirst { !it.esApp }.coerceAtLeast(0)
+    }
+
     private fun ultimoDelLado() = if (esCine) repo.ultimoCine else repo.ultimoCanal
 
     /** Cambia de lado con una cortinilla: ▶ o deslizar a la izquierda = Cine y series; ◀ = Tele. */
@@ -193,8 +198,7 @@ class MainActivity : Activity() {
         cortinilla.alpha = 1f
         cortinilla.visibility = View.VISIBLE
         cortinilla.animate().translationX(0f).setDuration(320).setInterpolator(DecelerateInterpolator()).withEndAction {
-            val i = canales.indexOfFirst { it.nombre == ultimoDelLado() }.coerceAtLeast(0)
-            sintonizar(i)
+            sintonizar(indiceInicial())
             cortinilla.animate().alpha(0f).setStartDelay(500).setDuration(260)
                 .withEndAction { cortinilla.visibility = View.GONE; cortinilla.alpha = 1f }.start()
         }.start()
@@ -309,7 +313,8 @@ class MainActivity : Activity() {
         val instalada = buscarApp(c.appClave!!) != null
         mostrarAviso(
             c.nombre,
-            "Este canal se ve en la app ${c.appNombre}.",
+            if (c.grupo == Repositorio.GRUPO_CARTA) "Películas y series gratis para elegir, en la app ${c.appNombre}."
+            else "Este canal se ve en la app ${c.appNombre}.",
             if (instalada) "Pulsa  OK  para verlo" else "Falta instalar ${c.appNombre}. Pulsa  OK  para buscarla",
         )
     }

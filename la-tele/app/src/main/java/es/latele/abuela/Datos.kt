@@ -66,7 +66,16 @@ class Repositorio(private val ctx: Context) {
 
     fun ponerIdioma(i: String, v: Boolean) = prefs.edit().putBoolean("idioma_$i", v).apply()
 
-    fun visiblesCine(): List<Canal> = cine.filter { idiomaVisible(idioma(it)) }.ifEmpty { cine }
+    /** «A la carta»: apps gratuitas y legales para elegir película o serie; se abren con OK. */
+    val aLaCarta = listOf(
+        Canal("RTVE Play", emptyList(), null, "rtve", "RTVE Play", GRUPO_CARTA, true),
+        Canal("Pluto TV", emptyList(), null, "pluto", "Pluto TV", GRUPO_CARTA, true),
+        Canal("Rakuten TV", emptyList(), null, "rakuten", "Rakuten TV", GRUPO_CARTA, true),
+        Canal("Plex", emptyList(), null, "plex", "Plex", GRUPO_CARTA, true),
+    )
+
+    fun visiblesCine(): List<Canal> =
+        if (cine.isEmpty()) emptyList() else aLaCarta + cine.filter { idiomaVisible(idioma(it)) }.ifEmpty { cine }
 
     var ultimoCine: String?
         get() = prefs.getString("ultimo_cine", null)
@@ -201,6 +210,8 @@ class Repositorio(private val ctx: Context) {
 
         /** Lista de iptv-org para España (dominio público): TDT en abierto, Pluto TV, Rakuten TV, Samsung TV Plus… */
         /** Lista generada cada semana en el repo (tools/cine.py) solo con servicios gratuitos oficiales. */
+        const val GRUPO_CARTA = "A la carta"
+
         const val URL_CINE = "https://raw.githubusercontent.com/N23GR045/Cl/la-tele/la-tele/listas/cine.m3u"
 
         fun leerCine(texto: String): List<Canal> =
