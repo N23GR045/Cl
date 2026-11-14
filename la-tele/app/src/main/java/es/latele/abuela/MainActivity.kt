@@ -3,6 +3,9 @@ package es.latele.abuela
 import android.app.Activity
 import android.content.ActivityNotFoundException
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.graphics.Rect
+import android.os.SystemClock
 import android.graphics.Color
 import android.graphics.Typeface
 import android.graphics.drawable.GradientDrawable
@@ -82,6 +85,13 @@ class MainActivity : Activity() {
     private var modoNieto = false
     private lateinit var gestos: GestureDetector
 
+    // Móvil o tablet: mando virtual en pantalla y todo a escala. En el Fire TV no cambia nada.
+    private var movil = false
+    private var escala = 1f
+    private lateinit var mando: LinearLayout
+    private lateinit var mandoMini: TextView
+    private var toqueEnMando = false
+
     private val horaFmt = SimpleDateFormat("HH:mm", Locale("es", "ES"))
 
     // Colores pensados para leer bien de lejos
@@ -97,6 +107,12 @@ class MainActivity : Activity() {
         super.onCreate(savedInstanceState)
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         repo = Repositorio(this)
+        val pm = packageManager
+        movil = pm.hasSystemFeature(PackageManager.FEATURE_TOUCHSCREEN) && !pm.hasSystemFeature(PackageManager.FEATURE_LEANBACK)
+        val dm = resources.displayMetrics
+        val anchoDp = Math.max(dm.widthPixels, dm.heightPixels) / dm.density
+        val altoDp = Math.min(dm.widthPixels, dm.heightPixels) / dm.density
+        escala = Math.min(1f, Math.min(anchoDp / 960f, altoDp / 540f))
         construirVista()
         gestos = GestureDetector(this, object : GestureDetector.SimpleOnGestureListener() {
             override fun onDown(e: MotionEvent) = true
@@ -334,9 +350,43 @@ class MainActivity : Activity() {
     // · mantener pulsado abre el modo nieto. En la lista, el toque normal elige o marca.
 
     override fun dispatchTouchEvent(ev: MotionEvent): Boolean {
-        if (lista.visibility == View.VISIBLE) return super.dispatchTouchEvent(ev)
+        if (ev.actionMasked == MotionEvent.ACTION_DOWN) {
+            toqueEnMando = movil && (dentro(mando, ev) || dentro(mandoMini, ev))
+        }
+        if (toqueEnMando || lista.visibility == View.VISIBLE) return super.dispatchTouchEvent(ev)
         gestos.onTouchEvent(ev)
         return true
+    }
+
+    private fun dentro(v: View, ev: MotionEvent): Boolean {
+        if (v.visibility != View.VISIBLE) return false
+        val r = Rect()
+        return v.getGlobalVisibleRect(r) && r.contains(ev.rawX.toInt(), ev.rawY.toInt())
+    }
+
+    /** Un botón del mando virtual hace exactamente lo mismo que la tecla del mando de verdad. */
+    private fun pulsar(codigo: Int) {
+        // Con la lista abierta, la navegación con flechas se hace a mano: las teclas simuladas
+        // no pasan por el sistema de foco de Android y en modo táctil no habría foco.
+        if (lista.visibility == View.VISIBLE) {
+            val dir = when (codigo) {
+                KeyEvent.KEYCODE_DPAD_UP -> View.FOCUS_UP
+                KeyEvent.KEYCODE_DPAD_DOWN -> View.FOCUS_DOWN
+                KeyEvent.KEYCODE_DPAD_LEFT -> View.FOCUS_LEFT
+                KeyEvent.KEYCODE_DPAD_RIGHT -> View.FOCUS_RIGHT
+                else -> 0
+            }
+            val f = currentFocus?.takeIf { it.isShown && it.parent != null } ?: focoLista
+            if (dir != 0) {
+                val destino = if (currentFocus == null) f else f?.focusSearch(dir)
+                destino?.requestFocusFromTouch()
+                return
+            }
+            if (codigo == KeyEvent.KEYCODE_DPAD_CENTER) { f?.performClick(); return }
+        }
+        val t = SystemClock.uptimeMillis()
+        dispatchKeyEvent(KeyEvent(t, t, KeyEvent.ACTION_DOWN, codigo, 0))
+        dispatchKeyEvent(KeyEvent(t, t, KeyEvent.ACTION_UP, codigo, 0))
     }
 
     private fun tocar() {
@@ -504,7 +554,10 @@ class MainActivity : Activity() {
         mostrarLista(foco)
     }
 
+    private var focoLista: View? = null
+
     private fun mostrarLista(foco: View?) {
+        focoLista = foco
         mostrar(lista)
         lista.scaleX = 1.04f; lista.scaleY = 1.04f
         lista.animate().scaleX(1f).scaleY(1f).setDuration(220).setInterpolator(DecelerateInterpolator()).start()
@@ -514,7 +567,7 @@ class MainActivity : Activity() {
     /** Título de sección a lo ancho de la rejilla (p. ej. «Español · Cine»). */
     private fun cabecera(texto: String) = TextView(this).apply {
         text = texto
-        textSize = 24f
+        textSize = 24f * escala
         typeface = Typeface.DEFAULT_BOLD
         setTextColor(cAcento)
         setPadding(dp(10), dp(22), dp(10), dp(4))
@@ -535,7 +588,7 @@ class MainActivity : Activity() {
         val t = TextView(this)
         t.text = texto
         t.setTextColor(cTexto)
-        t.textSize = 24f
+        t.textSize = 24f * escala
         t.maxLines = 1
         t.ellipsize = android.text.TextUtils.TruncateAt.END
         t.typeface = Typeface.DEFAULT_BOLD
@@ -596,14 +649,88 @@ class MainActivity : Activity() {
         v.animate().alpha(0f).setDuration(180).withEndAction { v.visibility = View.GONE }.start()
     }
 
+    // ---------- Mando virtual (solo en pantallas táctiles) ----------
+
+    private fun boton(etiqueta: String, ancho: Int = 58, accion: () -> Unit) = TextView(this).apply {
+        text = etiqueta
+        gravity = Gravity.CENTER
+        textSize = 20f
+        typeface = Typeface.DEFAULT_BOLD
+        setTextColor(cTexto)
+        isFocusable = false
+        background = GradientDrawable().apply {
+            cornerRadius = 999f
+            setColor(Color.parseColor("#CC1C2638"))
+            setStroke(2, Color.parseColor("#55FFFFFF"))
+        }
+        val tam = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 1f, resources.displayMetrics)
+        layoutParams = LinearLayout.LayoutParams((ancho * tam).toInt(), (48 * tam).toInt()).apply {
+            val m = (4 * tam).toInt(); setMargins(m, m, m, m)
+        }
+        setOnClickListener {
+            animate().scaleX(0.88f).scaleY(0.88f).setDuration(70).withEndAction {
+                animate().scaleX(1f).scaleY(1f).setDuration(120).start()
+            }.start()
+            accion()
+        }
+    }
+
+    private fun fila(vararg vs: View) = LinearLayout(this).apply {
+        orientation = LinearLayout.HORIZONTAL
+        gravity = Gravity.CENTER
+        vs.forEach { addView(it) }
+    }
+
+    private fun hueco() = View(this).apply {
+        val tam = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 1f, resources.displayMetrics)
+        layoutParams = LinearLayout.LayoutParams((66 * tam).toInt(), (48 * tam).toInt())
+    }
+
+    private fun construirMando() {
+        val d = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 1f, resources.displayMetrics)
+        mando = LinearLayout(this).apply {
+            orientation = LinearLayout.VERTICAL
+            gravity = Gravity.CENTER_HORIZONTAL
+            setPadding((8 * d).toInt(), (6 * d).toInt(), (8 * d).toInt(), (8 * d).toInt())
+            background = GradientDrawable().apply { cornerRadius = 28 * d; setColor(Color.parseColor("#99101826")) }
+        }
+        val titulo = TextView(this).apply {
+            text = "MANDO DE PRUEBA   ✕"
+            textSize = 11f
+            letterSpacing = 0.1f
+            setTextColor(cTenue)
+            gravity = Gravity.CENTER
+            setPadding(0, (2 * d).toInt(), 0, (4 * d).toInt())
+            setOnClickListener { ocultar(mando); mostrar(mandoMini) }
+        }
+        mando.addView(titulo)
+        mando.addView(fila(hueco(), boton("▲") { pulsar(KeyEvent.KEYCODE_DPAD_UP) }, hueco()))
+        mando.addView(fila(
+            boton("◀") { pulsar(KeyEvent.KEYCODE_DPAD_LEFT) },
+            boton("OK") { pulsar(KeyEvent.KEYCODE_DPAD_CENTER) },
+            boton("▶") { pulsar(KeyEvent.KEYCODE_DPAD_RIGHT) },
+        ))
+        mando.addView(fila(hueco(), boton("▼") { pulsar(KeyEvent.KEYCODE_DPAD_DOWN) }, hueco()))
+        mando.addView(fila(
+            boton("↩", 84) { pulsar(KeyEvent.KEYCODE_BACK) },
+            boton("☰", 84) { pulsar(KeyEvent.KEYCODE_MENU) },
+        ))
+        raiz.addView(mando, FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT,
+            Gravity.END or Gravity.CENTER_VERTICAL).apply { marginEnd = (12 * d).toInt() })
+
+        mandoMini = boton("🎮", 64) { ocultar(mandoMini); mostrar(mando) }.apply { visibility = View.GONE }
+        raiz.addView(mandoMini, FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT,
+            Gravity.END or Gravity.BOTTOM).apply { setMargins(0, 0, (16 * d).toInt(), (16 * d).toInt()) })
+    }
+
     // ---------- Construcción de la pantalla ----------
 
     private fun modulo(a: Int, n: Int) = ((a % n) + n) % n
 
-    private fun dp(v: Int) = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, v.toFloat(), resources.displayMetrics).toInt()
+    private fun dp(v: Int) = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, v * escala, resources.displayMetrics).toInt()
 
     private fun texto(tam: Float, color: Int = cTexto, negrita: Boolean = false) = TextView(this).apply {
-        textSize = tam
+        textSize = tam * escala
         setTextColor(color)
         if (negrita) typeface = Typeface.DEFAULT_BOLD
         setShadowLayer(6f, 0f, 2f, Color.BLACK)
@@ -716,6 +843,8 @@ class MainActivity : Activity() {
             visibility = View.GONE
         }
         raiz.addView(cortinilla, FrameLayout.LayoutParams(todo, todo))
+
+        if (movil) construirMando()
 
         setContentView(raiz)
     }
