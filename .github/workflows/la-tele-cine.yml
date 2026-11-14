@@ -1,0 +1,30 @@
+name: La Tele · actualizar Cine y series
+
+on:
+  schedule:
+    - cron: "17 4 * * 1"   # lunes 04:17 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  lista:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: la-tele
+      - name: Descargar iptv-org (dominio público)
+        run: |
+          git clone --depth 1 https://github.com/iptv-org/iptv "$RUNNER_TEMP/iptv"
+          git clone --depth 1 https://github.com/iptv-org/database "$RUNNER_TEMP/db"
+      - name: Generar lista
+        run: python3 la-tele/tools/cine.py "$RUNNER_TEMP/iptv" "$RUNNER_TEMP/db" la-tele/listas/cine.m3u
+      - name: Guardar si ha cambiado
+        run: |
+          if git diff --quiet; then echo "Sin cambios"; exit 0; fi
+          git config user.name "la-tele-bot"
+          git config user.email "la-tele-bot@users.noreply.github.com"
+          git commit -am "Cine y series: lista actualizada desde iptv-org"
+          git push

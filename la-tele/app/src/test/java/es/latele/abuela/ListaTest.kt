@@ -53,4 +53,23 @@ class ListaTest {
         assertEquals(listOf("https://a/cine.m3u8", "https://a/cine2.m3u8"), l[0].urls)
         assertTrue(l.none { it.visiblePorDefecto })
     }
+
+    @Test fun cineSeparaPorIdioma() {
+        val m3u = "#EXTM3U\n" +
+            "#EXTINF:-1 tvg-id=\"a\" group-title=\"Español · Cine\",Pluto TV Cine\nhttps://jmp2.uk/plu-1.m3u8\n" +
+            "#EXTINF:-1 tvg-id=\"b\" group-title=\"English · Cine\",Pluto TV Cine\nhttps://jmp2.uk/plu-2.m3u8\n" +
+            "#EXTINF:-1 tvg-id=\"a\" group-title=\"Español · Cine\",Pluto TV Cine\nhttps://jmp2.uk/plu-3.m3u8\n"
+        val l = Repositorio.leerCine(m3u)
+        assertEquals(2, l.size)
+        assertEquals(listOf("https://jmp2.uk/plu-1.m3u8", "https://jmp2.uk/plu-3.m3u8"), l[0].urls)
+        assertEquals("English · Cine", l[1].grupo)
+    }
+
+    @Test fun listaCineIncluidaEsValida() {
+        val f = java.io.File("../listas/cine.m3u")
+        assertTrue("falta listas/cine.m3u", f.exists())
+        val l = Repositorio.leerCine(f.readText())
+        assertTrue("pocos canales: ${l.size}", l.size > 100)
+        assertTrue(l.all { it.urls.all { u -> u.startsWith("http") } })
+    }
 }

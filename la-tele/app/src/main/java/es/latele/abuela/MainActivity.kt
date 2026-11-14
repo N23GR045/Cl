@@ -69,6 +69,8 @@ class MainActivity : Activity() {
     private lateinit var avisoPista: TextView
     private lateinit var banner: LinearLayout
     private lateinit var bNumero: TextView
+    private lateinit var bLado: TextView
+    private lateinit var cortinilla: TextView
     private lateinit var bNombre: TextView
     private lateinit var bAhora: TextView
     private lateinit var bProgreso: ProgressBar
@@ -101,19 +103,24 @@ class MainActivity : Activity() {
             override fun onSingleTapUp(e: MotionEvent): Boolean { tocar(); return true }
             override fun onLongPress(e: MotionEvent) { abrirLista(true) }
             override fun onFling(e1: MotionEvent?, e2: MotionEvent, vx: Float, vy: Float): Boolean {
+                if (Math.abs(vx) > Math.abs(vy) && Math.abs(vx) > 600f) {
+                    cambiarLado(if (vx < 0) "cine" else "tele")
+                    return true
+                }
                 if (Math.abs(vy) < Math.abs(vx) || Math.abs(vy) < 600f) return false
                 zapear(if (vy < 0) +1 else -1)
                 return true
             }
         })
-        canales = repo.visibles().ifEmpty { repo.todos().take(1) }
+        lado = repo.lado
+        canales = listaDelLado()
         actualizarEnSegundoPlano()
     }
 
     override fun onStart() {
         super.onStart()
         crearPlayer()
-        val i = canales.indexOfFirst { it.nombre == repo.ultimoCanal }.coerceAtLeast(0)
+        val i = canales.indexOfFirst { it.nombre == ultimoDelLado() }.coerceAtLeast(0)
         sintonizar(i)
         tickReloj.run()
     }
@@ -129,6 +136,7 @@ class MainActivity : Activity() {
         Thread {
             repo.actualizarLista()
             repo.actualizarExtras()
+            repo.actualizarCine()
             runOnUiThread { recargarCanales() }
             repo.actualizarGuia()
             runOnUiThread { if (banner.visibility == View.VISIBLE) rellenarBanner(canales.getOrNull(actual)) }
@@ -139,8 +147,41 @@ class MainActivity : Activity() {
     /** Vuelve a leer los canales sin cortar el que se está viendo. */
     private fun recargarCanales() {
         val nombre = canales.getOrNull(actual)?.nombre
-        canales = repo.visibles().ifEmpty { repo.todos().take(1) }
+        canales = listaDelLado()
         actual = canales.indexOfFirst { it.nombre == nombre }.coerceAtLeast(0)
+    }
+
+    // ---------- Dos lados: «Tele» y «Cine y series» ----------
+
+    private var lado = "tele"
+    private val esCine get() = lado == "cine"
+
+    private fun listaDelLado(): List<Canal> =
+        if (esCine) repo.visiblesCine().ifEmpty { repo.visibles() }
+        else repo.visibles().ifEmpty { repo.todos().take(1) }
+
+    private fun ultimoDelLado() = if (esCine) repo.ultimoCine else repo.ultimoCanal
+
+    /** Cambia de lado con una cortinilla: ▶ o deslizar a la izquierda = Cine y series; ◀ = Tele. */
+    private fun cambiarLado(nuevo: String) {
+        if (nuevo == lado) { canales.getOrNull(actual)?.let { mostrarBanner(it) }; return }
+        if (nuevo == "cine" && repo.cine.isEmpty()) {
+            Toast.makeText(this, "Cine y series se está descargando, prueba en un momento", Toast.LENGTH_LONG).show()
+            return
+        }
+        lado = nuevo
+        repo.lado = nuevo
+        canales = listaDelLado()
+        cortinilla.text = if (esCine) "🎬  Cine y series" else "📺  Tele"
+        cortinilla.translationX = (if (esCine) 1 else -1) * raiz.width.toFloat()
+        cortinilla.alpha = 1f
+        cortinilla.visibility = View.VISIBLE
+        cortinilla.animate().translationX(0f).setDuration(320).setInterpolator(DecelerateInterpolator()).withEndAction {
+            val i = canales.indexOfFirst { it.nombre == ultimoDelLado() }.coerceAtLeast(0)
+            sintonizar(i)
+            cortinilla.animate().alpha(0f).setStartDelay(500).setDuration(260)
+                .withEndAction { cortinilla.visibility = View.GONE; cortinilla.alpha = 1f }.start()
+        }.start()
     }
 
     // ---------- Reproductor ----------
@@ -201,7 +242,7 @@ class MainActivity : Activity() {
         h.removeCallbacks(reintento)
         h.removeCallbacks(vigilante)
         val c = canales[actual]
-        repo.ultimoCanal = c.nombre
+        if (esCine) repo.ultimoCine = c.nombre else repo.ultimoCanal = c.nombre
         mostrarBanner(c)
         if (c.esApp) {
             player?.stop()
@@ -326,7 +367,9 @@ class MainActivity : Activity() {
                 val c = canales.getOrNull(actual)
                 if (c != null && c.esApp) abrirApp(c) else abrirLista(false)
             }
-            KeyEvent.KEYCODE_DPAD_LEFT, KeyEvent.KEYCODE_DPAD_RIGHT, KeyEvent.KEYCODE_INFO ->
+            KeyEvent.KEYCODE_DPAD_RIGHT -> cambiarLado("cine")
+            KeyEvent.KEYCODE_DPAD_LEFT -> cambiarLado("tele")
+            KeyEvent.KEYCODE_INFO ->
                 canales.getOrNull(actual)?.let { mostrarBanner(it) }
             KeyEvent.KEYCODE_BACK -> {
                 if (banner.visibility == View.VISIBLE) ocultar(banner) else abrirLista(false)
@@ -383,6 +426,7 @@ class MainActivity : Activity() {
     private fun rellenarBanner(c: Canal?) {
         c ?: return
         bNombre.text = c.nombre
+        bLado.text = if (esCine) "CINE Y SERIES · ${c.grupo.uppercase()}   ◀ Tele" else "TELE   ▶ Cine y series"
         val (ahora, despues) = repo.ahoraYDespues(c)
         if (ahora != null) {
             bAhora.text = "${horaFmt.format(Date(ahora.inicio))}  ${ahora.titulo}"
@@ -409,13 +453,35 @@ class MainActivity : Activity() {
     private fun abrirLista(nieto: Boolean) {
         modoNieto = nieto
         ocultar(banner)
-        listaTitulo.text = if (nieto)
-            "Modo nieto · OK o toque marca/quita (${repo.todos().size}) · ☰ o Atrás para salir"
-        else "Canales · elige con las flechas y OK, o tócalo"
+        listaTitulo.text = when {
+            nieto && esCine -> "Modo nieto · Cine y series: elige idiomas · ☰ o Atrás para salir"
+            nieto -> "Modo nieto · OK o toque marca/quita (${repo.todos().size}) · ☰ o Atrás para salir"
+            esCine -> "Cine y series · ${canales.size} canales · ◀ vuelve a la Tele"
+            else -> "Canales · elige con las flechas y OK, o tócalo"
+        }
         listaRejilla.removeAllViews()
-        val fuente = if (nieto) repo.todos() else canales
         var foco: View? = null
+        if (nieto && esCine) {
+            repo.idiomas().forEach { (idi, n) ->
+                val t = tarjeta("$idi  ($n)", repo.idiomaVisible(idi))
+                t.setOnClickListener {
+                    val v = !repo.idiomaVisible(idi)
+                    repo.ponerIdioma(idi, v)
+                    marcarTarjeta(t, v)
+                }
+                listaRejilla.addView(t)
+                if (foco == null) foco = t
+            }
+            mostrarLista(foco)
+            return
+        }
+        val fuente = if (nieto) repo.todos() else canales
+        var grupoAnterior: String? = null
         fuente.forEachIndexed { i, c ->
+            if (esCine && !nieto && c.grupo != grupoAnterior) {
+                grupoAnterior = c.grupo
+                listaRejilla.addView(cabecera(c.grupo))
+            }
             val t = tarjeta(if (nieto) c.nombre else "${i + 1}   ${c.nombre}", if (nieto) repo.esVisible(c) else null)
             t.setOnClickListener {
                 if (nieto) {
@@ -435,10 +501,24 @@ class MainActivity : Activity() {
             r.setOnClickListener { repo.restablecer(); abrirLista(true) }
             listaRejilla.addView(r)
         }
+        mostrarLista(foco)
+    }
+
+    private fun mostrarLista(foco: View?) {
         mostrar(lista)
         lista.scaleX = 1.04f; lista.scaleY = 1.04f
         lista.animate().scaleX(1f).scaleY(1f).setDuration(220).setInterpolator(DecelerateInterpolator()).start()
-        foco?.post { foco?.requestFocus() }
+        foco?.post { foco.requestFocus() }
+    }
+
+    /** Título de sección a lo ancho de la rejilla (p. ej. «Español · Cine»). */
+    private fun cabecera(texto: String) = TextView(this).apply {
+        text = texto
+        textSize = 24f
+        typeface = Typeface.DEFAULT_BOLD
+        setTextColor(cAcento)
+        setPadding(dp(10), dp(22), dp(10), dp(4))
+        layoutParams = GridLayout.LayoutParams(GridLayout.spec(GridLayout.UNDEFINED), GridLayout.spec(0, 3))
     }
 
     private fun cerrarLista() {
@@ -583,6 +663,8 @@ class MainActivity : Activity() {
         }
         bNumero = texto(72f, cAcento, true).apply { setPadding(0, 0, dp(32), 0) }
         val col = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL }
+        bLado = texto(16f, cAcento, true).apply { letterSpacing = 0.08f }
+        col.addView(bLado)
         bNombre = texto(44f, cTexto, true)
         bAhora = texto(28f, cTexto)
         bProgreso = ProgressBar(this, null, android.R.attr.progressBarStyleHorizontal).apply {
@@ -626,6 +708,14 @@ class MainActivity : Activity() {
         listaCol.addView(scroll, LinearLayout.LayoutParams(todo, todo))
         lista.addView(listaCol, FrameLayout.LayoutParams(todo, todo))
         raiz.addView(lista, FrameLayout.LayoutParams(todo, todo))
+
+        // Cortinilla al cambiar de lado
+        cortinilla = texto(64f, cTexto, true).apply {
+            gravity = Gravity.CENTER
+            setBackgroundColor(Color.parseColor("#FF101826"))
+            visibility = View.GONE
+        }
+        raiz.addView(cortinilla, FrameLayout.LayoutParams(todo, todo))
 
         setContentView(raiz)
     }

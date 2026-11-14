@@ -32,6 +32,11 @@ class Repositorio(private val ctx: Context) {
     private val prefs = ctx.getSharedPreferences("latele", Context.MODE_PRIVATE)
     private val cacheLista = File(ctx.filesDir, "tv.m3u8")
     private val cacheExtra = File(ctx.filesDir, "extra.m3u")
+    private val cacheCine = File(ctx.filesDir, "cine.m3u")
+
+    /** Lado «Cine y series»: canales 24/7 gratis y oficiales (Pluto TV, Rakuten, Samsung TV Plus, Tubi…). */
+    @Volatile var cine: List<Canal> = emptyList()
+        private set
 
     /** Canales gratis de la comunidad (iptv-org): ocultos hasta que se activan en el modo nieto. */
     @Volatile private var extras: List<Canal> = emptyList()
@@ -45,6 +50,41 @@ class Repositorio(private val ctx: Context) {
     init {
         if (cacheLista.exists()) runCatching { urlsFrescas = parsearM3u(cacheLista.readText()) }
         if (cacheExtra.exists()) runCatching { extras = filtrarExtras(parsearCanales(cacheExtra.readText())) }
+        cine = runCatching { leerCine(cacheCine.readText()) }.getOrNull().orEmpty().ifEmpty {
+            runCatching { leerCine(ctx.assets.open("cine.m3u").bufferedReader().use { it.readText() }) }.getOrDefault(emptyList())
+        }
+    }
+
+    // ----- Cine y series -----
+
+    fun idioma(c: Canal) = c.grupo.substringBefore(" · ")
+
+    /** Idiomas disponibles con su número de canales, en el orden de la lista (español primero). */
+    fun idiomas(): List<Pair<String, Int>> = cine.groupBy { idioma(it) }.map { it.key to it.value.size }
+
+    fun idiomaVisible(i: String) = prefs.getBoolean("idioma_$i", true)
+
+    fun ponerIdioma(i: String, v: Boolean) = prefs.edit().putBoolean("idioma_$i", v).apply()
+
+    fun visiblesCine(): List<Canal> = cine.filter { idiomaVisible(idioma(it)) }.ifEmpty { cine }
+
+    var ultimoCine: String?
+        get() = prefs.getString("ultimo_cine", null)
+        set(v) { prefs.edit().putString("ultimo_cine", v).apply() }
+
+    var lado: String
+        get() = prefs.getString("lado", "tele") ?: "tele"
+        set(v) { prefs.edit().putString("lado", v).apply() }
+
+    fun actualizarCine() {
+        runCatching {
+            val texto = descargar(URL_CINE).use { it.bufferedReader().readText() }
+            val l = leerCine(texto)
+            if (l.size > 50) {
+                cine = l
+                cacheCine.writeText(texto)
+            }
+        }
     }
 
     fun todos(): List<Canal> = CanalesIncluidos.lista.map { c ->
@@ -160,6 +200,12 @@ class Repositorio(private val ctx: Context) {
         private val formato = SimpleDateFormat("yyyyMMddHHmmss Z", Locale.US)
 
         /** Lista de iptv-org para España (dominio público): TDT en abierto, Pluto TV, Rakuten TV, Samsung TV Plus… */
+        /** Lista generada cada semana en el repo (tools/cine.py) solo con servicios gratuitos oficiales. */
+        const val URL_CINE = "https://raw.githubusercontent.com/N23GR045/Cl/la-tele/la-tele/listas/cine.m3u"
+
+        fun leerCine(texto: String): List<Canal> =
+            parsearCanales(texto, porGrupo = true).filter { !ADULTOS.containsMatchIn(it.nombre + " " + it.grupo) }
+
         val URLS_EXTRA = listOf(
             "https://iptv-org.github.io/iptv/countries/es.m3u",
             "https://raw.githubusercontent.com/iptv-org/iptv/master/streams/es.m3u",
@@ -207,7 +253,7 @@ class Repositorio(private val ctx: Context) {
         }
 
         /** Lee una lista M3U completa: nombre, grupo, id de guía y enlaces (los repetidos por nombre se juntan). */
-        fun parsearCanales(texto: String): List<Canal> {
+        fun parsearCanales(texto: String, porGrupo: Boolean = false): List<Canal> {
             data class Tmp(val nombre: String, val grupo: String, val epg: String?, val urls: MutableList<String>)
             val res = LinkedHashMap<String, Tmp>()
             var info: Triple<String, String, String?>? = null
@@ -227,7 +273,8 @@ class Repositorio(private val ctx: Context) {
                     else -> {
                         val i = info
                         if (i != null && l.startsWith("http")) {
-                            val t = res.getOrPut(normalizar(i.first)) { Tmp(i.first, i.second, i.third, mutableListOf()) }
+                            val clave = if (porGrupo) normalizar(i.first) + "|" + i.second else normalizar(i.first)
+                            val t = res.getOrPut(clave) { Tmp(i.first, i.second, i.third, mutableListOf()) }
                             if (l !in t.urls) t.urls.add(l)
                         }
                         info = null

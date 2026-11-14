@@ -31,6 +31,9 @@ android {
             signingConfig = signingConfigs.findByName("release") ?: signingConfigs.getByName("debug")
         }
     }
+    // La lista «Cine y series» (generada por tools/cine.py) va también dentro del APK como copia de seguridad
+    sourceSets["main"].assets.srcDir("../listas")
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
