@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="dark">
+<title>CINEMA · S1 · Screening</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@500&family=Fira+Sans+Extra+Condensed:wght@700;900&family=Fira+Sans:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --void: #07050c; --night: #0f0a19; --v900: #1c1030; --v800: #2a1745; --v700: #3d1f66;
+  --v600: #5b2a9c; --v500: #7c3aed; --v300: #b69cff; --v200: #d6c8ff;
+  --text: #eee8fa; --muted: #b3a6cc; --line: #2b2240; --good: #7dffb5; --bad: #ff8a7a;
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --display: "Fira Sans Extra Condensed", "Arial Narrow", sans-serif;
+  --body: "Fira Sans", system-ui, sans-serif;
+  --mono: "Fira Code", ui-monospace, monospace;
+  color-scheme: dark;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --void: #07050c; } }
+:root[data-theme="dark"] { --void: #07050c; }
+*, *::before, *::after { box-sizing: border-box; }
+html { background: var(--void); overflow-x: clip; }
+body { margin: 0; background: var(--void); color: var(--text); font: 400 16px/1.55 var(--body); overflow-x: clip; }
+h1, h2, h3 { font-family: var(--display); font-weight: 900; line-height: .92; margin: 0; text-transform: uppercase; letter-spacing: -.01em; }
+a { color: var(--v200); }
+code { font-family: var(--mono); font-size: .86em; color: var(--v200); }
+:is(a, button):focus-visible { outline: 3px solid var(--v300); outline-offset: 3px; }
+.wrap { width: min(100% - 32px, 1080px); margin-inline: auto; }
+.mono { font: 500 12px/1.3 var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+.hero { padding: 88px 0 40px; background: radial-gradient(110% 70% at 70% 0%, var(--v800), transparent 62%), var(--void); }
+.hero h1 { font-size: clamp(50px, 14.5vw, 184px); }
+.hero h1 .ln { display: block; overflow: clip; padding-bottom: .04em; }
+.hero h1 .ln > span { display: block; }
+.hero h1 em { font-style: normal; color: var(--v300); }
+.motion .hero h1 .ln > span { animation: rise 680ms var(--ease-out) both; }
+.motion .hero h1 .ln:nth-child(2) > span { animation-delay: 100ms; }
+@keyframes rise { from { transform: translateY(105%); } }
+.lede { max-width: 40rem; margin: 22px 0 0; font-size: 18px; color: var(--muted); }
+.lede strong { color: var(--text); font-weight: 500; }
+.sec { border-top: 1px solid var(--line); padding: 56px 0 64px; }
+.sec h2 { font-size: clamp(42px, 11vw, 88px); margin-bottom: 22px; }
+
+/* Podio */
+.podium { display: grid; gap: 12px; grid-template-columns: minmax(0, 1fr); }
+.film > span { min-width: 0; }
+.film { display: grid; grid-template-columns: auto 1fr auto; gap: 6px 16px; align-items: center; padding: 18px; border-radius: 18px; background: var(--night); border: 1px solid var(--line); text-decoration: none; color: inherit; }
+.film.win { border-color: var(--v500); background: linear-gradient(160deg, var(--v900), var(--night)); }
+.film .pos { font: 900 44px/1 var(--display); color: var(--v300); }
+.film b { font: 900 26px/1 var(--display); text-transform: uppercase; }
+.film small { display: block; font: 500 11px/1.3 var(--mono); letter-spacing: .06em; text-transform: uppercase; color: var(--muted); margin-top: 4px; }
+.film .score { font: 900 46px/1 var(--display); }
+.film .bar { grid-column: 1 / -1; height: 6px; border-radius: 6px; background: var(--v900); overflow: clip; }
+.film .bar i { display: block; height: 100%; background: linear-gradient(90deg, var(--v600), var(--v300)); transform-origin: 0 50%; transform: scaleX(var(--s)); }
+.motion .film .bar i { animation: grow 900ms var(--ease-out) both; animation-delay: calc(var(--k) * 120ms + 300ms); }
+@keyframes grow { from { transform: scaleX(0); } }
+@media (hover: hover) and (pointer: fine) { .film:hover { border-color: var(--v600); } }
+
+/* Tabla */
+.tbl { overflow-x: auto; border-radius: 14px; border: 1px solid var(--line); }
+table { width: 100%; border-collapse: collapse; font-size: 14.5px; min-width: 640px; }
+th, td { text-align: left; padding: 11px 10px; border-bottom: 1px solid var(--line); vertical-align: top; }
+thead th { font: 500 10.5px/1.2 var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+td.n { font: 500 14px/1 var(--mono); text-align: center; }
+td.n.hi { color: var(--good); } td.n.lo { color: var(--bad); }
+tbody th { font-weight: 500; }
+tbody th small { display: block; font: 500 10.5px/1.2 var(--mono); color: var(--muted); }
+tfoot td { font: 900 22px/1 var(--display); text-align: center; color: var(--v200); }
+tfoot th { font: 500 11px/1 var(--mono); text-transform: uppercase; letter-spacing: .08em; color: var(--muted); }
+
+.two { display: grid; gap: 24px; }
+.card { padding: 20px; border-radius: 18px; background: var(--night); border: 1px solid var(--line); }
+.card h3 { font-size: 30px; margin-bottom: 12px; }
+.card.good h3 { color: var(--good); } .card.bad h3 { color: var(--bad); }
+.card ul { margin: 0; padding-left: 20px; display: grid; gap: 10px; }
+.card li b { font-weight: 500; }
+
+.rules { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; counter-reset: r; }
+.rules li { counter-increment: r; display: grid; grid-template-columns: auto 1fr; gap: 4px 16px; padding: 18px; border-radius: 18px; border: 1px solid var(--v600); background: var(--night); }
+.rules li::before { content: "R" counter(r); grid-row: span 2; font: 900 40px/1 var(--display); color: var(--v300); }
+.rules b { font: 900 22px/1.05 var(--display); text-transform: uppercase; }
+.rules span { color: var(--muted); }
+.notes p { margin: 0 0 14px; max-width: 46rem; color: var(--muted); }
+.notes p b { color: var(--text); font-weight: 500; }
+.end { padding-bottom: 96px; }
+@media (min-width: 760px) {
+  .podium { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .film { grid-template-columns: 1fr auto; } .film .pos { grid-column: 1 / -1; }
+  .two { grid-template-columns: 1fr 1fr; }
+}
+@media (prefers-reduced-motion: reduce) { .motion .hero h1 .ln > span, .motion .film .bar i { animation: none; } }
+</style>
+</head>
+<body>
+<header class="hero">
+  <div class="wrap">
+    <p class="mono">CINEMA//MOTION LAB · Semana 1 · Screening · Alfabeto cinematográfico <span style="color:var(--v300)">· recuperada el 25-11</span></p>
+    <h1><span class="ln"><span>Screening</span></span><span class="ln"><span>de la <em>S1</em></span></span></h1>
+    <p class="lede">Las tres piezas de la semana, puntuadas con la rúbrica de flujo-motion (intención 20 %, ritmo 15 %, física 15 %, creatividad 15 %, transiciones 10 %, rendimiento 10 %, accesibilidad 10 %, documentación 5 %). <strong>Notas sobre 10</strong>, con la restricción «sin opacidad» como listón.</p>
+  </div>
+</header>
+<main>
+<section class="sec" aria-labelledby="tPod">
+  <div class="wrap">
+    <h2 id="tPod">Clasificación</h2>
+    <div class="podium" id="podium"></div>
+  </div>
+</section>
+<section class="sec" aria-labelledby="tTab">
+  <div class="wrap">
+    <h2 id="tTab">Tabla de notas</h2>
+    <div class="tbl"><table id="tab"></table></div>
+  </div>
+</section>
+<section class="sec" aria-labelledby="tLo">
+  <div class="wrap">
+    <h2 id="tLo">Lo mejor y lo peor</h2>
+    <div class="two">
+      <div class="card good"><h3>Lo mejor</h3><ul>
+        <li><b>La restricción funcionó.</b> Sin un solo fundido, las tres piezas ganaron dirección: cortinas, iris, sellos y persianas dicen de dónde llega cada cosa.</li>
+        <li><b>El storyboard como estado del código</b> (Entrega): las seis viñetas son el prototipo congelado. Es la idea más reutilizable de la semana.</li>
+        <li><b>«El género es tiempo y color»</b> (Laboratorio): con cinco elementos fijos se contaron tres películas distintas.</li>
+      </ul></div>
+      <div class="card bad"><h3>Lo peor</h3><ul>
+        <li><b>Rendimiento sin medir en un móvil real.</b> Las tres piezas tienen botón de fps, pero solo se midieron en Chromium con la CPU frenada.</li>
+        <li><b>Desenfoque a pantalla completa</b> en el barrido del Laboratorio (14 px): lo más caro de la semana; la Entrega ya lo sustituyó por estelas.</li>
+        <li><b>Cámara al hombro continua</b> (Laboratorio, 5 px durante 7 s): marea en móvil y no tiene causa en pantalla.</li>
+      </ul></div>
+    </div>
+  </div>
+</section>
+<section class="sec" aria-labelledby="tRules">
+  <div class="wrap">
+    <h2 id="tRules">3 reglas nuevas</h2>
+    <ol class="rules">
+      <li><b>La línea de tiempo se puede arrastrar</b><span>Toda pieza con guion se monta sobre animaciones pausables (WAAPI o timeline de GSAP) y se mueve con <code>currentTime</code>/<code>progress</code>. Nada de <code>setTimeout</code> para coreografiar; el storyboard y las capturas se sacan congelándola.</span></li>
+      <li><b>Velocidad sin desenfoque</b><span>Barridos y golpes rápidos se venden con estelas, copias desplazadas o escala; <code>filter: blur</code> solo sobre elementos pequeños, ≤ 6 px y nunca a pantalla completa.</span></li>
+      <li><b>El temblor es una reacción, no un estilo</b><span>Sacudida de cámara ≤ 4 px y ≤ 300 ms, solo como respuesta a un impacto visible. Nada de cámara al hombro continua en móvil; en movimiento reducido, desaparece.</span></li>
+    </ol>
+  </div>
+</section>
+<section class="sec end notes" aria-labelledby="tNotas">
+  <div class="wrap">
+    <h2 id="tNotas">Notas</h2>
+    <p><b>Propuesta para flujo-motion:</b> las tres reglas van como sección nueva «Reglas del screening S1» en una versión actualizada de la skill, entregada como archivo para revisar.</p>
+    <p><b>Skill nueva vista:</b> <a href="https://skills.sh/mengto/skills/cinematic-scroll-storytelling">cinematic-scroll-storytelling (mengto)</a>, gratuita, sobre narrativa con scroll. Se propone revisarla para la S7 (narrativa); no se ha instalado ni seguido ninguna instrucción de la página.</p>
+    <p><b>Estudio:</b> lidera Calidad (rúbrica y comparación); Motion y 3D acompaña (reglas nuevas); Diseño UI acompaña (podio y tabla).</p>
+    <p class="mono">Sesión recuperada · siguiente pendiente: Ejercicios de la S2 (06 easings · 07 anticipación · 08 inercia)</p>
+  </div>
+</section>
+</main>
+<script>
+(() => {
+  const mq = matchMedia('(prefers-reduced-motion: reduce)');
+  document.documentElement.classList.toggle('motion', !mq.matches);
+  const W = [['Intención', .20], ['Ritmo', .15], ['Física', .15], ['Creatividad', .15], ['Transiciones', .10], ['Rendimiento', .10], ['Accesibilidad', .10], ['Documentación', .05]];
+  const P = [
+    { name: 'Ejercicios', sub: 'Alfabeto cinematográfico · 01–05', url: 'https://claude.ai/artifact/JsddM4ARTMnDEBfYuMa9eH', s: [7, 7, 7, 7, 7, 7, 8, 8] },
+    { name: 'Laboratorio', sub: 'Una pantalla, tres películas', url: 'https://claude.ai/artifact/MLJeQ5WaVMb3Awysazc9N7', s: [9, 8, 7, 8, 8, 6, 8, 8] },
+    { name: 'Entrega', sub: 'Teaser de 15 s + storyboard', url: 'https://claude.ai/artifact/CEVv4r895SRVkCWxTscskS', s: [9, 8, 7, 9, 8, 7, 8, 9] },
+  ];
+  P.forEach(p => p.total = p.s.reduce((a, v, i) => a + v * W[i][1], 0));
+  const f = n => n.toFixed(2).replace('.', ',');
+  const rank = [...P].sort((a, b) => b.total - a.total);
+  document.getElementById('podium').innerHTML = rank.map((p, k) => `<a class="film${k ? '' : ' win'}" href="${p.url}" style="--s:${p.total / 10};--k:${k}"><span class="pos">${k + 1}º</span><span><b>${p.name}</b><small>${p.sub}</small></span><span class="score">${f(p.total)}</span><span class="bar"><i></i></span></a>`).join('');
+  const cls = v => v >= 9 ? 'hi' : v <= 6 ? 'lo' : '';
+  document.getElementById('tab').innerHTML =
+    `<thead><tr><th>Criterio</th>${P.map(p => `<th>${p.name}</th>`).join('')}</tr></thead><tbody>` +
+    W.map(([n, w], i) => `<tr><th>${n}<small>${Math.round(w * 100)} %</small></th>${P.map(p => `<td class="n ${cls(p.s[i])}">${p.s[i]}</td>`).join('')}</tr>`).join('') +
+    `</tbody><tfoot><tr><th>Total ponderado</th>${P.map(p => `<td>${f(p.total)}</td>`).join('')}</tr></tfoot>`;
+})();
+</script>
+</body>
+</html>

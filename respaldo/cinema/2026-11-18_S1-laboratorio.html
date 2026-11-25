@@ -1,0 +1,472 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="dark">
+<title>CINEMA · S1 · Laboratorio — Una pantalla, tres películas</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@500&family=Fira+Sans+Extra+Condensed:wght@700;900&family=Fira+Sans:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --void: #07050c; --night: #0f0a19; --v900: #1c1030; --v800: #2a1745; --v700: #3d1f66;
+  --v600: #5b2a9c; --v500: #7c3aed; --v300: #b69cff; --v200: #d6c8ff;
+  --text: #eee8fa; --muted: #b3a6cc; --line: #2b2240;
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --dur-press: 140ms; --dur-ui: 200ms;
+  --display: "Fira Sans Extra Condensed", "Arial Narrow", sans-serif;
+  --body: "Fira Sans", system-ui, sans-serif;
+  --mono: "Fira Code", ui-monospace, monospace;
+  color-scheme: dark;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --void: #07050c; } }
+:root[data-theme="dark"] { --void: #07050c; }
+*, *::before, *::after { box-sizing: border-box; }
+html { background: var(--void); overflow-x: clip; }
+body { margin: 0; background: var(--void); color: var(--text); font: 400 16px/1.55 var(--body); overflow-x: clip;
+  padding: 0 env(safe-area-inset-right) 0 env(safe-area-inset-left); }
+h1, h2, h3 { font-family: var(--display); font-weight: 900; line-height: .92; margin: 0; text-transform: uppercase; letter-spacing: -.01em; }
+a { color: var(--v200); }
+code { font-family: var(--mono); font-size: .86em; color: var(--v200); }
+button { font: 500 15px/1 var(--body); color: var(--text); cursor: pointer; }
+:is(button, a, [tabindex]):focus-visible { outline: 3px solid var(--v300); outline-offset: 3px; }
+.wrap { width: min(100% - 32px, 1120px); margin-inline: auto; }
+.mono { font: 500 12px/1.3 var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+.skip { position: absolute; left: 16px; top: -60px; background: var(--v500); color: #fff; padding: 12px 16px; border-radius: 10px; z-index: 99; }
+.skip:focus { top: 12px; }
+
+.hud { position: fixed; z-index: 40; right: max(12px, env(safe-area-inset-right)); bottom: max(12px, env(safe-area-inset-bottom));
+  display: flex; gap: 6px; align-items: center; padding: 6px; border-radius: 999px; background: #120c1fe6; border: 1px solid var(--line);
+  backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); }
+.hud button { min-height: 44px; padding: 0 14px; border-radius: 999px; border: 0; background: transparent;
+  font: 500 12px/1 var(--mono); letter-spacing: .06em; text-transform: uppercase; color: var(--muted);
+  transition: background-color var(--dur-ui) var(--ease-out), color var(--dur-ui) var(--ease-out), transform var(--dur-press) var(--ease-out); }
+.hud button[aria-pressed="true"] { background: var(--v700); color: var(--text); }
+.hud button:active { transform: scale(.97); }
+.fps { font: 500 12px/1 var(--mono); color: #7dffb5; padding: 0 8px; min-width: 60px; text-align: center; }
+.fps.low { color: #ff8a7a; }
+
+.hero { padding: 88px 0 44px; background: radial-gradient(110% 70% at 70% 0%, var(--v800), transparent 62%), var(--void); }
+.hero h1 { font-size: clamp(54px, 15.5vw, 176px); }
+.hero h1 .ln { display: block; overflow: clip; padding-bottom: .04em; }
+.hero h1 .ln > span { display: block; }
+.hero h1 em { font-style: normal; color: var(--v300); }
+.motion .hero h1 .ln > span { animation: rise 680ms var(--ease-out) both; }
+.motion .hero h1 .ln:nth-child(2) > span { animation-delay: 100ms; }
+@keyframes rise { from { transform: translateY(105%); } }
+.lede { max-width: 38rem; margin: 22px 0 0; font-size: 18px; color: var(--muted); }
+.lede strong { color: var(--text); font-weight: 500; }
+.rule-box { margin-top: 24px; display: inline-flex; flex-wrap: wrap; gap: 6px 10px; align-items: center; border: 1px solid var(--v600); border-radius: 18px; padding: 10px 16px; font: 500 13px/1.3 var(--mono); color: var(--v200); }
+.rule-box b { color: var(--text); }
+
+.sec { border-top: 1px solid var(--line); padding: 60px 0 72px; }
+.sec-head { display: grid; gap: 12px; margin-bottom: 26px; }
+.sec-head h2 { font-size: clamp(44px, 12vw, 96px); }
+.sec-head p { margin: 0; max-width: 42rem; color: var(--muted); }
+.sec-head p b { color: var(--text); font-weight: 500; }
+
+/* Selector de película */
+.films { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin-bottom: 12px; }
+.films button { min-height: 66px; padding: 10px 8px; border-radius: 14px; border: 1px solid var(--line); background: var(--night); display: grid; gap: 5px; place-content: center; text-align: center;
+  transition: background-color var(--dur-ui) var(--ease-out), border-color var(--dur-ui) var(--ease-out), transform var(--dur-press) var(--ease-out); }
+.films button:active { transform: scale(.97); }
+.films b { font: 900 22px/1 var(--display); text-transform: uppercase; }
+.films span { font: 500 10px/1.2 var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+.films [aria-checked="true"] { background: linear-gradient(160deg, var(--v600), var(--v800)); border-color: var(--v300); }
+.films [aria-checked="true"] span { color: var(--v200); }
+@media (hover: hover) and (pointer: fine) { .films button:hover { border-color: var(--v600); } }
+
+/* ───── La pantalla ───── */
+.screen { position: relative; aspect-ratio: 4 / 5; border-radius: 18px; overflow: clip; background: #05030a; isolation: isolate; border: 1px solid var(--line); }
+.cam, .world, .layer { position: absolute; inset: 0; }
+.world { transform-origin: 50% 62%; }
+.sky { position: absolute; inset: 0; background: radial-gradient(90% 60% at 50% 100%, #5b2a9c, #1c1030 55%, #05030a); }
+.moon { position: absolute; left: 64%; top: 14%; width: 22%; aspect-ratio: 1; border-radius: 50%;
+  background: radial-gradient(circle at 38% 34%, #f4efff, #b69cff 60%, #6d42d6); box-shadow: 0 0 80px 16px #7c3aed44; }
+.city { position: absolute; left: -8%; right: -8%; bottom: 0; }
+.city::before { content: ""; position: absolute; inset: 0; clip-path: var(--sky); background: var(--c); }
+.far { height: 56%; --c: #2a1745; }
+.near { height: 40%; --c: #0b0614; }
+.near::before { background: radial-gradient(circle, #b69cff 0 1.2px, transparent 1.7px) 0 0 / 15px 19px, #0b0614; }
+.rain { position: absolute; inset: -30% -30%; pointer-events: none; display: none;
+  background: repeating-linear-gradient(104deg, transparent 0 14px, #b69cff2e 14px 15px, transparent 15px 41px); }
+.blinds { position: absolute; inset: 0; display: none; grid-template-rows: repeat(9, 1fr); pointer-events: none; }
+.blinds i { display: block; background: #05030a; transform-origin: 50% 0; }
+.title { position: absolute; left: 7%; right: 7%; top: 30%; z-index: 2; }
+.title h3 { font-size: clamp(40px, 12.5vw, 128px); color: var(--text); white-space: nowrap; }
+.title .ln { display: block; overflow: clip; padding-bottom: .03em; }
+.title .ln > span { display: block; transform-origin: 0 80%; }
+.title .ln:nth-child(2) > span { color: var(--v300); }
+.sub { display: inline-block; margin: 14px 0 0; padding: 7px 10px; background: var(--v500); color: #fff; font: 500 12px/1 var(--mono); letter-spacing: .1em; text-transform: uppercase; }
+.sub-wrap { overflow: clip; }
+.cta { position: absolute; left: 7%; bottom: 9%; z-index: 2; display: inline-flex; align-items: center; gap: 10px; padding: 13px 18px; border-radius: 999px;
+  background: #eee8fa; color: #1c1030; font: 500 14px/1 var(--body); box-shadow: 0 10px 30px -10px #7c3aed; }
+.cta::after { content: "→"; }
+.lower { position: absolute; left: 7%; top: 13%; z-index: 2; display: none; text-align: left; font: 500 11px/1.5 var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--v200);
+  border-left: 3px solid var(--v500); padding-left: 10px; }
+.vig { position: absolute; inset: 0; z-index: 3; pointer-events: none; background: radial-gradient(ellipse at center, transparent 46%, #000000e0 100%); }
+.bars { position: absolute; inset: 0; z-index: 4; pointer-events: none; display: grid; grid-template-rows: 1fr auto 1fr; }
+.bars i { display: block; background: #000; height: 11%; }
+.bars i:first-child { transform-origin: 50% 0; } .bars i:last-child { grid-row: 3; align-self: end; transform-origin: 50% 100%; }
+.slate { position: absolute; left: 12px; top: 10px; z-index: 5; font: 500 10.5px/1 var(--mono); letter-spacing: .1em; color: #ffffffcc; text-transform: uppercase; display: flex; gap: 10px; }
+.slate b { color: #ff8a7a; font-weight: 500; }
+.shot { position: absolute; left: 0; right: 0; bottom: 0; height: 3px; z-index: 5; background: var(--v300); transform: scaleX(0); transform-origin: 0 50%; }
+
+/* Gradación por película: cambia el color, no la transparencia */
+.screen[data-film="noir"] .world { filter: saturate(.28) contrast(1.25) brightness(.9); }
+.screen[data-film="noir"] .rain, .screen[data-film="noir"] .blinds { display: grid; }
+.screen[data-film="noir"] .rain { display: block; }
+.screen[data-film="accion"] .world { filter: saturate(1.35) contrast(1.1); }
+.screen[data-film="doc"] .world { filter: sepia(.25) saturate(.9) brightness(1.05); }
+.screen[data-film="doc"] .bars { display: none; }
+.screen[data-film="doc"] .lower { display: block; }
+
+.rodar { display: flex; flex-wrap: wrap; gap: 10px 14px; align-items: center; margin-top: 14px; }
+.go { min-height: 52px; padding: 0 24px; border-radius: 999px; border: 0; background: var(--v500); color: #fff; font: 500 16px/1 var(--body);
+  box-shadow: 0 10px 24px -12px var(--v500); transition: transform var(--dur-press) var(--ease-out), background-color var(--dur-ui) var(--ease-out); }
+.go:active { transform: scale(.97); }
+@media (hover: hover) and (pointer: fine) { .go:hover { background: #8b4cf5; } }
+.go::before { content: "● "; color: #ff8a7a; }
+.note { margin: 0; font: 500 11.5px/1.45 var(--mono); color: var(--muted); max-width: 34rem; }
+
+/* Fotogramas finales */
+.finals { display: grid; gap: 12px; }
+.finals figure { margin: 0; }
+.finals figcaption { margin-top: 8px; font: 500 11px/1.3 var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+.finals figcaption b { color: var(--v200); font-weight: 500; }
+.finals .screen { aspect-ratio: 16 / 10; }
+.finals .title h3 { font-size: clamp(34px, 10vw, 56px); }
+.finals .slate, .finals .shot { display: none; }
+
+.beats { width: 100%; border-collapse: collapse; font-size: 14.5px; min-width: 680px; }
+.beats th, .beats td { text-align: left; vertical-align: top; padding: 12px 10px; border-bottom: 1px solid var(--line); }
+.beats th { font: 500 10.5px/1.2 var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+.beats td:first-child { font: 900 22px/1 var(--display); text-transform: uppercase; color: var(--v300); }
+.tbl { overflow-x: auto; border-radius: 14px; border: 1px solid var(--line); }
+
+.notes { display: grid; gap: 34px; }
+.notes h3 { font-size: 30px; color: var(--v300); margin-bottom: 10px; }
+.notes ul { margin: 0; padding-left: 20px; display: grid; gap: 10px; max-width: 46rem; }
+.notes li::marker { color: var(--v500); }
+.notes p { margin: 0; max-width: 46rem; color: var(--muted); }
+.notes p b { color: var(--text); font-weight: 500; }
+.end { padding-bottom: 120px; }
+
+@media (min-width: 760px) {
+  .screen { aspect-ratio: 16 / 9; }
+  .title { top: 26%; }
+  .finals { grid-template-columns: repeat(3, 1fr); }
+  .finals .title h3 { font-size: 40px; }
+  .finals .sub { font-size: 9px; } .finals .cta { font-size: 11px; padding: 9px 12px; } .finals .lower { font-size: 8.5px; }
+  .notes .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; }
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#lab">Saltar al laboratorio</a>
+<div class="hud" role="group" aria-label="Controles de la pieza">
+  <span class="fps" hidden>— fps</span>
+  <button type="button" id="fpsBtn" aria-pressed="false">fps</button>
+  <button type="button" id="rmBtn" aria-pressed="false">Movimiento reducido</button>
+</div>
+
+<header class="hero">
+  <div class="wrap">
+    <p class="mono">CINEMA//MOTION LAB · Semana 1 · Laboratorio · Caso Natural Life RP <span style="color:var(--v300)">· recuperada el 25-11</span></p>
+    <h1><span class="ln"><span>Una pantalla,</span></span><span class="ln"><span>tres <em>películas</em></span></span></h1>
+    <p class="lede">La misma pantalla de entrada al servidor —nombre, plazas y botón— rodada como <strong>cine negro, acción y documental</strong>. Los elementos son idénticos; lo que cambia es la cámara, el montaje y el color.</p>
+    <div class="rule-box"><span>Restricción S1</span><b>Sin opacidad</b><span>· todo entra por máscara, escala, desenfoque o color</span></div>
+  </div>
+</header>
+
+<main>
+<section class="sec" id="lab" aria-labelledby="tLab">
+  <div class="wrap">
+    <div class="sec-head">
+      <p class="mono">Recetas 01 parallax · 03 dolly · 04 foco · 05 plano secuencia</p>
+      <h2 id="tLab">Sala de rodaje</h2>
+      <p>Elige un género y pulsa <b>Rodar</b>. Cada toma dura entre 4,5 y 7 segundos y acaba en un fotograma fijo: el que vería el jugador. Si sales de la pantalla a mitad de toma, el rodaje se pausa.</p>
+    </div>
+
+    <div class="films" role="radiogroup" aria-label="Género">
+      <button type="button" role="radio" aria-checked="true" data-f="noir"><b>Noir</b><span>La persiana</span></button>
+      <button type="button" role="radio" aria-checked="false" data-f="accion" tabindex="-1"><b>Acción</b><span>Persecución</span></button>
+      <button type="button" role="radio" aria-checked="false" data-f="doc" tabindex="-1"><b>Documental</b><span>Al hombro</span></button>
+    </div>
+
+    <div class="screen" id="screen" data-film="noir" role="img" aria-label="Pantalla de entrada de Natural Life RP: ciudad de noche, el nombre del servidor, beta abierta de 18 plazas y botón para entrar por el Discord">
+      <div class="cam">
+        <div class="world">
+          <div class="sky"></div>
+          <div class="moon"></div>
+          <div class="city far" data-seed="7" data-min="30" data-max="80"></div>
+          <div class="city near" data-seed="19" data-min="25" data-max="85"></div>
+          <div class="rain"></div>
+        </div>
+        <div class="blinds"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+        <div class="title">
+          <h3><span class="ln"><span>Natural</span></span><span class="ln"><span>Life RP</span></span></h3>
+          <div class="sub-wrap"><p class="sub">Beta abierta · 18 plazas</p></div>
+        </div>
+        <span class="cta">Entrar por el Discord</span>
+        <p class="lower">Los Santos · 03:00<br>Rol serio · sin pay to win</p>
+        <div class="vig"></div>
+      </div>
+      <div class="bars"><i></i><i></i></div>
+      <p class="slate" aria-hidden="true"><b>● REC</b><span id="tc">00:00:00</span><span id="fname">Noir</span></p>
+      <div class="shot"></div>
+    </div>
+
+    <div class="rodar">
+      <button type="button" class="go" id="go">Rodar</button>
+      <p class="note" id="note" aria-live="polite">Noir · persiana que se abre, lluvia y travelling lento hacia el nombre.</p>
+    </div>
+  </div>
+</section>
+
+<section class="sec" aria-labelledby="tFin">
+  <div class="wrap">
+    <div class="sec-head">
+      <p class="mono">El mismo plano final · tres géneros</p>
+      <h2 id="tFin">Fotogramas finales</h2>
+      <p>Las tres tomas terminan con los mismos elementos en el mismo sitio. La diferencia está en lo que queda <b>después</b> del movimiento: sombras de persiana, un plano saturado y una cámara que nunca termina de quedarse quieta.</p>
+    </div>
+    <div class="finals" id="finals"></div>
+  </div>
+</section>
+
+<section class="sec" aria-labelledby="tBeats">
+  <div class="wrap">
+    <div class="sec-head">
+      <p class="mono">Guion de beats · milisegundos desde «Rodar»</p>
+      <h2 id="tBeats">Tres guiones</h2>
+    </div>
+    <div class="tbl">
+      <table class="beats">
+        <thead><tr><th>Película</th><th>Apertura</th><th>Cámara</th><th>Título</th><th>Remate</th></tr></thead>
+        <tbody>
+          <tr><td>Noir</td><td>0–600: entran las bandas · 400–1 900: la persiana se abre lama a lama</td><td>Travelling lento de 6 s (escala 1,18 → 1) bajo la lluvia</td><td>1 800: cortina de izquierda a derecha, línea a línea</td><td>4 200: iris sobre el botón; las lamas se quedan como sombra</td></tr>
+          <tr><td>Acción</td><td>0–250: bandas de golpe</td><td>Barrido de 600 ms con desenfoque solo a mitad · la ciudad cercana va más rápida</td><td>700 y 1 000: sellos con escala 2,6 → 1; la cámara tiembla con cada impacto</td><td>2 200: el botón sale con un muelle</td></tr>
+          <tr><td>Documental</td><td>Sin bandas: plano abierto</td><td>Cámara al hombro durante 7 s y acercamiento lento</td><td>2 500: cambio de foco de la ciudad al nombre</td><td>4 200: rótulo de lugar y hora · 5 200: botón</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section class="sec end" aria-labelledby="tNotes">
+  <div class="wrap notes">
+    <h2 id="tNotes" style="font-size:clamp(44px,12vw,96px)">Notas de dirección</h2>
+    <div class="grid2">
+      <div>
+        <h3>Aprendizajes</h3>
+        <ul>
+          <li><b>El género es tiempo y color, no layout.</b> Con los mismos cinco elementos en el mismo sitio, el noir cuenta con lentitud y sombra, la acción con golpes y el documental con imperfección.</li>
+          <li><b>El fotograma final decide el género.</b> Lo que queda cuando se para la cámara (lamas como sombra, saturación, foco suave) es lo que el jugador recuerda; la toma solo lo presenta.</li>
+          <li><b>Sin opacidad, la entrada tiene dirección.</b> Persiana, cortina, iris y sello dicen por dónde llega cada cosa. El cambio de foco hace de fundido sin serlo.</li>
+        </ul>
+      </div>
+      <div>
+        <h3>Qué mejorar</h3>
+        <ul>
+          <li>El temblor de la acción y la cámara al hombro pueden marear en el móvil: en la Entrega, limitarlos a 4 px y probarlos en Android.</li>
+          <li>El desenfoque del barrido es lo más caro de la pieza: medirlo en un Fire TV o pasarlo a un rastro de copias desplazadas.</li>
+        </ul>
+      </div>
+    </div>
+    <p><b>Estudio:</b> lidera Motion y 3D (tres guiones de cámara con la Web Animations API, sin librerías); Diseño UI acompaña (la misma pantalla y la tipografía Fira de la S1, con una gradación por género); Calidad acompaña (capturas a 390 y 1440 px a mitad y al final de cada toma, ruta reducida, teclado y fps con CPU ×4).</p>
+    <p><b>Fuentes de la búsqueda:</b>
+      <a href="https://tympanus.net/codrops/2026/02/20/cinematic-presence-the-directors-cut-of-the-jason-bergh-experience/">Codrops · Cinematic Presence (Jason Bergh)</a> ·
+      <a href="https://developer.chrome.com/release-notes/146">Chrome 146 · notas de versión</a> ·
+      <a href="https://groups.google.com/a/chromium.org/g/blink-dev/c/TZLFLjzt4II/m/nzUrqB4CAwAJ">Blink · Intent to Ship: scroll-triggered animations</a> ·
+      <a href="https://speckyboy.com/css-javascript-snippets-iconic-titles/">Speckyboy · títulos icónicos en CSS y JS</a></p>
+    <p class="mono">Sesión recuperada · la siguiente pendiente es la Entrega de la S1</p>
+  </div>
+</section>
+</main>
+
+<script>
+(() => {
+  const root = document.documentElement;
+  const mq = matchMedia('(prefers-reduced-motion: reduce)');
+  const reduced = () => mq.matches || root.classList.contains('rm');
+
+  /* Skyline determinista (de la S1) */
+  function rng(seed) { let s = seed * 9301 + 49297; return () => ((s = (s * 9301 + 49297) % 233280) / 233280); }
+  function skyline(seed, min, max) {
+    const r = rng(seed), pts = ['0% 100%']; let x = 0;
+    while (x < 100) {
+      const w = 3 + r() * 7, h = min + r() * (max - min), y = (100 - h).toFixed(1);
+      pts.push(`${x.toFixed(1)}% ${y}%`);
+      if (r() > .78) { const m = x + w / 2; pts.push(`${(m - .4).toFixed(1)}% ${y}%`, `${(m - .4).toFixed(1)}% ${(100 - h - 6).toFixed(1)}%`, `${(m + .4).toFixed(1)}% ${(100 - h - 6).toFixed(1)}%`, `${(m + .4).toFixed(1)}% ${y}%`); }
+      x = Math.min(100, x + w); pts.push(`${x.toFixed(1)}% ${y}%`);
+    }
+    pts.push('100% 100%'); return `polygon(${pts.join(',')})`;
+  }
+  document.querySelectorAll('[data-seed]').forEach(el => el.style.setProperty('--sky', skyline(+el.dataset.seed, +el.dataset.min, +el.dataset.max)));
+
+  const EO = 'cubic-bezier(0.23, 1, 0.32, 1)', EIO = 'cubic-bezier(0.77, 0, 0.175, 1)', WHIP = 'cubic-bezier(.9, 0, .1, 1)', SPRING = 'cubic-bezier(.34, 1.56, .64, 1)';
+  const HIDE_L = 'inset(0 100% 0 0)', SHOW = 'inset(0 0% 0 0)';
+
+  /* Cámara al hombro: temblor determinista que vuelve a cero */
+  function handheld(n, amp, rot) {
+    const r = rng(31), k = [{ transform: 'translate(0,0) rotate(0deg)' }];
+    for (let i = 1; i < n; i++) k.push({ transform: `translate(${((r() - .5) * 2 * amp).toFixed(1)}px, ${((r() - .5) * 2 * amp).toFixed(1)}px) rotate(${((r() - .5) * 2 * rot).toFixed(2)}deg)` });
+    k.push({ transform: 'translate(0,0) rotate(0deg)' }); return k;
+  }
+  const shake = [0, -7, 6, -4, 3, 0].map((v, i) => ({ transform: `translate(${v}px, ${i % 2 ? -v / 2 : v / 2}px)` }));
+
+  /* Guiones: [selector, keyframes, { delay, duration, easing, stagger }] */
+  const FILMS = {
+    noir: { name: 'Noir', T: 6000, note: 'Noir · persiana que se abre, lluvia y travelling lento hacia el nombre.', script: [
+      ['.bars i', [{ transform: 'scaleY(0)' }, { transform: 'scaleY(1)' }], { delay: 0, duration: 600, easing: EIO }],
+      ['.blinds i', [{ transform: 'scaleY(1)' }, { transform: 'scaleY(.2)' }], { delay: 400, duration: 900, easing: EIO, stagger: 75 }],
+      ['.world', [{ transform: 'scale(1.18) translateX(2%)' }, { transform: 'scale(1) translateX(0)' }], { delay: 0, duration: 6000, easing: EO }],
+      ['.rain', [{ transform: 'translate(0, 0)' }, { transform: 'translate(-26px, 112px)' }], { delay: 0, duration: 750, easing: 'linear', iterations: 8 }],
+      ['.title .ln > span', [{ clipPath: HIDE_L }, { clipPath: SHOW }], { delay: 1800, duration: 900, easing: EIO, stagger: 260 }],
+      ['.sub', [{ clipPath: HIDE_L }, { clipPath: SHOW }], { delay: 3000, duration: 700, easing: EO }],
+      ['.cta', [{ clipPath: 'circle(0% at 30% 50%)' }, { clipPath: 'circle(120% at 30% 50%)' }], { delay: 4200, duration: 900, easing: EIO }],
+      ['.vig', [{ transform: 'scale(1.25)' }, { transform: 'scale(1)' }], { delay: 0, duration: 6000, easing: EO }],
+    ] },
+    accion: { name: 'Acción', T: 4500, note: 'Acción · barrido con desenfoque, sellos que golpean y temblor en cada impacto.', script: [
+      ['.bars i', [{ transform: 'scaleY(0)' }, { transform: 'scaleY(1)' }], { delay: 0, duration: 250, easing: WHIP }],
+      ['.world', [{ transform: 'translateX(60%)', filter: 'saturate(1.35) contrast(1.1) blur(0px)' }, { filter: 'saturate(1.35) contrast(1.1) blur(14px)', offset: .5 }, { transform: 'translateX(0)', filter: 'saturate(1.35) contrast(1.1) blur(0px)' }], { delay: 0, duration: 600, easing: WHIP }],
+      ['.near', [{ transform: 'translateX(35%)' }, { transform: 'translateX(0)' }], { delay: 0, duration: 650, easing: WHIP }],
+      ['.title .ln > span', [{ transform: 'scale(2.6)', clipPath: 'inset(0 0 100% 0)' }, { transform: 'scale(1)', clipPath: 'inset(0 0 0% 0)' }], { delay: 700, duration: 420, easing: SPRING, stagger: 300 }],
+      ['.cam', shake, { delay: 1050, duration: 260, easing: 'linear' }],
+      ['.cam', shake, { delay: 1350, duration: 260, easing: 'linear', composite: 'add' }],
+      ['.sub', [{ transform: 'translateX(-110%)' }, { transform: 'translateX(0)' }], { delay: 1700, duration: 380, easing: WHIP }],
+      ['.cta', [{ transform: 'scale(0)' }, { transform: 'scale(1)' }], { delay: 2200, duration: 520, easing: SPRING }],
+      ['.vig', [{ transform: 'scale(2.2)' }, { transform: 'scale(1)' }], { delay: 600, duration: 700, easing: EO }],
+    ] },
+    doc: { name: 'Documental', T: 7000, note: 'Documental · cámara al hombro, cambio de foco y rótulo de lugar.', script: [
+      ['.cam', handheld(14, 5, .5), { delay: 0, duration: 7000, easing: 'ease-in-out' }],
+      ['.world', [{ transform: 'scale(1)', filter: 'sepia(.25) saturate(.9) brightness(1.05) blur(0px)' }, { transform: 'scale(1.03)', filter: 'sepia(.25) saturate(.9) brightness(1.05) blur(0px)', offset: .36 }, { transform: 'scale(1.045)', filter: 'sepia(.25) saturate(.9) brightness(1.05) blur(5px)', offset: .5 }, { transform: 'scale(1.07)', filter: 'sepia(.25) saturate(.9) brightness(1.05) blur(5px)' }], { delay: 0, duration: 7000, easing: 'linear' }],
+      ['.title', [{ filter: 'blur(9px)', transform: 'scale(.97)' }, { filter: 'blur(9px)', transform: 'scale(.97)', offset: .73 }, { filter: 'blur(0px)', transform: 'scale(1)' }], { delay: 0, duration: 3400, easing: EO }],
+      ['.lower', [{ clipPath: 'inset(0 100% 0 0)' }, { clipPath: 'inset(0 0% 0 0)' }], { delay: 4200, duration: 700, easing: EIO }],
+      ['.cta', [{ clipPath: 'inset(100% 0 0 0)' }, { clipPath: 'inset(0% 0 0 0)' }], { delay: 5200, duration: 600, easing: EO }],
+    ] }
+  };
+
+  /* Motor: lanza un guion sobre una pantalla; sin movimiento = mismo guion con duración cero */
+  function shoot(screen, key, instant) {
+    const f = FILMS[key], anims = [];
+    screen.getAnimations({ subtree: true }).forEach(a => a.cancel());
+    screen.dataset.film = key;
+    for (const [sel, kf, o] of f.script) {
+      if (instant && (o.iterations || o.composite)) continue;    // lluvia y temblores: no existen sin movimiento
+      if (instant && sel === '.cam') continue;
+      screen.querySelectorAll(sel).forEach((el, i) => {
+        anims.push(el.animate(kf, { duration: instant ? 0 : o.duration, delay: instant ? 0 : o.delay + i * (o.stagger || 0), easing: o.easing,
+          iterations: o.iterations || 1, composite: o.composite || 'replace', fill: (o.iterations || sel === '.cam') ? 'none' : 'both' }));
+      });
+    }
+    return anims;
+  }
+
+  const screen = document.getElementById('screen'), go = document.getElementById('go'), note = document.getElementById('note');
+  const tc = document.getElementById('tc'), fname = document.getElementById('fname'), shot = screen.querySelector('.shot');
+  let film = 'noir', live = [], t0 = 0, paused = false, rafTc = 0, visible = true, playing = false;
+
+  function timecode() {
+    rafTc = 0;
+    if (!playing || paused) return;
+    const now = (live.find(a => a.effect.target.classList.contains('world')) || live[0]);
+    const t = now ? Math.min(FILMS[film].T, now.currentTime || 0) : 0;
+    const s = Math.floor(t / 1000), fr = Math.floor((t % 1000) / 1000 * 24);
+    tc.textContent = `00:${String(s).padStart(2, '0')}:${String(fr).padStart(2, '0')}`;
+    if (t < FILMS[film].T) rafTc = requestAnimationFrame(timecode); else done();
+  }
+  function done() {
+    playing = false; tc.textContent = `00:${String(Math.floor(FILMS[film].T / 1000)).padStart(2, '0')}:00`;
+    go.textContent = 'Repetir toma'; screen.querySelector('.slate b').textContent = '■ FIN';
+  }
+  function roll() {
+    fname.textContent = FILMS[film].name;
+    note.textContent = FILMS[film].note;
+    screen.querySelector('.slate b').textContent = '● REC';
+    if (reduced()) { live = shoot(screen, film, true); shot.style.transform = 'scaleX(1)'; done(); note.textContent = FILMS[film].note + ' (Movimiento reducido: fotograma final, sin toma.)'; return; }
+    live = shoot(screen, film, false);
+    live.push(shot.animate([{ transform: 'scaleX(0)' }, { transform: 'scaleX(1)' }], { duration: FILMS[film].T, easing: 'linear', fill: 'both' }));
+    playing = true; paused = !visible;
+    if (paused) live.forEach(a => a.pause());
+    go.textContent = 'Rodando…';
+    rafTc = requestAnimationFrame(timecode);
+  }
+  go.addEventListener('click', roll);
+
+  /* Pausa fuera de pantalla */
+  new IntersectionObserver(([e]) => {
+    visible = e.isIntersecting;
+    if (!playing) return;
+    if (visible) { paused = false; live.forEach(a => { if (a.playState === 'paused') a.play(); }); if (!rafTc) rafTc = requestAnimationFrame(timecode); }
+    else { paused = true; live.forEach(a => { if (a.playState === 'running') a.pause(); }); }
+  }, { threshold: .2 }).observe(screen);
+
+  /* Selector */
+  const radios = [...document.querySelectorAll('.films [role=radio]')];
+  function choose(key, focus) {
+    film = key;
+    radios.forEach(b => { const on = b.dataset.f === key; b.setAttribute('aria-checked', on); b.tabIndex = on ? 0 : -1; if (on && focus) b.focus(); });
+    screen.getAnimations({ subtree: true }).forEach(a => a.cancel());
+    screen.dataset.film = key; fname.textContent = FILMS[key].name; note.textContent = FILMS[key].note;
+    shoot(screen, key, true);                                      // muestra el fotograma final del género
+    playing = false; go.textContent = 'Rodar'; tc.textContent = '00:00:00'; screen.querySelector('.slate b').textContent = '● REC';
+    shot.style.transform = 'scaleX(0)';
+  }
+  radios.forEach((b, i) => {
+    b.addEventListener('click', () => choose(b.dataset.f));
+    b.addEventListener('keydown', e => {
+      const d = { ArrowRight: 1, ArrowDown: 1, ArrowLeft: -1, ArrowUp: -1 }[e.key];
+      if (!d) return; e.preventDefault(); choose(radios[(i + d + 3) % 3].dataset.f, true);
+    });
+  });
+
+  /* Fotogramas finales: tres copias congeladas al final de su toma */
+  const finals = document.getElementById('finals');
+  for (const key of ['noir', 'accion', 'doc']) {
+    const fig = document.createElement('figure');
+    const clone = screen.cloneNode(true);
+    clone.removeAttribute('id'); clone.querySelectorAll('[id]').forEach(n => n.removeAttribute('id'));
+    clone.setAttribute('aria-label', `Fotograma final en versión ${FILMS[key].name}`);
+    fig.append(clone);
+    const cap = document.createElement('figcaption');
+    cap.innerHTML = `<b>${FILMS[key].name}</b> · ${FILMS[key].T / 1000} s de toma`.replace('.', ',');
+    fig.append(cap); finals.append(fig);
+    shoot(clone, key, true);
+  }
+
+  /* Movimiento reducido */
+  const rmBtn = document.getElementById('rmBtn');
+  function applyRM() {
+    root.classList.toggle('motion', !reduced());
+    rmBtn.setAttribute('aria-pressed', String(reduced()));
+    if (reduced() && playing) { live.forEach(a => a.finish()); }
+  }
+  rmBtn.addEventListener('click', () => { root.classList.toggle('rm'); applyRM(); });
+  mq.addEventListener('change', applyRM);
+
+  /* fps (receta 24) */
+  const fpsBtn = document.getElementById('fpsBtn'), fpsEl = document.querySelector('.fps');
+  let fpsOn = false, frames = 0, ft0 = 0, fraf = 0;
+  function fpsTick(t) {
+    frames++;
+    if (t - ft0 >= 500) { const f = Math.round(frames * 1000 / (t - ft0)); fpsEl.textContent = f + ' fps'; fpsEl.classList.toggle('low', f < 50); frames = 0; ft0 = t; }
+    if (fpsOn) fraf = requestAnimationFrame(fpsTick);
+  }
+  fpsBtn.addEventListener('click', () => {
+    fpsOn = !fpsOn; fpsBtn.setAttribute('aria-pressed', String(fpsOn)); fpsEl.hidden = !fpsOn;
+    if (fpsOn) { frames = 0; ft0 = performance.now(); fraf = requestAnimationFrame(fpsTick); } else cancelAnimationFrame(fraf);
+  });
+
+  applyRM();
+  choose('noir');
+  window.__lab = { roll, choose };
+})();
+</script>
+</body>
+</html>
+
+</body></html>

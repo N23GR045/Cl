@@ -1,0 +1,633 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="dark">
+<title>CINEMA · S2 · Laboratorio — UI con personalidad animal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Special+Gothic+Condensed+One&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Special+Gothic:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --void: #07050c; --night: #0f0a19; --v900: #1c1030; --v800: #2a1745; --v700: #3d1f66;
+  --v600: #5b2a9c; --v500: #7c3aed; --v300: #b69cff; --v200: #d6c8ff;
+  --text: #eee8fa; --muted: #b3a6cc; --line: #2b2240;
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+  --dur-press: 140ms; --dur-ui: 200ms;
+  --display: "Special Gothic Condensed One", "Arial Narrow", sans-serif;
+  --body: "Special Gothic", system-ui, sans-serif;
+  --mono: "Fira Code", ui-monospace, monospace;
+  /* Los rellena JS con la física del animal elegido */
+  --anim-ease: var(--ease-out); --anim-dur: 500ms;
+  --press-scale: .95; --press-dur: 160ms;
+  color-scheme: dark;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --void: #07050c; } }
+:root[data-theme="dark"] { --void: #07050c; }
+
+*, *::before, *::after { box-sizing: border-box; }
+html { background: var(--void); overflow-x: clip; }
+body { margin: 0; background: var(--void); color: var(--text); font: 400 16px/1.55 var(--body); overflow-x: clip;
+  padding: 0 env(safe-area-inset-right) 0 env(safe-area-inset-left); }
+h1, h2, h3 { font-family: var(--display); font-weight: 400; line-height: .92; margin: 0; text-transform: uppercase; letter-spacing: .005em; }
+a { color: var(--v200); }
+code { font-family: var(--mono); font-size: .86em; color: var(--v200); }
+button { font: 500 15px/1 var(--body); color: var(--text); cursor: pointer; }
+:is(button, a, [tabindex]):focus-visible { outline: 3px solid var(--v300); outline-offset: 3px; }
+.wrap { width: min(100% - 32px, 1080px); margin-inline: auto; }
+.mono { font: 500 12px/1.3 var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+.skip { position: absolute; left: 16px; top: -60px; background: var(--v500); color: #fff; padding: 12px 16px; border-radius: 10px; z-index: 99; }
+.skip:focus { top: 12px; }
+
+/* HUD */
+.hud { position: fixed; z-index: 40; right: max(12px, env(safe-area-inset-right)); bottom: max(12px, env(safe-area-inset-bottom));
+  display: flex; gap: 6px; align-items: center; padding: 6px; border-radius: 999px; background: #120c1fe6; border: 1px solid var(--line);
+  backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); }
+.hud button { min-height: 44px; padding: 0 14px; border-radius: 999px; border: 0; background: transparent;
+  font: 500 12px/1 var(--mono); letter-spacing: .06em; text-transform: uppercase; color: var(--muted);
+  transition: background-color var(--dur-ui) var(--ease-out), color var(--dur-ui) var(--ease-out), transform var(--dur-press) var(--ease-out); }
+.hud button[aria-pressed="true"] { background: var(--v700); color: var(--text); }
+.hud button:active { transform: scale(.97); }
+.fps { font: 500 12px/1 var(--mono); color: #7dffb5; padding: 0 8px; min-width: 60px; text-align: center; }
+.fps.low { color: #ff8a7a; }
+
+/* Hero */
+.hero { padding: 88px 0 48px; background: radial-gradient(110% 70% at 80% 0%, var(--v800), transparent 62%), var(--void); }
+.hero h1 { font-size: clamp(58px, 17vw, 184px); }
+.hero h1 .ln { display: block; overflow: clip; padding-bottom: .05em; }
+.hero h1 .ln > span { display: block; }
+.hero h1 em { font-style: normal; color: var(--v300); }
+.motion .hero h1 .ln > span { animation: rise 640ms var(--ease-out) both; }
+.motion .hero h1 .ln:nth-child(2) > span { animation-delay: 110ms; }
+@keyframes rise { from { transform: translateY(105%); } }
+.lede { max-width: 38rem; margin: 22px 0 0; font-size: 18px; color: var(--muted); }
+.lede strong { color: var(--text); font-weight: 500; }
+.rule-box { margin-top: 24px; display: inline-flex; flex-wrap: wrap; gap: 6px 10px; align-items: center; border: 1px solid var(--v600); border-radius: 18px; padding: 10px 16px; font: 500 13px/1.3 var(--mono); color: var(--v200); }
+.rule-box b { color: var(--text); }
+
+/* Secciones */
+.sec { border-top: 1px solid var(--line); padding: 64px 0 72px; }
+.sec-head { display: grid; gap: 12px; margin-bottom: 28px; }
+.sec-head h2 { font-size: clamp(44px, 12vw, 96px); }
+.sec-head p { margin: 0; max-width: 42rem; color: var(--muted); }
+.sec-head p b { color: var(--text); font-weight: 500; }
+
+/* Selector de animal */
+.pick { position: relative; display: grid; grid-template-columns: repeat(3, 1fr); padding: 5px; border-radius: 18px; background: var(--night); border: 1px solid var(--line); margin-bottom: 14px; }
+.pick-ind { position: absolute; top: 5px; bottom: 5px; left: 5px; width: calc((100% - 10px) / 3); border-radius: 13px;
+  background: linear-gradient(160deg, var(--v600), var(--v800)); box-shadow: inset 0 1px 0 #ffffff22;
+  translate: calc(var(--i, 0) * 100%) 0; transition: translate var(--anim-dur) var(--anim-ease); }
+.pick button { position: relative; z-index: 1; min-height: 64px; border: 0; background: transparent; border-radius: 13px; display: grid; gap: 4px; place-content: center; text-align: center;
+  transition: transform var(--dur-press) var(--ease-out); }
+.pick button:active { transform: scale(.97); }
+.pick b { font: 400 24px/1 var(--display); text-transform: uppercase; }
+.pick span { font: 500 10.5px/1 var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+.pick [aria-checked="true"] span { color: var(--v200); }
+
+/* Escenario */
+.stage { position: relative; height: 330px; border-radius: 22px; overflow: clip; border: 1px solid var(--line); touch-action: pan-y;
+  background:
+    radial-gradient(80% 70% at 85% 0%, #3d1f6688, transparent 70%),
+    linear-gradient(transparent calc(100% - 46px), #160c27 0) , var(--night); }
+.stage::before { content: ""; position: absolute; left: 0; right: 0; bottom: 46px; height: 1px; background: var(--v700); }
+.slot { position: absolute; bottom: 46px; width: var(--cw); height: var(--ch); border: 1.5px dashed #3d1f66; border-radius: 16px; }
+.slot.s0 { left: calc(var(--pad) + var(--off, 0px)); }
+.slot.s1 { left: calc(var(--pad) + var(--off, 0px) + var(--D, 200px)); }
+.slot-l { position: absolute; bottom: 14px; font: 500 10.5px/1 var(--mono); letter-spacing: .1em; text-transform: uppercase; color: #8d7fb0; }
+.slot-l.l0 { left: calc(var(--pad) + var(--off, 0px)); } .slot-l.l1 { left: calc(var(--pad) + var(--off, 0px) + var(--D, 200px)); }
+.stage { --pad: 16px; --cw: 112px; --ch: 146px; --bw: 92px; }
+
+.card { position: absolute; left: calc(var(--pad) + var(--off, 0px)); bottom: 46px; width: var(--cw); height: var(--ch); border-radius: 16px; z-index: 2;
+  transform-origin: 50% 100%; touch-action: none; cursor: grab; user-select: none; -webkit-user-select: none;
+  background: linear-gradient(170deg, #2e1a4d, #150c26 70%); border: 1px solid #5b2a9c;
+  box-shadow: 0 14px 30px -12px #000, inset 0 1px 0 #ffffff1c; display: grid; grid-template-rows: auto 1fr auto; overflow: clip; }
+.card:active { cursor: grabbing; }
+.card-top { padding: 8px 10px; background: var(--v600); font: 500 9.5px/1 var(--mono); letter-spacing: .1em; text-transform: uppercase; color: #fff; }
+.card-av { display: grid; place-items: center; }
+.card-av i { width: 44%; aspect-ratio: 1; border-radius: 50%; position: relative;
+  background: radial-gradient(circle at 50% 36%, var(--v200) 0 22%, transparent 23%), radial-gradient(ellipse 60% 44% at 50% 100%, var(--v200) 0 98%, transparent 100%), #3d1f66;
+  border: 1.5px solid var(--v300); }
+.card-txt { padding: 0 10px 10px; display: grid; gap: 4px; }
+.card-txt b { font: 400 17px/1 var(--display); text-transform: uppercase; }
+.card-txt span { font: 500 9px/1.2 var(--mono); letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
+
+.badge { position: absolute; top: 18px; left: calc(var(--pad) + var(--off, 0px) + var(--D, 200px) + (var(--cw) - var(--bw)) / 2); width: var(--bw); aspect-ratio: 1; border-radius: 50%; z-index: 1;
+  display: grid; place-content: center; text-align: center; gap: 2px; transform-origin: 50% 0;
+  background: radial-gradient(circle at 50% 40%, #2a1745, #150c26); border: 2px solid var(--v500);
+  box-shadow: 0 0 0 5px #150c26, 0 0 0 6px #3d1f66; transition: border-color 260ms var(--ease-out), background-color 260ms var(--ease-out); }
+.badge b { font: 400 30px/.85 var(--display); color: var(--v200); }
+.badge span { font: 500 8.5px/1.15 var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+.badge.hit { border-color: var(--v200); }
+.badge.hit b { color: #fff; }
+.badge::after { content: ""; position: absolute; left: 50%; top: 100%; width: 1.5px; height: 12px; background: var(--v700); } /* colgante */
+
+.stage-cap { position: absolute; left: var(--pad); top: 16px; width: calc(var(--off, 0px) + var(--D, 200px) + (var(--cw) - var(--bw)) / 2 - 14px); font: 500 11px/1.35 var(--mono); letter-spacing: .04em; color: var(--v200); }
+
+.controls { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-top: 14px; }
+.act { min-height: 52px; padding: 0 22px; border-radius: 999px; border: 0; background: var(--v500); color: #fff; font: 500 16px/1 var(--body);
+  box-shadow: 0 10px 24px -12px var(--v500), inset 0 1px 0 #ffffff33;
+  transition: transform var(--press-dur) var(--anim-ease), background-color var(--dur-ui) var(--ease-out); }
+.act:active { transform: scale(var(--press-scale)); transition-duration: var(--press-dur); transition-timing-function: var(--ease-out); }
+@media (hover: hover) and (pointer: fine) { .act:hover { background: #8b4cf5; } }
+.hint { font: 500 11.5px/1.4 var(--mono); color: var(--muted); max-width: 30rem; margin: 0; }
+
+/* Ficha técnica */
+.tech { margin-top: 22px; display: grid; gap: 14px; padding: 18px; border-radius: 20px; background: var(--night); border: 1px solid var(--line); }
+.tech h3 { font-size: 30px; color: var(--v300); }
+.tech p { margin: 0; color: var(--muted); }
+.tech p b { color: var(--text); font-weight: 500; }
+.params { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin: 0; }
+.params div { padding: 10px; border-radius: 12px; background: var(--v900); }
+.params dt { font: 500 10px/1 var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+.params dd { margin: 6px 0 0; font: 400 22px/1 var(--display); }
+.curve { width: 100%; height: auto; display: block; background: #0a0613; border-radius: 12px; border: 1px solid var(--line); }
+details summary { cursor: pointer; min-height: 44px; display: flex; align-items: center; font: 500 12px/1 var(--mono); color: var(--v200); }
+details pre { margin: 0; white-space: pre-wrap; word-break: break-all; font: 500 11px/1.5 var(--mono); color: var(--muted); background: #0a0613; padding: 12px; border-radius: 10px; max-height: 180px; overflow: auto; }
+
+/* Comparativa */
+.lanes { display: grid; gap: 10px; }
+.lane { position: relative; height: 68px; border-radius: 14px; background: var(--night); border: 1px solid var(--line); overflow: clip; --lp: 10px; }
+.lane-pill { position: absolute; left: var(--lp); top: 50%; margin-top: -22px; height: 44px; width: 104px; border-radius: 12px; display: grid; place-content: center;
+  background: linear-gradient(170deg, var(--v600), var(--v800)); font: 400 20px/1 var(--display); text-transform: uppercase; }
+.lane-end { position: absolute; left: var(--end, 200px); top: 50%; margin-top: -16px; width: 32px; height: 32px; border-radius: 50%; border: 2px solid var(--v500); }
+.lane-t { position: absolute; right: 12px; bottom: 8px; font: 500 10px/1 var(--mono); color: var(--muted); letter-spacing: .06em; }
+
+/* Tabla de beats */
+.beats { width: 100%; border-collapse: collapse; font-size: 14.5px; }
+.beats th, .beats td { text-align: left; vertical-align: top; padding: 12px 10px; border-bottom: 1px solid var(--line); }
+.beats th { font: 500 10.5px/1.2 var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+.beats td:first-child { font: 400 22px/1 var(--display); text-transform: uppercase; color: var(--v300); }
+.tbl { overflow-x: auto; border-radius: 14px; border: 1px solid var(--line); }
+.tbl table { min-width: 640px; }
+
+/* Notas */
+.notes { display: grid; gap: 34px; }
+.notes h3 { font-size: 30px; color: var(--v300); margin-bottom: 10px; }
+.notes ul { margin: 0; padding-left: 20px; display: grid; gap: 10px; max-width: 46rem; }
+.notes li::marker { color: var(--v500); }
+.notes p { margin: 0; max-width: 46rem; color: var(--muted); }
+.notes p b { color: var(--text); font-weight: 500; }
+.end { padding-bottom: 120px; }
+
+/* Movimiento reducido: un relevo corto y nítido */
+.rm-swap { animation: swap 180ms var(--ease-out); }
+@keyframes swap { from { opacity: .2; } }
+
+@media (min-width: 760px) {
+  .stage { height: 420px; --pad: 28px; --cw: 160px; --ch: 210px; --bw: 128px; }
+  .badge b { font-size: 42px; }
+  .badge span { font-size: 10px; }
+  .card-top { font-size: 11px; padding: 10px 12px; }
+  .card-txt b { font-size: 22px; }
+  .card-txt span { font-size: 10.5px; }
+  .stage-cap { font-size: 12.5px; }
+  .tech { grid-template-columns: 1fr 1fr; align-items: start; }
+  .tech > .full { grid-column: 1 / -1; }
+  .notes .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; }
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#lab">Saltar al laboratorio</a>
+
+<div class="hud" role="group" aria-label="Controles de la pieza">
+  <span class="fps" hidden>— fps</span>
+  <button type="button" id="fpsBtn" aria-pressed="false">fps</button>
+  <button type="button" id="rmBtn" aria-pressed="false">Movimiento reducido</button>
+</div>
+
+<header class="hero">
+  <div class="wrap">
+    <p class="mono">CINEMA//MOTION LAB · Semana 2 · Laboratorio · Caso Natural Life RP</p>
+    <h1><span class="ln"><span>Tres animales,</span></span><span class="ln"><span>una <em>ficha</em></span></span></h1>
+    <p class="lede">La misma interfaz —una ficha de personaje que se entrega a la beta— con tres personalidades. No cambia el diseño: cambian <strong>la masa, la rigidez y la amortiguación</strong>. Y con ellas, el carácter.</p>
+    <div class="rule-box"><span>Restricción S2</span><b>Tres elementos</b><span>· ficha, sello y botón; nada más se mueve</span></div>
+  </div>
+</header>
+
+<main>
+<section class="sec" id="lab" aria-labelledby="tLab">
+  <div class="wrap">
+    <div class="sec-head">
+      <p class="mono">Recetas 06 easings · 07 anticipación · 08 inercia</p>
+      <h2 id="tLab">El laboratorio</h2>
+      <p>Elige un animal y pulsa <b>Enviar ficha</b>, o <b>arrastra la ficha</b> y suéltala con fuerza: la velocidad de tu dedo entra en el muelle. Con teclado, Tab hasta la ficha: Intro la envía y las flechas le dan un empujón.</p>
+    </div>
+
+    <div class="pick" role="radiogroup" aria-label="Personalidad">
+      <span class="pick-ind" aria-hidden="true"></span>
+      <button type="button" role="radio" aria-checked="true" data-a="pantera"><b>Pantera</b><span>Sigilo</span></button>
+      <button type="button" role="radio" aria-checked="false" data-a="oso" tabindex="-1"><b>Oso</b><span>Peso</span></button>
+      <button type="button" role="radio" aria-checked="false" data-a="colibri" tabindex="-1"><b>Colibrí</b><span>Nervio</span></button>
+    </div>
+
+    <div class="stage" id="stage">
+      <p class="stage-cap" id="cap" aria-live="polite">Pantera · se agacha, ataca y frena en seco.</p>
+      <div class="slot s0" aria-hidden="true"></div><div class="slot s1" aria-hidden="true"></div>
+      <span class="slot-l l0" aria-hidden="true">Tu ficha</span><span class="slot-l l1" aria-hidden="true">Beta</span>
+      <div class="badge" id="badge" aria-hidden="true"><b>18</b><span>plazas<br>beta</span></div>
+      <div class="card" id="card" tabindex="0" role="button" aria-label="Ficha de personaje. Intro para enviarla a la beta; flechas para empujarla.">
+        <div class="card-top">Ficha · ciudadano</div>
+        <div class="card-av"><i></i></div>
+        <div class="card-txt"><b>Sin nombre</b><span>Historia por escribir</span></div>
+      </div>
+    </div>
+
+    <div class="controls">
+      <button type="button" class="act" id="act">Enviar ficha →</button>
+      <p class="hint" id="hint">Distancia de viaje calculada al tamaño de tu pantalla.</p>
+    </div>
+
+    <div class="tech" aria-labelledby="tTech">
+      <div>
+        <h3 id="tTech">Ficha técnica</h3>
+        <p id="techTxt"></p>
+      </div>
+      <dl class="params" id="params"></dl>
+      <div class="full">
+        <svg class="curve" id="curve" viewBox="0 0 600 170" role="img" aria-label="Curva de posición frente a tiempo del muelle elegido"></svg>
+      </div>
+      <details class="full">
+        <summary>Ver la curva exportada a CSS (<code>linear()</code>)</summary>
+        <pre id="linCode"></pre>
+      </details>
+    </div>
+  </div>
+</section>
+
+<section class="sec" aria-labelledby="tCmp">
+  <div class="wrap">
+    <div class="sec-head">
+      <p class="mono">Misma acción · misma distancia · tres muelles</p>
+      <h2 id="tCmp">Tres películas</h2>
+      <p>Aquí no hay JavaScript moviendo nada en cada frame: el muelle de cada animal se ha simulado una vez y se ha <b>exportado a una curva CSS <code>linear()</code></b> que corre en el compositor. Mira quién llega antes, quién se pasa y quién no para quieto.</p>
+    </div>
+    <div class="lanes" id="lanes">
+      <div class="lane" data-a="pantera"><span class="lane-end"></span><span class="lane-t"></span><span class="lane-pill">Pantera</span></div>
+      <div class="lane" data-a="oso"><span class="lane-end"></span><span class="lane-t"></span><span class="lane-pill">Oso</span></div>
+      <div class="lane" data-a="colibri"><span class="lane-end"></span><span class="lane-t"></span><span class="lane-pill">Colibrí</span></div>
+    </div>
+    <div class="controls"><button type="button" class="act" id="playAll">Reproducir las tres</button></div>
+  </div>
+</section>
+
+<section class="sec" aria-labelledby="tBeats">
+  <div class="wrap">
+    <div class="sec-head">
+      <p class="mono">Anticipación → acción → reacción</p>
+      <h2 id="tBeats">Guion de beats</h2>
+      <p>Cada personalidad es un reparto distinto de los mismos tres tiempos. La reacción la lleva el sello: es el único testigo del golpe.</p>
+    </div>
+    <div class="tbl">
+      <table class="beats">
+        <thead><tr><th>Animal</th><th>Anticipación</th><th>Acción</th><th>Reacción del sello</th><th>Uso en Natural Life</th></tr></thead>
+        <tbody>
+          <tr><td>Pantera</td><td>Se agacha 260 ms (aplasta un 8 %)</td><td>Ataque con amortiguación crítica, ζ = 1: cero rebote</td><td>Ninguna sacudida; solo se ilumina. Llega sin ruido</td><td>Personalidad base: avisos, menús y confirmaciones de rol serio</td></tr>
+          <tr><td>Oso</td><td>Se echa atrás 360 ms</td><td>Masa 3, ζ = 0,5: arranca lento y se pasa de frenada</td><td>Golpe fuerte: el sello se balancea en su colgante</td><td>Solo momentos de peso: algo irreversible o importante</td></tr>
+          <tr><td>Colibrí</td><td>Casi nada: 50 ms y se eleva</td><td>Masa 0,35, ζ = 0,3: llega primero y vibra</td><td>Toquecito leve</td><td>Microfeedback puntual; nunca en algo que se repite</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section class="sec end" aria-labelledby="tNotes">
+  <div class="wrap notes">
+    <h2 id="tNotes" style="font-size:clamp(44px,12vw,96px)">Notas de dirección</h2>
+    <div class="grid2">
+      <div>
+        <h3>Aprendizajes</h3>
+        <ul>
+          <li><b>La personalidad es física, no decoración.</b> Cambiando solo masa, rigidez y amortiguación, la misma ficha pasa de felino a oso. Ni un píxel del diseño cambia.</li>
+          <li><b>Un muelle, dos salidas.</b> Para lo interrumpible (arrastrar, empujar) se integra en vivo y hereda la velocidad del dedo; para lo que solo se reproduce, se simula una vez y se exporta a <code>linear()</code> en CSS.</li>
+          <li><b>La reacción vende el peso.</b> El oso pesa porque el sello lo nota; la pantera es sigilosa porque el sello <i>no</i> lo nota. El tercer elemento es el testigo.</li>
+        </ul>
+      </div>
+      <div>
+        <h3>Qué mejorar</h3>
+        <ul>
+          <li>El colibrí cansa si se repite: en la Entrega, limitar su oscilación a la primera vez y comprobarlo con tres pulsaciones seguidas.</li>
+          <li>Medir en un Android de gama media real con el botón «fps»; aquí se midió en Chromium con la CPU frenada ×4.</li>
+        </ul>
+      </div>
+    </div>
+    <p><b>Estudio:</b> lidera Motion y 3D (física de muelles, anticipación y reacción); Diseño UI acompaña (ficha y sello en la paleta del servidor, tipografía Special Gothic sugerida por Adobe Fonts); Calidad acompaña (capturas a 390 y 1440 px, ruta reducida, teclado y fps con CPU lenta). Descartado GSAP: un muelle propio de 40 líneas pesa menos y es interrumpible.</p>
+    <p><b>Fuentes de la búsqueda:</b>
+      <a href="https://developer.chrome.com/docs/modern-web-guidance/guides/ui-behaviors/physics-based-easing">Chrome · Physics-based easing</a> ·
+      <a href="https://ics.media/en/entry/260402/">ICS MEDIA · linear() para muelles en UI</a> ·
+      <a href="https://tympanus.net/codrops/2026/10/15/noho-redesign/">Codrops · Knowing when to do less (oct. 2026)</a> ·
+      <a href="https://tympanus.net/codrops/demos/?tag=physics">Codrops · demos de física (nov. 2026)</a></p>
+    <p class="mono">Siguiente · viernes · Entrega «Comparativa de 3 personalidades»</p>
+  </div>
+</section>
+</main>
+
+<script>
+(() => {
+  const root = document.documentElement;
+  const mq = matchMedia('(prefers-reduced-motion: reduce)');
+  const reduced = () => mq.matches || root.classList.contains('rm');
+
+  /* ── Personalidades: un muelle principal + uno de giro, y el guion de beats ── */
+  const A = {
+    pantera: { name: 'Pantera', m: 1, k: 260, c: 32.25, rot: { m: 1, k: 180, c: 26.8 },
+      antMs: 260, antX: 12, antQ: 8, antR: 2, antY: 5, stretch: 6, leanR: 3, flyY: 0, holdMs: 150,
+      kick: 0, kickR: 0, kickS: 0, tilt: .008, press: [.94, 220],
+      cap: 'Pantera · se agacha, ataca y frena en seco.', hit: 'Llega sin ruido: el sello solo se ilumina.',
+      txt: '<b>Sigilo.</b> Amortiguación crítica (ζ = 1): la ficha llega lo antes posible sin pasarse ni un píxel. Toda la energía está en la anticipación.' },
+    oso: { name: 'Oso', m: 3, k: 140, c: 20.5, rot: { m: 3, k: 90, c: 13 },
+      antMs: 360, antX: 20, antQ: 4, antR: 4, antY: 0, stretch: 2, leanR: 5, flyY: 0, holdMs: 420,
+      kick: 520, kickR: 220, kickS: 0, tilt: .005, press: [.9, 300],
+      cap: 'Oso · tarda en arrancar y se pasa de frenada.', hit: 'Golpe: el sello se balancea.',
+      txt: '<b>Peso.</b> Mucha masa y poca amortiguación (ζ = 0,5): arranca despacio, se pasa del sitio y vuelve. El golpe se transmite al sello.' },
+    colibri: { name: 'Colibrí', m: .35, k: 420, c: 7.27, rot: { m: .35, k: 260, c: 3.4 },
+      antMs: 50, antX: 2, antQ: 0, antR: 0, antY: -14, stretch: 3, leanR: 9, flyY: -22, holdMs: 240,
+      kick: 140, kickR: 90, kickS: 6, tilt: .03, press: [.97, 90],
+      cap: 'Colibrí · sin aviso, llega primero y no para quieto.', hit: 'Toquecito: el sello apenas lo nota.',
+      txt: '<b>Nervio.</b> Poca masa y amortiguación muy baja (ζ = 0,3): respuesta inmediata y oscilación que tarda en morir.' }
+  };
+  const zeta = p => p.c / (2 * Math.sqrt(p.k * p.m));
+
+  /* ── Simular un muelle 0→1 y exportarlo a linear() ── */
+  function springCurve(p) {
+    const dt = .001, xs = [];
+    let x = 0, v = 0;
+    for (let i = 0; i < 4000; i++) { const a = (-p.k * (x - 1) - p.c * v) / p.m; v += a * dt; x += v * dt; xs.push(x); }
+    let T = xs.length - 1;
+    while (T > 0 && Math.abs(xs[T] - 1) < .002) T--;
+    T = Math.max(120, T + 1);
+    const n = Math.max(16, Math.min(90, Math.round(T / 14)));
+    const pts = [];
+    for (let i = 0; i <= n; i++) pts.push(i === n ? 1 : +xs[Math.round(i / n * (T - 1))].toFixed(3));
+    pts[0] = 0;
+    return { T, pts, ease: `linear(${pts.join(', ')})`, xs: xs.slice(0, T) };
+  }
+  for (const key in A) A[key].curve = springCurve(A[key]);
+
+  /* ── Motor de muelles (solo transform) ── */
+  const S = v => ({ x: v, v: 0, t: v });
+  const stage = document.getElementById('stage'), cardEl = document.getElementById('card'), badgeEl = document.getElementById('badge');
+  const cap = document.getElementById('cap'), actBtn = document.getElementById('act');
+  const card = { x: S(0), y: S(0), r: S(0), q: S(0) };
+  const badge = { y: S(0), r: S(0), s: S(0) };
+  const BADGE = { m: 1, k: 260, c: 7 };
+  let cur = A.pantera, D = 200, OFF = 0, slot = 0, raf = 0, last = 0, visible = true, impact = null, timers = [];
+  let drag = null;
+
+  function step(s, p, dt) { const a = (-p.k * (s.x - s.t) - p.c * s.v) / p.m; s.v += a * dt; s.x += s.v * dt; }
+  const rest = s => Math.abs(s.x - s.t) < .03 && Math.abs(s.v) < .03;
+
+  function render() {
+    const q = card.q.x / 100;
+    cardEl.style.transform = `translate3d(${card.x.x.toFixed(2)}px, ${card.y.x.toFixed(2)}px, 0) rotate(${card.r.x.toFixed(2)}deg) scale(${(1 + q).toFixed(4)}, ${(1 - q).toFixed(4)})`;
+    badgeEl.style.transform = `translate3d(0, ${badge.y.x.toFixed(2)}px, 0) rotate(${badge.r.x.toFixed(2)}deg) scale(${(1 + badge.s.x / 100).toFixed(4)})`;
+  }
+  function frame(now) {
+    raf = 0;
+    if (!visible) return;
+    let dt = Math.min(1 / 30, (now - last) / 1000 || 1 / 60); last = now;
+    const sub = Math.ceil(dt / (1 / 240)), h = dt / sub;
+    for (let i = 0; i < sub; i++) {
+      if (!drag) { step(card.x, cur, h); step(card.y, cur, h); }
+      step(card.r, cur.rot, h); step(card.q, cur, h);
+      step(badge.y, BADGE, h); step(badge.r, BADGE, h); step(badge.s, BADGE, h);
+    }
+    if (!drag) {                                   // paredes del escenario: rebote con pérdida
+      if (card.x.x > D + OFF) { card.x.x = D + OFF; card.x.v *= -.35; }
+      if (card.x.x < -OFF) { card.x.x = -OFF; card.x.v *= -.35; }
+    }
+    if (impact && (card.x.x - impact.to) * impact.dir >= -2) fireImpact();
+    render();
+    const all = [card.x, card.y, card.r, card.q, badge.y, badge.r, badge.s];
+    if (drag || timers.length || !all.every(rest)) raf = requestAnimationFrame(frame);
+    else { all.forEach(s => { s.x = s.t; s.v = 0; }); render(); cardEl.style.willChange = badgeEl.style.willChange = ''; }
+  }
+  function wake() {
+    if (raf || !visible) return;
+    cardEl.style.willChange = badgeEl.style.willChange = 'transform';
+    last = performance.now(); raf = requestAnimationFrame(frame);
+  }
+  new IntersectionObserver(([e]) => { visible = e.isIntersecting; if (visible) wake(); else { cancelAnimationFrame(raf); raf = 0; } }).observe(stage);
+
+  function fireImpact() {
+    const { dir } = impact; impact = null;
+    badge.y.v -= cur.kick; badge.r.v += dir * cur.kickR; badge.s.v += cur.kickS * 10;
+    badgeEl.classList.add('hit');
+    cap.textContent = slot ? cur.hit : cur.cap;
+  }
+  function clearTimers() { timers.forEach(clearTimeout); timers = []; }
+  function later(fn, ms) { const id = setTimeout(() => { timers = timers.filter(t => t !== id); fn(); wake(); }, ms); timers.push(id); }
+
+  function measure() {
+    const cs = getComputedStyle(stage);
+    const avail = stage.clientWidth - 2 * parseFloat(cs.getPropertyValue('--pad')) - parseFloat(cs.getPropertyValue('--cw'));
+    D = Math.round(Math.min(avail * .62, 380)); OFF = Math.round((avail - D) / 2);
+    stage.style.setProperty('--D', D + 'px'); stage.style.setProperty('--off', OFF + 'px');
+    card.x.x = card.x.t = slot * D; card.x.v = 0; render();
+    document.getElementById('hint').textContent = `Viaje de ${Math.round(D)} px, calculado para tu pantalla.`;
+  }
+  new ResizeObserver(measure).observe(stage);
+
+  function label() {
+    actBtn.textContent = slot ? '← Recuperar ficha' : 'Enviar ficha →';
+    if (!slot) badgeEl.classList.remove('hit');
+  }
+
+  /* Acción: anticipación → acción → reacción */
+  function act() {
+    clearTimers(); impact = null;
+    slot = 1 - slot;
+    const to = slot * D, dir = slot ? 1 : -1;
+    label();
+    if (reduced()) {
+      Object.values(card).forEach(s => { s.v = 0; s.x = s.t = 0; });
+      card.x.x = card.x.t = to; render();
+      cardEl.classList.remove('rm-swap'); void cardEl.offsetWidth; cardEl.classList.add('rm-swap');
+      badgeEl.classList.toggle('hit', !!slot);
+      cap.textContent = slot ? 'Ficha entregada a la beta.' : 'Ficha recuperada.';
+      return;
+    }
+    cap.textContent = cur.cap;
+    const rest0 = card.x.t;
+    card.x.t = rest0 - dir * cur.antX; card.q.t = cur.antQ; card.r.t = -dir * cur.antR; card.y.t = cur.antY;
+    wake();
+    later(() => {
+      card.x.t = to; card.q.t = -cur.stretch; card.r.t = dir * cur.leanR; card.y.t = cur.flyY;
+      impact = slot ? { to, dir } : null;
+      later(() => { card.q.t = 0; card.r.t = 0; card.y.t = 0; }, cur.holdMs);
+    }, cur.antMs);
+  }
+  actBtn.addEventListener('click', act);
+
+  /* Teclado en la ficha */
+  cardEl.addEventListener('keydown', e => {
+    if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); act(); return; }
+    const k = { ArrowLeft: [-1, 0], ArrowRight: [1, 0], ArrowUp: [0, -1], ArrowDown: [0, 1] }[e.key];
+    if (!k) return;
+    e.preventDefault();
+    if (reduced()) return;
+    card.x.v += k[0] * 700; card.y.v += k[1] * 500; card.r.v += k[0] * 60;
+    wake();
+  });
+
+  /* Arrastre con inercia: la velocidad del dedo entra en el muelle */
+  cardEl.addEventListener('pointerdown', e => {
+    if (e.button !== 0) return;
+    clearTimers(); impact = null;
+    cardEl.setPointerCapture(e.pointerId);
+    drag = { id: e.pointerId, sx: e.clientX - card.x.x, sy: e.clientY - card.y.x, lx: e.clientX, ly: e.clientY, lt: performance.now(), vx: 0, vy: 0 };
+    card.q.t = reduced() ? 0 : -2; wake();
+  });
+  cardEl.addEventListener('pointermove', e => {
+    if (!drag || e.pointerId !== drag.id) return;
+    const now = performance.now(), dt = Math.max(1, now - drag.lt);
+    drag.vx = drag.vx * .25 + (e.clientX - drag.lx) / dt * 1000 * .75;
+    drag.vy = drag.vy * .25 + (e.clientY - drag.ly) / dt * 1000 * .75;
+    drag.lx = e.clientX; drag.ly = e.clientY; drag.lt = now;
+    card.x.x = card.x.t = Math.max(-OFF, Math.min(D + OFF, e.clientX - drag.sx));
+    card.y.x = card.y.t = Math.max(-170, Math.min(30, e.clientY - drag.sy));
+    card.r.t = reduced() ? 0 : Math.max(-16, Math.min(16, drag.vx * cur.tilt));
+    if (reduced()) { card.r.x = 0; render(); }
+  });
+  function release(e) {
+    if (!drag || e.pointerId !== drag.id) return;
+    const { vx, vy } = drag; drag = null;
+    const proj = card.x.x + vx * .18;              // a dónde iría con esa inercia
+    const prev = slot; slot = proj > D / 2 ? 1 : 0;
+    const to = slot * D; label();
+    card.x.t = to; card.y.t = 0; card.r.t = 0; card.q.t = 0;
+    if (reduced()) { Object.values(card).forEach(s => { s.x = s.t; s.v = 0; }); render(); badgeEl.classList.toggle('hit', !!slot); return; }
+    card.x.v = vx; card.y.v = vy;
+    impact = slot ? { to, dir: 1 } : null;
+    if (slot !== prev || slot) cap.textContent = cur.cap;
+    wake();
+  }
+  cardEl.addEventListener('pointerup', release);
+  cardEl.addEventListener('pointercancel', release);
+
+  /* ── Selector de personalidad (radiogroup con flechas) ── */
+  const pick = [...document.querySelectorAll('.pick [role=radio]')];
+  const params = document.getElementById('params'), techTxt = document.getElementById('techTxt');
+  const fmt = n => String(+n.toFixed(2)).replace('.', ',');
+  function choose(key, focus) {
+    cur = A[key];
+    pick.forEach((b, i) => {
+      const on = b.dataset.a === key;
+      b.setAttribute('aria-checked', on); b.tabIndex = on ? 0 : -1;
+      if (on) { document.querySelector('.pick').style.setProperty('--i', i); if (focus) b.focus(); }
+    });
+    const c = cur.curve;
+    root.style.setProperty('--anim-ease', c.ease);
+    root.style.setProperty('--anim-dur', c.T + 'ms');
+    root.style.setProperty('--press-scale', cur.press[0]);
+    root.style.setProperty('--press-dur', cur.press[1] + 'ms');
+    cap.textContent = cur.cap;
+    techTxt.innerHTML = cur.txt;
+    params.innerHTML = [['Masa', fmt(cur.m)], ['Rigidez', fmt(cur.k)], ['Amortig.', fmt(cur.c)], ['ζ', fmt(zeta(cur))], ['Asentado', c.T + ' ms'], ['Puntos', c.pts.length]]
+      .map(([t, d]) => `<div><dt>${t}</dt><dd>${d}</dd></div>`).join('');
+    document.getElementById('linCode').textContent = `transition: transform ${c.T}ms ${c.ease};`;
+    drawCurve();
+  }
+  pick.forEach((b, i) => {
+    b.addEventListener('click', () => choose(b.dataset.a));
+    b.addEventListener('keydown', e => {
+      const d = { ArrowRight: 1, ArrowDown: 1, ArrowLeft: -1, ArrowUp: -1 }[e.key];
+      if (!d) return; e.preventDefault();
+      choose(pick[(i + d + 3) % 3].dataset.a, true);
+    });
+  });
+
+  /* Curva en SVG: las tres de fondo, la elegida delante */
+  function poly(c, Tmax) {
+    const W = 600, H = 170, top = 18, base = 140, step = Math.max(1, Math.floor(c.xs.length / 200));
+    let d = '';
+    for (let i = 0; i < c.xs.length; i += step) d += `${(i / Tmax * (W - 20) + 10).toFixed(1)},${(base - c.xs[i] * (base - top - 40)).toFixed(1)} `;
+    d += `${(c.xs.length / Tmax * (W - 20) + 10).toFixed(1)},${(base - (base - top - 40)).toFixed(1)}`;
+    return d;
+  }
+  function drawCurve() {
+    const Tmax = Math.max(...Object.values(A).map(a => a.curve.T));
+    const svg = document.getElementById('curve');
+    const goal = 140 - (140 - 18 - 40);
+    let html = `<line x1="10" x2="590" y1="${goal}" y2="${goal}" stroke="#3d1f66" stroke-dasharray="4 5"/><line x1="10" x2="590" y1="140" y2="140" stroke="#2b2240"/>`;
+    html += `<text x="12" y="${goal - 6}" fill="#8d7fb0" font-family="Fira Code, monospace" font-size="11">destino</text>`;
+    html += `<text x="590" y="160" text-anchor="end" fill="#8d7fb0" font-family="Fira Code, monospace" font-size="11">${Tmax} ms</text>`;
+    for (const key in A) {
+      const on = A[key] === cur;
+      html += `<polyline fill="none" stroke="${on ? '#d6c8ff' : '#5b2a9c'}" stroke-width="${on ? 3 : 1.5}" stroke-linejoin="round" points="${poly(A[key].curve, Tmax)}"/>`;
+    }
+    svg.innerHTML = html;
+  }
+
+  /* ── Comparativa: WAAPI con la curva exportada ── */
+  const lanes = [...document.querySelectorAll('.lane')];
+  let lanesOut = false, lanesBusy = false;
+  const laneDist = l => Math.round((l.clientWidth - 20 - l.querySelector('.lane-pill').offsetWidth) * .55);
+  function placeEnds() { lanes.forEach(l => { const pw = l.querySelector('.lane-pill').offsetWidth; l.style.setProperty('--end', (10 + laneDist(l) + pw / 2 - 16) + 'px'); }); }
+  lanes.forEach(l => { l.querySelector('.lane-t').textContent = A[l.dataset.a].curve.T + ' ms'; });
+  placeEnds(); new ResizeObserver(placeEnds).observe(document.getElementById('lanes'));
+  document.getElementById('playAll').addEventListener('click', async e => {
+    if (lanesBusy) return; lanesBusy = true;
+    const btn = e.currentTarget;
+    const go = !lanesOut; lanesOut = go;
+    btn.textContent = go ? 'Volver a empezar' : 'Reproducir las tres';
+    await Promise.all(lanes.map(async l => {
+      const a = A[l.dataset.a], pill = l.querySelector('.lane-pill');
+      const dist = laneDist(l);
+      const from = go ? 0 : dist, to = go ? dist : 0, dir = go ? 1 : -1;
+      if (reduced()) {
+        pill.style.transform = `translateX(${to}px)`;
+        await pill.animate([{ opacity: .2 }, { opacity: 1 }], { duration: 180, easing: 'ease-out' }).finished;
+        return;
+      }
+      const ant = from - dir * a.antX;
+      await pill.animate([{ transform: `translateX(${from}px)` }, { transform: `translateX(${ant}px) scale(${1 + a.antQ / 100}, ${1 - a.antQ / 100})` }],
+        { duration: a.antMs, easing: 'cubic-bezier(0.77, 0, 0.175, 1)', fill: 'forwards' }).finished;
+      const anim = pill.animate([{ transform: `translateX(${ant}px)` }, { transform: `translateX(${to}px)` }],
+        { duration: a.curve.T, easing: a.curve.ease, fill: 'forwards' });
+      await anim.finished;
+      pill.style.transform = `translateX(${to}px)`;
+      pill.getAnimations().forEach(x => x.cancel());
+    }));
+    lanesBusy = false;
+  });
+
+  /* ── Movimiento reducido (sistema o botón) ── */
+  const rmBtn = document.getElementById('rmBtn');
+  function applyRM() {
+    root.classList.toggle('motion', !reduced());
+    rmBtn.setAttribute('aria-pressed', String(reduced()));
+    if (reduced()) { clearTimers(); impact = null; Object.values(card).concat(Object.values(badge)).forEach(s => { s.x = s.t = 0; s.v = 0; }); card.x.x = card.x.t = slot * D; render(); }
+  }
+  rmBtn.addEventListener('click', () => { root.classList.toggle('rm'); applyRM(); });
+  mq.addEventListener('change', applyRM);
+
+  /* ── Medidor de fps (receta 24) ── */
+  const fpsBtn = document.getElementById('fpsBtn'), fpsEl = document.querySelector('.fps');
+  let fpsOn = false, frames = 0, t0 = 0, fraf = 0;
+  function fpsTick(t) {
+    frames++;
+    if (t - t0 >= 500) { const f = Math.round(frames * 1000 / (t - t0)); fpsEl.textContent = f + ' fps'; fpsEl.classList.toggle('low', f < 50); frames = 0; t0 = t; }
+    if (fpsOn) fraf = requestAnimationFrame(fpsTick);
+  }
+  fpsBtn.addEventListener('click', () => {
+    fpsOn = !fpsOn; fpsBtn.setAttribute('aria-pressed', String(fpsOn)); fpsEl.hidden = !fpsOn;
+    if (fpsOn) { frames = 0; t0 = performance.now(); fraf = requestAnimationFrame(fpsTick); } else cancelAnimationFrame(fraf);
+  });
+  document.addEventListener('visibilitychange', () => { if (document.hidden) cancelAnimationFrame(fraf); else if (fpsOn) { t0 = performance.now(); frames = 0; fraf = requestAnimationFrame(fpsTick); } });
+
+  applyRM();
+  choose('pantera');
+  measure();
+  window.__lab = { act, A, get state() { return { slot, x: card.x.x, D }; } };
+})();
+</script>
+</body>
+</html>
+
+</body></html>

@@ -1,0 +1,514 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="dark">
+<title>CINEMA · S2 · Ejercicios — Tiempo, física y personalidad</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Special+Gothic+Condensed+One&family=Special+Gothic:wght@400;500&family=Fira+Code:wght@500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --void: #07050c; --night: #0f0a19; --v900: #1c1030; --v800: #2a1745; --v700: #3d1f66;
+  --v600: #5b2a9c; --v500: #7c3aed; --v300: #b69cff; --v200: #d6c8ff;
+  --text: #eee8fa; --muted: #b3a6cc; --line: #2b2240;
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --dur-press: 140ms; --dur-ui: 200ms;
+  --display: "Special Gothic Condensed One", "Arial Narrow", sans-serif;
+  --body: "Special Gothic", system-ui, sans-serif;
+  --mono: "Fira Code", ui-monospace, monospace;
+  color-scheme: dark;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --void: #07050c; } }
+:root[data-theme="dark"] { --void: #07050c; }
+*, *::before, *::after { box-sizing: border-box; }
+html { background: var(--void); overflow-x: clip; }
+body { margin: 0; background: var(--void); color: var(--text); font: 400 16px/1.55 var(--body); overflow-x: clip; padding: 0 env(safe-area-inset-right) 0 env(safe-area-inset-left); }
+h1, h2, h3 { font-family: var(--display); font-weight: 400; line-height: .92; margin: 0; text-transform: uppercase; letter-spacing: .005em; }
+a { color: var(--v200); }
+code { font-family: var(--mono); font-size: .86em; color: var(--v200); }
+button { font: 500 15px/1 var(--body); color: var(--text); cursor: pointer; }
+:is(button, a, input, [tabindex]):focus-visible { outline: 3px solid var(--v300); outline-offset: 3px; }
+.wrap { width: min(100% - 32px, 1080px); margin-inline: auto; }
+.mono { font: 500 12px/1.3 var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+.skip { position: absolute; left: 16px; top: -60px; background: var(--v500); color: #fff; padding: 12px 16px; border-radius: 10px; z-index: 99; }
+.skip:focus { top: 12px; }
+
+.hud { position: fixed; z-index: 40; right: max(12px, env(safe-area-inset-right)); bottom: max(12px, env(safe-area-inset-bottom)); display: flex; gap: 6px; align-items: center; padding: 6px; border-radius: 999px; background: #120c1fe6; border: 1px solid var(--line); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); }
+.hud button { min-height: 44px; padding: 0 14px; border-radius: 999px; border: 0; background: transparent; font: 500 12px/1 var(--mono); letter-spacing: .06em; text-transform: uppercase; color: var(--muted); transition: background-color var(--dur-ui) var(--ease-out), color var(--dur-ui) var(--ease-out), transform var(--dur-press) var(--ease-out); }
+.hud button[aria-pressed="true"] { background: var(--v700); color: var(--text); }
+.hud button:active { transform: scale(.97); }
+.fps { font: 500 12px/1 var(--mono); color: #7dffb5; padding: 0 8px; min-width: 60px; text-align: center; }
+.fps.low { color: #ff8a7a; }
+
+.hero { padding: 88px 0 48px; background: radial-gradient(110% 70% at 80% 0%, var(--v800), transparent 62%), var(--void); }
+.hero h1 { font-size: clamp(56px, 16vw, 184px); }
+.hero h1 .ln { display: block; overflow: clip; padding-bottom: .05em; }
+.hero h1 .ln > span { display: block; }
+.hero h1 em { font-style: normal; color: var(--v300); }
+.motion .hero h1 .ln > span { animation: rise 640ms var(--ease-out) both; }
+.motion .hero h1 .ln:nth-child(2) > span { animation-delay: 110ms; }
+@keyframes rise { from { transform: translateY(105%); } }
+.lede { max-width: 40rem; margin: 22px 0 0; font-size: 18px; color: var(--muted); }
+.lede strong { color: var(--text); font-weight: 500; }
+.rule-box { margin-top: 24px; display: inline-flex; flex-wrap: wrap; gap: 6px 10px; align-items: center; border: 1px solid var(--v600); border-radius: 18px; padding: 10px 16px; font: 500 13px/1.3 var(--mono); color: var(--v200); }
+.rule-box b { color: var(--text); }
+.index { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 18px; }
+.index a { min-height: 44px; display: inline-flex; align-items: center; padding: 0 14px; border-radius: 999px; border: 1px solid var(--line); background: var(--night); font: 500 12px/1 var(--mono); letter-spacing: .06em; text-transform: uppercase; text-decoration: none; color: var(--v200); }
+
+.sec { border-top: 1px solid var(--line); padding: 64px 0 72px; }
+.sec-head { display: grid; gap: 12px; margin-bottom: 24px; }
+.sec-head .num { font: 400 20px/1 var(--display); color: var(--v300); }
+.sec-head h2 { font-size: clamp(44px, 12vw, 96px); }
+.sec-head p { margin: 0; max-width: 42rem; color: var(--muted); }
+.sec-head p b { color: var(--text); font-weight: 500; }
+.trio { margin: 0; font: 500 11px/1.4 var(--mono); letter-spacing: .06em; text-transform: uppercase; color: var(--v200); }
+
+.seg { position: relative; display: grid; grid-template-columns: repeat(var(--n), minmax(0, 1fr)); padding: 5px; border-radius: 16px; background: var(--night); border: 1px solid var(--line); margin-bottom: 12px; }
+.seg button { min-height: 52px; border: 0; background: transparent; border-radius: 11px; display: grid; gap: 4px; place-content: center; text-align: center; padding: 0 4px; transition: background-color var(--dur-ui) var(--ease-out), transform var(--dur-press) var(--ease-out); }
+.seg button:active { transform: scale(.97); }
+.seg b { font: 400 clamp(14px, 3.9vw, 19px)/1 var(--display); text-transform: uppercase; max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.seg span { font: 500 9.5px/1 var(--mono); letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
+.seg [aria-checked="true"] { background: linear-gradient(160deg, var(--v600), var(--v800)); }
+.seg [aria-checked="true"] span { color: var(--v200); }
+
+.stage { position: relative; border-radius: 22px; overflow: clip; border: 1px solid var(--line); background: radial-gradient(80% 70% at 85% 0%, #3d1f6666, transparent 70%), var(--night); }
+.controls { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-top: 12px; }
+.act { min-height: 52px; padding: 0 22px; border-radius: 999px; border: 0; background: var(--v500); color: #fff; font: 500 16px/1 var(--body); box-shadow: 0 10px 24px -12px var(--v500), inset 0 1px 0 #ffffff33; transition: transform var(--dur-press) var(--ease-out), background-color var(--dur-ui) var(--ease-out); }
+.act:active { transform: scale(.97); }
+.ghost { min-height: 52px; padding: 0 18px; border-radius: 999px; border: 1px solid var(--line); background: var(--void); transition: transform var(--dur-press) var(--ease-out), border-color var(--dur-ui) var(--ease-out); }
+.ghost:active { transform: scale(.97); }
+.ghost[aria-pressed="true"] { border-color: var(--v300); background: var(--v800); }
+@media (hover: hover) and (pointer: fine) { .act:hover { background: #8b4cf5; } .ghost:hover { border-color: var(--v600); } }
+.readout { margin: 0; font: 500 12px/1.45 var(--mono); color: var(--muted); }
+.readout b { color: var(--v200); font-weight: 500; }
+.scrub { width: 100%; accent-color: var(--v500); height: 44px; }
+
+/* 06 · Curvas */
+.track { height: 120px; }
+.track::before { content: ""; position: absolute; left: 16px; right: 16px; top: 60px; height: 1px; background: var(--v700); }
+.pill { position: absolute; left: 16px; top: 38px; width: 86px; height: 44px; border-radius: 14px; display: grid; place-content: center; background: linear-gradient(170deg, var(--v600), var(--v800)); border: 1px solid var(--v300); font: 400 18px/1 var(--display); text-transform: uppercase; box-shadow: 0 10px 20px -10px #000; }
+.goal { position: absolute; top: 30px; right: 16px; width: 98px; height: 60px; border-radius: 18px; border: 2px dashed var(--v500); }
+.goal.hit { border-style: solid; border-color: var(--v200); }
+.graph { margin-top: 10px; position: relative; aspect-ratio: 600 / 220; }
+.graph svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+.dotx { position: absolute; left: 4%; top: 0; bottom: 0; width: 0; }
+.doty { position: absolute; left: -8px; top: calc(86% - 8px); width: 16px; height: 16px; border-radius: 50%; background: var(--v200); box-shadow: 0 0 0 4px #b69cff44; }
+.recipe { margin-top: 12px; padding: 14px 16px; border-radius: 16px; background: var(--v900); font: 500 12px/1.5 var(--mono); color: var(--muted); word-break: break-all; }
+.recipe b { color: var(--text); font-weight: 500; }
+
+/* 07 · Anticipación */
+.range { height: 190px; }
+.cta { position: absolute; left: 16px; top: 64px; min-height: 60px; padding: 0 20px 0 22px; border: 0; border-radius: 999px; background: #eee8fa; color: #1c1030; font: 500 16px/1 var(--body); box-shadow: 0 12px 28px -12px #7c3aed; transform-origin: 0 50%; touch-action: none; user-select: none; -webkit-user-select: none; }
+.cta .gap { display: inline-block; width: 26px; }
+.arrow { position: absolute; left: 0; top: 0; width: 26px; height: 60px; display: grid; place-items: center; font: 500 22px/1 var(--body); color: #1c1030; pointer-events: none; }
+.door { position: absolute; right: 16px; top: 46px; width: 18px; height: 96px; border-radius: 9px; background: var(--v700); border: 2px solid var(--v500); }
+.door.hit { background: var(--v300); border-color: var(--v200); }
+.door-l { position: absolute; right: 8px; top: 150px; font: 500 10px/1 var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+.meter { position: absolute; left: 16px; right: 16px; bottom: 14px; height: 4px; border-radius: 4px; background: var(--v900); overflow: clip; }
+.meter i { display: block; height: 100%; background: var(--v300); transform: scaleX(0); transform-origin: 0 50%; }
+
+/* 08 · Inercia */
+.table { height: 340px; touch-action: none; background: radial-gradient(circle at 50% 40%, #1f1236, #0b0614 75%); }
+.hole { position: absolute; width: 104px; height: 104px; right: 18px; bottom: 18px; border-radius: 50%; display: grid; place-content: center; text-align: center; border: 2px dashed var(--v500); background: radial-gradient(circle, #05030a, #120a20); font: 500 10px/1.3 var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+.hole.hit { border-style: solid; border-color: var(--v200); color: var(--v200); }
+.shadow { position: absolute; left: 0; top: 0; width: 80px; height: 80px; border-radius: 50%; background: radial-gradient(circle, #000000aa, transparent 70%); pointer-events: none; }
+.token { position: absolute; left: 0; top: 0; width: 80px; height: 80px; border-radius: 50%; display: grid; place-content: center; text-align: center; gap: 1px; cursor: grab; touch-action: none; user-select: none; -webkit-user-select: none;
+  border: 3px solid var(--v300); background: radial-gradient(circle at 50% 36%, #3d1f66, #1c1030); box-shadow: 0 0 0 4px #0b0614, 0 0 0 5px var(--v500); }
+.token:active { cursor: grabbing; }
+.token b { font: 400 30px/.85 var(--display); color: #fff; }
+.token span { font: 500 7.5px/1.2 var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--v200); }
+
+.notes { display: grid; gap: 34px; }
+.notes h3 { font-size: 30px; color: var(--v300); margin-bottom: 10px; }
+.notes ul { margin: 0; padding-left: 20px; display: grid; gap: 10px; max-width: 46rem; }
+.notes li::marker { color: var(--v500); }
+.notes p { margin: 0; max-width: 46rem; color: var(--muted); }
+.notes p b { color: var(--text); font-weight: 500; }
+.end { padding-bottom: 120px; }
+@media (min-width: 760px) {
+  .ex { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; align-items: start; }
+  .ex .sec-head { margin: 0; }
+  .track { height: 140px; } .table { height: 420px; } .range { height: 220px; }
+  .notes .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; }
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#e06">Saltar a los ejercicios</a>
+<div class="hud" role="group" aria-label="Controles de la pieza">
+  <span class="fps" hidden>— fps</span>
+  <button type="button" id="fpsBtn" aria-pressed="false">fps</button>
+  <button type="button" id="rmBtn" aria-pressed="false">Movimiento reducido</button>
+</div>
+
+<header class="hero">
+  <div class="wrap">
+    <p class="mono">CINEMA//MOTION LAB · Semana 2 · Ejercicios · Caso Natural Life RP <span style="color:var(--v300)">· recuperada el 25-11</span></p>
+    <h1><span class="ln"><span>Tiempo, física</span></span><span class="ln"><span>y <em>carácter</em></span></span></h1>
+    <p class="lede">Tres ejercicios antes del laboratorio de los animales: <strong>la curva</strong> decide el carácter de un viaje, <strong>la anticipación</strong> le da intención a un botón y <strong>la inercia</strong> hace que algo pese en la mano.</p>
+    <div class="rule-box"><span>Restricción S2</span><b>Tres elementos</b><span>· en cada ejercicio solo se mueven tres cosas</span></div>
+    <nav class="index" aria-label="Ejercicios"><a href="#e06">06 · Curvas</a><a href="#e07">07 · Anticipación</a><a href="#e08">08 · Inercia</a></nav>
+  </div>
+</header>
+
+<main>
+<!-- 06 -->
+<section class="sec" id="e06" aria-labelledby="t06">
+  <div class="wrap ex">
+    <div class="sec-head">
+      <span class="num">Ejercicio 06 · receta 06</span>
+      <h2 id="t06">Cinco curvas, un viaje</h2>
+      <p>La misma distancia, el mismo elemento, cinco curvas con nombre. Arrastra la barra para recorrer el viaje a mano: el punto de la gráfica es <b>el mismo tiempo</b> que el de la ficha, animado en dos ejes (X lineal, Y con la curva).</p>
+      <p class="trio">Se mueven: la ficha · el punto de la gráfica · la meta</p>
+    </div>
+    <div>
+      <div class="seg" role="radiogroup" aria-label="Curva" id="ease" style="--n:5"></div>
+      <div class="stage track" id="track"><div class="goal" id="goal"></div><div class="pill" id="pill">Ficha</div></div>
+      <div class="stage graph" id="graph"><svg viewBox="0 0 600 220" preserveAspectRatio="none" id="gsvg" aria-hidden="true"></svg><div class="dotx" id="dotx"><div class="doty" id="doty"></div></div></div>
+      <div class="controls"><button type="button" class="act" id="p06">Reproducir</button><span class="readout" id="r06"></span></div>
+      <label class="mono" for="s06" style="display:block;margin-top:8px">Tiempo del viaje</label>
+      <input class="scrub" id="s06" type="range" min="0" max="1000" value="0" aria-valuetext="0 %">
+      <div class="recipe" id="rec06"></div>
+    </div>
+  </div>
+</section>
+
+<!-- 07 -->
+<section class="sec" id="e07" aria-labelledby="t07">
+  <div class="wrap ex">
+    <div class="sec-head">
+      <span class="num">Ejercicio 07 · receta 07</span>
+      <h2 id="t07">El botón que coge aire</h2>
+      <p><b>Mantén pulsado</b> el botón (o la barra espaciadora con el foco en él) y suelta. Cuanto más cargues, más se encoge, más atrás se va la flecha y más fuerte llega a la puerta. Compara con la versión <b>sin anticipación</b>: la misma acción parece un clic perdido.</p>
+      <p class="trio">Se mueven: el botón · la flecha · la puerta</p>
+    </div>
+    <div>
+      <div class="stage range" id="range">
+        <button type="button" class="cta" id="cta">Entrar por el Discord <span class="gap"></span></button>
+        <span class="arrow" id="arrow" aria-hidden="true">→</span>
+        <div class="door" id="door" aria-hidden="true"></div><span class="door-l" aria-hidden="true">Discord</span>
+        <div class="meter" aria-hidden="true"><i id="meter"></i></div>
+      </div>
+      <div class="controls">
+        <button type="button" class="ghost" id="noAnt" aria-pressed="false">Sin anticipación</button>
+        <p class="readout" id="r07" aria-live="polite">Carga: 0 %</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 08 -->
+<section class="sec" id="e08" aria-labelledby="t08">
+  <div class="wrap ex">
+    <div class="sec-head">
+      <span class="num">Ejercicio 08 · receta 08</span>
+      <h2 id="t08">Lanza el sello</h2>
+      <p><b>Arrastra el sello y suéltalo con fuerza.</b> La velocidad de tu dedo se conserva y la mesa la va frenando con una fricción por milisegundo, igual a 60 o a 120 Hz. Si se para dentro del hueco, el imán lo centra. «Lanzar al Discord» calcula el impulso exacto: con fricción exponencial, la distancia de frenado es <code>v / −ln(f)</code>.</p>
+      <p class="trio">Se mueven: el sello · su sombra · el hueco</p>
+    </div>
+    <div>
+      <div class="seg" role="radiogroup" aria-label="Superficie" id="surf" style="--n:3"></div>
+      <div class="stage table" id="table">
+        <div class="hole" id="hole" aria-hidden="true">Discord</div>
+        <div class="shadow" id="shadow"></div>
+        <div class="token" id="token" tabindex="0" role="button" aria-label="Sello de 18 plazas. Flechas para empujarlo, Intro para lanzarlo al hueco del Discord."><b>18</b><span>plazas</span></div>
+      </div>
+      <div class="controls">
+        <button type="button" class="act" id="throw">Lanzar al Discord</button>
+        <button type="button" class="ghost" id="reset">Recolocar</button>
+      </div>
+      <p class="readout" id="r08" aria-live="polite">Velocidad 0 px/s</p>
+    </div>
+  </div>
+</section>
+
+<section class="sec end" aria-labelledby="tNotes">
+  <div class="wrap notes">
+    <h2 id="tNotes" style="font-size:clamp(44px,12vw,96px)">Notas de dirección</h2>
+    <div class="grid2">
+      <div>
+        <h3>Aprendizajes</h3>
+        <ul>
+          <li><b>La curva es el personaje.</b> Seda llega con educación, piedra cae, látigo restalla, resorte y gelatina se pasan: misma distancia, cinco caracteres. Por eso el laboratorio solo tuvo que cambiar la física.</li>
+          <li><b>La anticipación es información.</b> El encogimiento le dice al jugador «esto va a pasar y va a ser así de fuerte» antes de que pase; sin ella, el viaje de la flecha parece un error.</li>
+          <li><b>La fricción se mide por milisegundo.</b> <code>v *= f^dt</code> hace que el sello frene igual a cualquier tasa de refresco, y permite predecir exactamente dónde se para.</li>
+        </ul>
+      </div>
+      <div>
+        <h3>Qué mejorar</h3>
+        <ul>
+          <li>Gelatina y resorte cansan en elementos que se repiten: en la Entrega, reservarlos para la primera vez y usar seda en las siguientes.</li>
+          <li>Probar el lanzamiento en Android real: el muestreo de velocidad del puntero varía según el dispositivo y puede dar lanzamientos flojos.</li>
+        </ul>
+      </div>
+    </div>
+    <p><b>Reglas del screening S1 aplicadas:</b> la curva se puede arrastrar con <code>currentTime</code>; no hay ningún <code>blur</code>; el único temblor (la puerta) dura 240 ms, mide como mucho 4 px y responde a un impacto.</p>
+    <p><b>Estudio:</b> lidera Motion y 3D (curvas con nombre, carga de anticipación y fricción exponencial); Diseño UI acompaña (ficha, botón y sello de la paleta del servidor, tipografía Special Gothic de la S2); Calidad acompaña (capturas a 390 y 1440 px, ruta reducida, teclado en los tres ejercicios).</p>
+    <p><b>Fuentes de la búsqueda:</b>
+      <a href="https://developer.chrome.com/docs/modern-web-guidance/guides/ui-behaviors/physics-based-easing">Chrome · Physics-based easing</a> ·
+      <a href="https://www.joshwcomeau.com/animation/linear-timing-function">Josh Comeau · linear()</a> ·
+      <a href="https://www.joshwcomeau.com/animation/squash-and-stretch">Josh Comeau · Squash and stretch</a> ·
+      <a href="https://gsap.com/blog/3-15/">GSAP 3.15</a></p>
+    <p class="mono">Sesión recuperada · el Laboratorio de la S2 ya estaba hecho · siguiente: viernes, Entrega «Comparativa de 3 personalidades»</p>
+  </div>
+</section>
+</main>
+
+<script>
+(() => {
+  const root = document.documentElement;
+  const mq = matchMedia('(prefers-reduced-motion: reduce)');
+  const reduced = () => mq.matches || root.classList.contains('rm');
+  const $ = id => document.getElementById(id);
+  const pct = n => Math.round(n * 100) + ' %';
+
+  /* Muelle → linear() */
+  function spring(k, c, m = 1) {
+    const dt = .001, xs = []; let x = 0, v = 0;
+    for (let i = 0; i < 3000; i++) { v += ((-k * (x - 1) - c * v) / m) * dt; x += v * dt; xs.push(x); }
+    let T = xs.length - 1; while (T > 0 && Math.abs(xs[T] - 1) < .002) T--; T = Math.max(200, T + 1);
+    const n = 60, pts = []; for (let i = 0; i <= n; i++) pts.push(i === n ? 1 : +xs[Math.round(i / n * (T - 1))].toFixed(3));
+    pts[0] = 0; return { ease: `linear(${pts.join(', ')})`, T };
+  }
+  function radios(box, items, onPick) {
+    box.innerHTML = items.map((it, i) => `<button type="button" role="radio" aria-checked="${!i}" tabindex="${i ? -1 : 0}" data-k="${it.k}"><b>${it.name}</b><span>${it.sub}</span></button>`).join('');
+    const bs = [...box.children];
+    const pick = (i, focus) => { bs.forEach((b, j) => { b.setAttribute('aria-checked', String(i === j)); b.tabIndex = i === j ? 0 : -1; }); if (focus) bs[i].focus(); onPick(items[i]); };
+    bs.forEach((b, i) => {
+      b.addEventListener('click', () => pick(i));
+      b.addEventListener('keydown', e => { const d = { ArrowRight: 1, ArrowDown: 1, ArrowLeft: -1, ArrowUp: -1 }[e.key]; if (!d) return; e.preventDefault(); pick((i + d + bs.length) % bs.length, true); });
+    });
+    onPick(items[0]);
+  }
+  /* Pausa fuera de pantalla para cualquier bucle */
+  const vis = new Map();
+  const io = new IntersectionObserver(es => es.forEach(e => { vis.set(e.target, e.isIntersecting); e.target.dispatchEvent(new CustomEvent(e.isIntersecting ? 'enter' : 'leave')); }));
+
+  /* ═════ 06 · Curvas ═════ */
+  (() => {
+    const s1 = spring(170, 12), s2 = spring(300, 6);
+    const E = [
+      { k: 'seda', name: 'Seda', sub: 'entra', ease: 'cubic-bezier(0.23, 1, 0.32, 1)', T: 700, why: 'Arranca rápido y se posa. Para todo lo que entra en pantalla.' },
+      { k: 'piedra', name: 'Piedra', sub: 'cae', ease: 'cubic-bezier(0.7, 0, 0.84, 0)', T: 560, why: 'Acelera hasta el golpe. Solo para lo que sale o cae: nunca para entrar.' },
+      { k: 'latigo', name: 'Látigo', sub: 'restalla', ease: 'cubic-bezier(.9, 0, .1, 1)', T: 520, why: 'Casi quieto, de golpe y frena. Barridos y cambios de plano.' },
+      { k: 'resorte', name: 'Resorte', sub: 'se pasa', ease: s1.ease, T: s1.T, why: 'Muelle con ζ ≈ 0,46: se pasa un poco y vuelve. Confirmaciones.' },
+      { k: 'gelatina', name: 'Gelatina', sub: 'tiembla', ease: s2.ease, T: s2.T, why: 'Muelle con ζ ≈ 0,17: oscila varias veces. Solo la primera vez, nunca en bucle.' },
+    ];
+    const track = $('track'), pill = $('pill'), goal = $('goal'), dotx = $('dotx'), doty = $('doty'), svg = $('gsvg'), scrub = $('s06'), playB = $('p06');
+    let cur = E[0], anims = [], raf = 0, playing = false;
+    const dist = () => track.clientWidth - 32 - pill.offsetWidth - 6;
+    function sample(ease) {        // la curva real del navegador, no una aproximación
+      const eff = new KeyframeEffect(null, [], { duration: 1000, easing: ease, fill: 'both' }), a = new Animation(eff), ys = [];
+      for (let i = 0; i <= 200; i++) { a.currentTime = i * 5; ys.push(eff.getComputedTiming().progress); }
+      return ys;
+    }
+    function draw() {
+      const H = 220, top = 70, base = 190, map = y => (base - y * (base - top)).toFixed(1);
+      let html = `<line x1="24" x2="584" y1="${top}" y2="${top}" stroke="#3d1f66" stroke-dasharray="4 5"/><line x1="24" x2="584" y1="${base}" y2="${base}" stroke="#2b2240"/>`;
+      for (const e of E) {
+        const ys = sample(e.ease), on = e === cur;
+        html += `<polyline fill="none" stroke="${on ? '#d6c8ff' : '#3d1f66'}" stroke-width="${on ? 3 : 1.5}" vector-effect="non-scaling-stroke" points="${ys.map((y, i) => `${(24 + i / 200 * 560).toFixed(1)},${map(y)}`).join(' ')}"/>`;
+      }
+      svg.innerHTML = html;
+    }
+    function build() {
+      anims.forEach(a => a.cancel());
+      const D = dist(), gw = $('graph').clientWidth, gh = $('graph').clientHeight;
+      const W = gw * (560 / 600), yspan = gh * (120 / 220);
+      const opt = { duration: cur.T, easing: cur.ease, fill: 'both' };
+      anims = [
+        pill.animate([{ transform: 'translateX(0)' }, { transform: `translateX(${D}px)` }], opt),
+        dotx.animate([{ transform: 'translateX(0)' }, { transform: `translateX(${W}px)` }], { duration: cur.T, easing: 'linear', fill: 'both' }),
+        doty.animate([{ transform: 'translateY(0)' }, { transform: `translateY(${-yspan}px)` }], opt),
+      ];
+      anims.forEach(a => a.pause());
+    }
+    function seek(p) {
+      anims.forEach(a => { a.currentTime = p * cur.T; });
+      scrub.value = Math.round(p * 1000); scrub.setAttribute('aria-valuetext', pct(p));
+      goal.classList.toggle('hit', p >= .999);
+    }
+    function stop() { playing = false; cancelAnimationFrame(raf); raf = 0; playB.textContent = 'Reproducir'; }
+    function play() {
+      if (reduced()) { seek(1); return; }                       // sin viaje: la ficha ya está en la meta
+      if (+scrub.value >= 1000) seek(0);
+      playing = true; playB.textContent = 'Pausa';
+      let t0 = performance.now() - (+scrub.value / 1000) * cur.T;
+      const tick = now => { raf = 0; if (!playing) return; const p = Math.min(1, (now - t0) / cur.T); seek(p); if (p < 1) raf = requestAnimationFrame(tick); else stop(); };
+      raf = requestAnimationFrame(tick);
+    }
+    playB.addEventListener('click', () => playing ? stop() : play());
+    scrub.addEventListener('input', () => { stop(); seek(+scrub.value / 1000); });
+    track.addEventListener('leave', stop); io.observe(track);
+    radios($('ease'), E, e => {
+      cur = e; stop(); draw(); build(); seek(0);
+      $('r06').innerHTML = `<b>${e.name}</b> · ${e.T} ms`;
+      $('rec06').innerHTML = `<b>${e.why}</b><br>transition: transform ${e.T}ms ${e.ease.length > 60 ? e.ease.slice(0, 60) + '…)' : e.ease};`;
+    });
+    new ResizeObserver(() => { const p = +scrub.value / 1000; build(); seek(p); }).observe(track);
+  })();
+
+  /* ═════ 07 · Anticipación ═════ */
+  (() => {
+    const range = $('range'), cta = $('cta'), arrow = $('arrow'), door = $('door'), meter = $('meter'), out = $('r07'), noB = $('noAnt');
+    const back = spring(320, 14);
+    let charge = null, flying = false, noAnt = false;
+    const homeX = () => cta.offsetLeft + cta.offsetWidth - 20 - 26;
+    const place = () => { arrow.style.left = homeX() + 'px'; arrow.style.top = cta.offsetTop + 'px'; };
+    place(); new ResizeObserver(place).observe(range);
+    noB.addEventListener('click', () => { noAnt = !noAnt; noB.setAttribute('aria-pressed', String(noAnt)); });
+
+    function start() {
+      if (charge || flying) return;
+      if (reduced() || noAnt) { charge = { a: [], t0: performance.now(), instant: true }; return; }
+      const T = 650, k = [{ transform: 'translateX(0) scale(1, 1)' }, { transform: 'translateX(-10px) scale(.9, 1.06)' }];
+      charge = { t0: performance.now(), T, a: [
+        cta.animate(k, { duration: T, easing: 'cubic-bezier(.3, 0, .2, 1)', fill: 'forwards' }),
+        arrow.animate([{ transform: 'translateX(0)' }, { transform: 'translateX(-28px)' }], { duration: T, easing: 'cubic-bezier(.3, 0, .2, 1)', fill: 'forwards' }),
+        meter.animate([{ transform: 'scaleX(0)' }, { transform: 'scaleX(1)' }], { duration: T, easing: 'linear', fill: 'forwards' }),
+      ] };
+    }
+    async function release() {
+      if (!charge) return;
+      const c = charge; charge = null;
+      const p = c.instant ? (noAnt ? .5 : 1) : Math.min(1, (performance.now() - c.t0) / c.T);
+      out.textContent = `Carga: ${pct(p)}`;
+      if (reduced()) {
+        door.classList.add('hit'); out.textContent = 'Entregado (movimiento reducido: sin viaje).';
+        setTimeout(() => door.classList.remove('hit'), 600); return;
+      }
+      flying = true;
+      const sx = cta.getAnimations()[0] ? -10 * p : 0;
+      c.a.forEach(a => a.cancel());
+      meter.animate([{ transform: `scaleX(${p})` }, { transform: 'scaleX(0)' }], { duration: 300, easing: 'cubic-bezier(0.23, 1, 0.32, 1)' });
+      /* El botón suelta el aire: vuelve con un muelle cuyo empuje depende de la carga */
+      cta.animate([{ transform: `translateX(${sx}px) scale(${1 - .1 * p}, ${1 + .06 * p})` }, { transform: `translateX(${4 * p}px) scale(${1 + .04 * p}, ${1 - .03 * p})`, offset: .25 }, { transform: 'translateX(0) scale(1, 1)' }], { duration: back.T, easing: 'linear' });
+      const D = door.offsetLeft - homeX() - 20, dur = Math.round(560 - 300 * p);
+      const ax = c.instant ? 0 : -28 * p;
+      await arrow.animate([{ transform: `translateX(${ax}px)` }, { transform: `translateX(${D}px)` }], { duration: dur, easing: noAnt ? 'cubic-bezier(0.23, 1, 0.32, 1)' : 'cubic-bezier(.5, 0, .2, 1)', fill: 'forwards' }).finished;
+      /* Impacto: la puerta reacciona (≤ 4 px, ≤ 240 ms, regla R3) */
+      door.classList.add('hit');
+      const amp = Math.max(1, 4 * p);
+      door.animate([0, amp, -amp * .7, amp * .4, 0].map(v => ({ transform: `translateX(${v}px)` })), { duration: 240, easing: 'linear' });
+      out.textContent = `Carga: ${pct(p)} · llegada en ${dur} ms`;
+      await arrow.animate([{ transform: `translateX(${D}px)`, clipPath: 'inset(0 0 0 0)' }, { transform: `translateX(${D}px)`, clipPath: 'inset(0 0 0 100%)' }], { duration: 160, easing: 'cubic-bezier(0.77, 0, 0.175, 1)', fill: 'forwards' }).finished;
+      await arrow.animate([{ transform: 'translateX(0)', clipPath: 'inset(0 100% 0 0)' }, { transform: 'translateX(0)', clipPath: 'inset(0 0 0 0)' }], { duration: 220, easing: 'cubic-bezier(0.23, 1, 0.32, 1)', fill: 'forwards' }).finished;
+      arrow.getAnimations().forEach(a => a.cancel());
+      door.classList.remove('hit'); flying = false;
+    }
+    cta.addEventListener('pointerdown', e => { if (e.button === 0) { cta.setPointerCapture(e.pointerId); start(); } });
+    cta.addEventListener('pointerup', release);
+    cta.addEventListener('pointercancel', release);
+    cta.addEventListener('keydown', e => { if ((e.key === ' ' || e.key === 'Enter') && !e.repeat) { e.preventDefault(); start(); } else if (e.key === ' ' || e.key === 'Enter') e.preventDefault(); });
+    cta.addEventListener('keyup', e => { if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); release(); } });
+    cta.addEventListener('click', e => e.preventDefault());
+  })();
+
+  /* ═════ 08 · Inercia ═════ */
+  (() => {
+    const table = $('table'), token = $('token'), shadow = $('shadow'), hole = $('hole'), out = $('r08');
+    const SURF = [
+      { k: 'hielo', name: 'Hielo', sub: 'se escapa', f: .9989 },
+      { k: 'madera', name: 'Madera', sub: 'equilibrio', f: .9966 },
+      { k: 'moqueta', name: 'Moqueta', sub: 'se clava', f: .9905 },
+    ];
+    let f = SURF[1].f, x = 24, y = 24, vx = 0, vy = 0, lift = 0, raf = 0, last = 0, drag = null, visible = true, snapped = false;
+    const R = 40, size = () => [table.clientWidth, table.clientHeight];
+    const center = () => [hole.offsetLeft + hole.offsetWidth / 2 - R, hole.offsetTop + hole.offsetHeight / 2 - R];
+    function render() {
+      token.style.transform = `translate3d(${x.toFixed(1)}px, ${y.toFixed(1)}px, 0) scale(${1 + lift * .06})`;
+      shadow.style.transform = `translate3d(${(x + 6 + lift * 10).toFixed(1)}px, ${(y + 10 + lift * 14).toFixed(1)}px, 0) scale(${1 + lift * .15})`;
+    }
+    function inHole() { const [cx, cy] = center(); return Math.hypot(x - cx, y - cy) < hole.offsetWidth / 2 - 6; }
+    function arrive() {
+      snapped = true; hole.classList.add('hit');
+      if (!reduced()) hole.animate([{ transform: 'scale(1)' }, { transform: 'scale(1.08)', offset: .35 }, { transform: 'scale(1)' }], { duration: 420, easing: 'cubic-bezier(0.23, 1, 0.32, 1)' });
+      out.textContent = 'Dentro: el imán lo ha centrado.';
+    }
+    function frame(now) {
+      raf = 0; if (!visible) return;
+      const dt = Math.min(34, now - last || 16); last = now;
+      if (!drag) {
+        const k = Math.pow(f, dt);                       // fricción por milisegundo: igual a 60 y a 120 Hz
+        vx *= k; vy *= k; x += vx * dt / 1000; y += vy * dt / 1000;
+        const [W, H] = size();
+        if (x < 0) { x = 0; vx *= -.5; } if (x > W - 2 * R) { x = W - 2 * R; vx *= -.5; }
+        if (y < 0) { y = 0; vy *= -.5; } if (y > H - 2 * R) { y = H - 2 * R; vy *= -.5; }
+        const sp = Math.hypot(vx, vy);
+        if (sp < 140 && inHole()) {                     // imán: muelle crítico hacia el centro
+          const [cx, cy] = center(); vx += (cx - x) * 60 * dt / 1000 - vx * 12 * dt / 1000; vy += (cy - y) * 60 * dt / 1000 - vy * 12 * dt / 1000;
+          if (!snapped && Math.hypot(cx - x, cy - y) < 2 && sp < 12) { x = cx; y = cy; vx = vy = 0; arrive(); }
+        }
+        lift += (0 - lift) * Math.min(1, dt / 90);
+        out.textContent = `Velocidad ${Math.round(sp)} px/s`;
+      } else lift += (1 - lift) * Math.min(1, dt / 70);
+      render();
+      if (drag || Math.hypot(vx, vy) > 8 || lift > .01) raf = requestAnimationFrame(frame);
+      else { vx = vy = 0; lift = 0; if (!snapped && !drag && inHole()) { [x, y] = center(); arrive(); } render(); out.textContent = snapped ? out.textContent : 'Parado fuera del hueco.'; token.style.willChange = ''; }
+    }
+    function wake() { if (raf || !visible) return; token.style.willChange = 'transform'; last = performance.now(); raf = requestAnimationFrame(frame); }
+    table.addEventListener('enter', () => { visible = true; wake(); });
+    table.addEventListener('leave', () => { visible = false; cancelAnimationFrame(raf); raf = 0; });
+    io.observe(table);
+
+    /* Movimiento reducido: sin deslizamiento, el sello aparece donde se pararía */
+    function stopPoint(v0x, v0y) { const L = -Math.log(f) * 1000; return [x + v0x / L, y + v0y / L]; }
+    function launch(v0x, v0y) {
+      snapped = false; hole.classList.remove('hit');
+      if (reduced()) {
+        const [W, H] = size(); [x, y] = stopPoint(v0x, v0y);
+        x = Math.max(0, Math.min(W - 2 * R, x)); y = Math.max(0, Math.min(H - 2 * R, y));
+        if (inHole()) { [x, y] = center(); render(); arrive(); } else { render(); out.textContent = 'Parado fuera del hueco.'; }
+        return;
+      }
+      vx = v0x; vy = v0y; wake();
+    }
+    token.addEventListener('pointerdown', e => {
+      if (e.button !== 0) return;
+      token.setPointerCapture(e.pointerId); snapped = false; hole.classList.remove('hit');
+      drag = { id: e.pointerId, ox: e.clientX - x, oy: e.clientY - y, lx: e.clientX, ly: e.clientY, lt: performance.now(), vx: 0, vy: 0 };
+      vx = vy = 0; wake();
+    });
+    token.addEventListener('pointermove', e => {
+      if (!drag || e.pointerId !== drag.id) return;
+      const now = performance.now(), dt = Math.max(1, now - drag.lt), [W, H] = size();
+      drag.vx = drag.vx * .3 + (e.clientX - drag.lx) / dt * 1000 * .7; drag.vy = drag.vy * .3 + (e.clientY - drag.ly) / dt * 1000 * .7;
+      drag.lx = e.clientX; drag.ly = e.clientY; drag.lt = now;
+      x = Math.max(0, Math.min(W - 2 * R, e.clientX - drag.ox)); y = Math.max(0, Math.min(H - 2 * R, e.clientY - drag.oy));
+      if (reduced()) render();
+    });
+    function up(e) {
+      if (!drag || e.pointerId !== drag.id) return;
+      const stale = performance.now() - drag.lt > 80;      // si el dedo se paró antes de soltar, no hay lanzamiento
+      const v = stale ? [0, 0] : [drag.vx, drag.vy]; drag = null;
+      launch(Math.max(-4000, Math.min(4000, v[0])), Math.max(-4000, Math.min(4000, v[1])));
+    }
+    token.addEventListener('pointerup', up); token.addEventListener('pointercancel', up);
+    function aimAtHole() { const [cx, cy] = center(), L = -Math.log(f) * 1000; launch((cx - x) * L, (cy - y) * L); }
+    $('throw').addEventListener('click', aimAtHole);
+    token.addEventListener('keydown', e => {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); aimAtHole(); return; }
+      const d = { ArrowLeft: [-1, 0], ArrowRight: [1, 0], ArrowUp: [0, -1], ArrowDown: [0, 1] }[e.key]; if (!d) return;
+      e.preventDefault(); launch(vx + d[0] * 600, vy + d[1] * 600);
+    });
+    function resetPos() { vx = vy = 0; x = 24; y = 24; snapped = false; hole.classList.remove('hit'); render(); out.textContent = 'Velocidad 0 px/s'; }
+    $('reset').addEventListener('click', resetPos);
+    radios($('surf'), SURF, s => { f = s.f; });
+    render();
+  })();
+
+  /* Movimiento reducido y fps */
+  const rmBtn = $('rmBtn');
+  function applyRM() { root.classList.toggle('motion', !reduced()); rmBtn.setAttribute('aria-pressed', String(reduced())); }
+  rmBtn.addEventListener('click', () => { root.classList.toggle('rm'); applyRM(); });
+  mq.addEventListener('change', applyRM); applyRM();
+  const fpsBtn = $('fpsBtn'), fpsEl = document.querySelector('.fps');
+  let fpsOn = false, frames = 0, ft0 = 0, fraf = 0;
+  function fpsTick(now) { frames++; if (now - ft0 >= 500) { const v = Math.round(frames * 1000 / (now - ft0)); fpsEl.textContent = v + ' fps'; fpsEl.classList.toggle('low', v < 50); frames = 0; ft0 = now; } if (fpsOn) fraf = requestAnimationFrame(fpsTick); }
+  fpsBtn.addEventListener('click', () => { fpsOn = !fpsOn; fpsBtn.setAttribute('aria-pressed', String(fpsOn)); fpsEl.hidden = !fpsOn; if (fpsOn) { frames = 0; ft0 = performance.now(); fraf = requestAnimationFrame(fpsTick); } else cancelAnimationFrame(fraf); });
+})();
+</script>
+</body>
+</html>

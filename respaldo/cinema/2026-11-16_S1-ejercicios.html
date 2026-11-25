@@ -1,0 +1,595 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="dark">
+<title>CINEMA · S1 · Ejercicios — Alfabeto cinematográfico</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@500&family=Fira+Sans+Extra+Condensed:wght@700;900&family=Fira+Sans:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* ───────── Tokens ───────── */
+:root {
+  --void: #07050c;
+  --night: #0f0a19;
+  --v900: #1c1030;
+  --v800: #2a1745;
+  --v700: #3d1f66;
+  --v600: #5b2a9c;
+  --v500: #7c3aed;
+  --v300: #b69cff;
+  --v200: #d6c8ff;
+  --text: #eee8fa;
+  --muted: #b3a6cc;
+  --line: #2b2240;
+
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+  --ease-spring: cubic-bezier(.34, 1.56, .64, 1);
+  --dur-press: 140ms;
+  --dur-ui: 200ms;
+  --dur-panel: 320ms;
+  --dur-scene: 600ms;
+
+  --display: "Fira Sans Extra Condensed", "Arial Narrow", sans-serif;
+  --body: "Fira Sans", system-ui, sans-serif;
+  --mono: "Fira Code", ui-monospace, monospace;
+  color-scheme: dark;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --void: #07050c; } }
+:root[data-theme="dark"] { --void: #07050c; }
+
+*, *::before, *::after { box-sizing: border-box; }
+html { background: var(--void); overflow-x: clip; }
+body {
+  margin: 0; background: var(--void); color: var(--text);
+  font: 400 16px/1.55 var(--body);
+  overflow-x: clip;
+  padding: 0 env(safe-area-inset-right) 0 env(safe-area-inset-left);
+}
+h1, h2, h3 { font-family: var(--display); font-weight: 900; line-height: .92; letter-spacing: -.01em; margin: 0; text-transform: uppercase; }
+a { color: var(--v200); }
+button { font: 500 15px/1 var(--body); color: var(--text); cursor: pointer; }
+button:focus-visible, a:focus-visible, [tabindex]:focus-visible { outline: 3px solid var(--v300); outline-offset: 3px; }
+.wrap { width: min(100% - 32px, 1120px); margin-inline: auto; }
+.mono { font-family: var(--mono); font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+.skip { position: absolute; left: 16px; top: -60px; background: var(--v500); color: #fff; padding: 12px 16px; border-radius: 10px; z-index: 99; }
+.skip:focus { top: 12px; }
+
+/* ───────── Barra de control ───────── */
+.hud {
+  position: fixed; z-index: 40; right: max(12px, env(safe-area-inset-right)); bottom: max(12px, env(safe-area-inset-bottom));
+  display: flex; gap: 8px; align-items: center;
+  padding: 6px; border-radius: 999px; background: #120c1fe6; border: 1px solid var(--line);
+  backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+}
+.hud button {
+  min-height: 44px; padding: 0 14px; border-radius: 999px; border: 1px solid transparent; background: transparent;
+  font: 500 12px/1 var(--mono); letter-spacing: .06em; text-transform: uppercase; color: var(--muted);
+  transition: background-color var(--dur-ui) var(--ease-out), color var(--dur-ui) var(--ease-out), transform var(--dur-press) var(--ease-out);
+}
+.hud button[aria-pressed="true"] { background: var(--v700); color: var(--text); }
+.hud button:active { transform: scale(.97); }
+@media (hover: hover) and (pointer: fine) { .hud button:hover { color: var(--text); } }
+.fps { font: 500 12px/1 var(--mono); color: #7dffb5; padding: 0 10px; min-width: 64px; text-align: center; }
+.fps.low { color: #ff8a7a; }
+.fps[hidden] { display: none; }
+
+.progress { position: fixed; z-index: 41; top: 0; left: 0; right: 0; height: 3px; background: var(--v500); transform-origin: 0 50%; transform: scaleX(0); display: none; }
+@supports (animation-timeline: scroll()) {
+  .motion .progress { display: block; animation: grow linear both; animation-timeline: scroll(root); }
+}
+@keyframes grow { to { transform: scaleX(1); } }
+
+/* ───────── Hero ───────── */
+.hero { min-height: 100svh; display: grid; align-content: end; padding: 96px 0 56px; position: relative; overflow: clip;
+  background: radial-gradient(120% 70% at 70% 0%, var(--v800), transparent 60%), var(--void); }
+.hero .mono { margin: 0 0 18px; }
+.hero h1 { font-size: clamp(54px, 16vw, 210px); }
+.hero h1 .ln { display: block; overflow: clip; padding-bottom: .04em; }
+.hero h1 .ln > span { display: block; }
+.hero h1 em { font-style: normal; color: var(--v300); }
+.motion .hero h1 .ln > span { animation: rise 680ms var(--ease-out) both; }
+.motion .hero h1 .ln:nth-child(2) > span { animation-delay: 90ms; }
+.motion .hero .lede { animation: wipe-in 520ms 240ms var(--ease-out) both; }
+@keyframes rise { from { transform: translateY(105%); } }
+@keyframes wipe-in { from { clip-path: inset(0 100% 0 0); } to { clip-path: inset(0 0 0 0); } }
+.lede { max-width: 36rem; margin: 24px 0 0; font-size: 18px; color: var(--muted); }
+.lede strong { color: var(--text); font-weight: 500; }
+.rule-box { margin-top: 28px; display: inline-flex; gap: 10px; align-items: center; border: 1px solid var(--v600); border-radius: 999px; padding: 10px 16px; font: 500 13px/1.2 var(--mono); color: var(--v200); }
+.rule-box b { color: var(--text); }
+.index { list-style: none; padding: 0; margin: 36px 0 0; display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; }
+.index a { display: grid; gap: 4px; min-height: 64px; padding: 10px; border-radius: 12px; background: var(--night); border: 1px solid var(--line); text-decoration: none; color: var(--text);
+  transition: background-color var(--dur-ui) var(--ease-out), transform var(--dur-press) var(--ease-out); }
+.index a:active { transform: scale(.97); }
+@media (hover: hover) and (pointer: fine) { .index a:hover { background: var(--v900); } }
+.index b { font: 900 22px/1 var(--display); color: var(--v300); }
+.index span { font-size: 11px; line-height: 1.2; color: var(--muted); }
+
+/* ───────── Cabecera de ejercicio ───────── */
+.ex { position: relative; border-top: 1px solid var(--line); }
+.ex-head { padding: 72px 0 32px; display: grid; gap: 14px; }
+.ex-num { font: 900 clamp(84px, 24vw, 180px)/.8 var(--display); color: transparent; -webkit-text-stroke: 1.5px var(--v500); }
+.ex-head h2 { font-size: clamp(40px, 11vw, 96px); }
+.ex-head .meta { display: flex; flex-wrap: wrap; gap: 6px 14px; }
+.ex-head p { margin: 0; max-width: 40rem; color: var(--muted); }
+.ex-head p b { color: var(--text); font-weight: 500; }
+.tag { font: 500 11px/1 var(--mono); letter-spacing: .08em; text-transform: uppercase; padding: 7px 10px; border-radius: 999px; background: var(--v900); color: var(--v200); border: 1px solid var(--line); }
+
+/* ───────── 01 · Parallax ───────── */
+.px { position: relative; height: 92svh; min-height: 520px; overflow: clip;
+  background: linear-gradient(#0c0716 0%, #1d1036 55%, #3a1f63 100%); }
+.px-layer { position: absolute; left: 0; right: 0; top: -22%; bottom: -22%; will-change: transform; }
+.px-stars { background:
+    radial-gradient(1px 1px at 12% 18%, #e9e0ff 98%, transparent),
+    radial-gradient(1px 1px at 33% 9%, #cbb8ff 98%, transparent),
+    radial-gradient(1.5px 1.5px at 56% 22%, #fff 98%, transparent),
+    radial-gradient(1px 1px at 71% 12%, #cbb8ff 98%, transparent),
+    radial-gradient(1px 1px at 88% 26%, #e9e0ff 98%, transparent),
+    radial-gradient(1px 1px at 22% 31%, #b69cff 98%, transparent),
+    radial-gradient(1px 1px at 47% 35%, #e9e0ff 98%, transparent),
+    radial-gradient(1px 1px at 93% 6%, #fff 98%, transparent); }
+.px-moon::before { content: ""; position: absolute; left: 68%; top: 26%; width: clamp(64px, 16vw, 130px); aspect-ratio: 1; border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, #f4efff, #c9b6ff 55%, #8b6be0);
+  box-shadow: 0 0 60px 10px #7c3aed55, 0 0 160px 40px #7c3aed22; }
+.px-city::before { content: ""; position: absolute; inset: 0; clip-path: var(--sky); background: var(--c); }
+.px-city.lit::before { background:
+    radial-gradient(circle, var(--w) 0 1.3px, transparent 1.8px) 0 0 / 14px 18px,
+    var(--c); }
+.px-sign { position: absolute; left: 50%; bottom: 13%; translate: -50% 0; text-align: center; z-index: 2; pointer-events: none; }
+.px-sign h3 { font-size: clamp(44px, 13vw, 120px); color: var(--v200); text-shadow: 0 0 18px #7c3aed, 0 0 48px #7c3aedaa; }
+.px-sign p { margin: 8px 0 0; font: 500 12px/1 var(--mono); letter-spacing: .2em; color: var(--v300); text-transform: uppercase; }
+.px-ground { position: absolute; left: 0; right: 0; bottom: 0; height: 9%; background: linear-gradient(#0a0612, #050309); z-index: 1; }
+
+/* ───────── 02 · Scroll-driven ───────── */
+.rules { list-style: none; margin: 0; padding: 8px 0 120px; display: grid; gap: clamp(28px, 8vw, 56px); }
+.rule { display: grid; gap: 10px; }
+.rule small { font: 500 12px/1 var(--mono); letter-spacing: .1em; color: var(--v300); text-transform: uppercase; }
+.rule-text { font: 900 clamp(46px, 13.5vw, 128px)/.9 var(--display); text-transform: uppercase; color: var(--text); clip-path: inset(0 0 0 0); }
+.rule-text span { color: var(--v300); }
+.rule-bar { height: 3px; background: linear-gradient(90deg, var(--v500), var(--v300)); transform-origin: 0 50%; }
+.rule p { margin: 0; color: var(--muted); max-width: 34rem; }
+.motion .rule-text { clip-path: inset(0 100% 0 0); transition: clip-path 700ms var(--ease-out); }
+.motion .rule-bar { transform: scaleX(0); transition: transform 900ms var(--ease-out); }
+.motion .rule.in .rule-text { clip-path: inset(0 0 0 0); }
+.motion .rule.in .rule-bar { transform: scaleX(1); }
+@supports (animation-timeline: view()) {
+  .motion .rule-text { transition: none; animation: wipe-in linear both; animation-timeline: view(); animation-range: entry 20% cover 42%; }
+  .motion .rule-bar { transition: none; animation: grow-x linear both; animation-timeline: view(); animation-range: entry 40% cover 55%; }
+}
+@keyframes grow-x { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+
+.stamp-row { display: flex; justify-content: center; padding: 40px 0 120px; overflow-x: clip; }
+.stamp { margin: 0 16px; max-width: calc(100vw - 48px); text-align: center; font: 900 clamp(30px, 8.5vw, 72px)/1 var(--display); text-transform: uppercase; color: var(--void); background: var(--v300);
+  padding: 14px 26px 10px; border-radius: 10px; rotate: -4deg; }
+.motion .stamp { transform: scale(2.4); clip-path: circle(0% at 50% 50%); transition: transform 520ms var(--ease-spring), clip-path 420ms var(--ease-out); }
+.motion .stamp.in { transform: scale(1); clip-path: circle(100% at 50% 50%); }
+@supports (timeline-trigger: --stamp view()) {
+  .motion .stamp { transition: none; transform: none; clip-path: none;
+    timeline-trigger: --stamp view() entry 100% exit 0%;
+    animation: stamp 520ms var(--ease-spring) both;
+    animation-trigger: --stamp play-forwards play-backwards; }
+}
+@keyframes stamp { from { transform: scale(2.4); clip-path: circle(0% at 50% 50%); } to { transform: scale(1); clip-path: circle(100% at 50% 50%); } }
+
+/* ───────── 03 · Dolly zoom ───────── */
+.dz-track { position: relative; }
+.motion .dz-track { height: 260svh; }
+.dz { position: sticky; top: 0; height: 100svh; overflow: clip; background: #05030a; --persp: 700px; }
+.dz-world { position: absolute; inset: 0; perspective: var(--persp); perspective-origin: 50% 52%; }
+.dz-plane { position: absolute; }
+.dz-floor { left: -40%; right: -40%; bottom: 0; height: 160%; transform-origin: 50% 100%; transform: rotateX(84deg);
+  background:
+    linear-gradient(90deg, transparent calc(50% - 3px), #b69cff 0 calc(50% + 3px), transparent 0) 0 0 / 100% 120px,
+    repeating-linear-gradient(90deg, #7c3aed55 0 2px, transparent 2px 90px),
+    repeating-linear-gradient(0deg, #7c3aed40 0 2px, transparent 2px 90px),
+    #0d0818; }
+.dz-ceil { left: -40%; right: -40%; top: 0; height: 160%; transform-origin: 50% 0; transform: rotateX(-84deg);
+  background: repeating-linear-gradient(0deg, #3d1f66 0 3px, transparent 3px 140px), #07040d; }
+.dz-wall { top: -40%; bottom: -40%; width: 160%;
+  background:
+    radial-gradient(circle, #d6c8ff 0 2px, transparent 2.5px) 0 0 / 46px 60px,
+    repeating-linear-gradient(0deg, #2a1745 0 2px, transparent 2px 120px),
+    linear-gradient(90deg, #160c27, #0b0614); }
+.dz-left { left: 0; transform-origin: 0 50%; transform: rotateY(84deg); }
+.dz-right { right: 0; transform-origin: 100% 50%; transform: rotateY(-84deg); }
+.dz-glow { position: absolute; left: 50%; top: 52%; width: 22vmin; aspect-ratio: 1; translate: -50% -50%; border-radius: 50%;
+  background: radial-gradient(circle, #d6c8ff, #7c3aed 40%, transparent 70%); }
+.dz-subject { position: absolute; left: 50%; bottom: 7%; translate: -50% 0; width: clamp(120px, 30vw, 200px); z-index: 2; filter: drop-shadow(0 0 22px #7c3aedaa); }
+.dz-caption { position: absolute; left: 16px; right: 16px; top: max(20px, env(safe-area-inset-top)); display: flex; justify-content: space-between; gap: 12px; z-index: 3; }
+.dz-caption .mono { background: #07050ccc; padding: 8px 10px; border-radius: 8px; color: var(--v200); }
+
+/* ───────── 04 · Foco ───────── */
+.paths { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; padding-bottom: 24px; }
+.path {
+  position: relative; min-height: 168px; text-align: left; display: grid; align-content: space-between; gap: 20px;
+  padding: 16px; border-radius: 16px; border: 1px solid var(--line);
+  background: linear-gradient(160deg, var(--v800), var(--night) 70%);
+  transition: filter 360ms var(--ease-out), transform 360ms var(--ease-out), border-color var(--dur-ui) var(--ease-out);
+}
+.path b { font: 900 clamp(21px, 6vw, 40px)/.95 var(--display); text-transform: uppercase; overflow-wrap: break-word; hyphens: auto; padding-right: 26px; }
+.path span { font: 500 11px/1.3 var(--mono); letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
+.path i { position: absolute; right: 14px; top: 14px; width: 28px; height: 28px; border-radius: 50%; border: 1.5px solid var(--v600);
+  display: grid; place-items: center; font-style: normal; font: 500 12px/1 var(--mono); color: var(--v300); }
+.path:active { transform: scale(.97); }
+.path[aria-pressed="true"] { border-color: var(--v300); background: linear-gradient(160deg, var(--v600), var(--v900) 75%); }
+.paths:has(.path:is(:focus-visible, [aria-pressed="true"])) .path:not(:focus-visible, [aria-pressed="true"]) {
+  filter: blur(4px) saturate(.3) brightness(.55); transform: scale(.96); }
+@media (hover: hover) and (pointer: fine) {
+  .paths:has(.path:hover) .path:not(:hover, :focus-visible, [aria-pressed="true"]) { filter: blur(4px) saturate(.3) brightness(.55); transform: scale(.96); }
+}
+.focus-out { min-height: 48px; margin: 8px 0 96px; color: var(--muted); }
+.focus-out b { color: var(--text); font-weight: 500; }
+
+/* ───────── 05 · Plano secuencia ───────── */
+.sq { position: relative; height: 100svh; min-height: 560px; overflow: clip; background: #05030a; }
+.sq-world { position: absolute; inset: 0; transform-origin: 50% 70%; }
+.sq-sky { position: absolute; inset: 0; background: radial-gradient(90% 60% at 50% 100%, #5b2a9c, #1c1030 55%, #05030a); }
+.sq-moon { position: absolute; left: 50%; top: 18%; width: clamp(90px, 22vw, 180px); aspect-ratio: 1; translate: -50% 0; border-radius: 50%;
+  background: radial-gradient(circle at 40% 35%, #f4efff, #b69cff 60%, #6d42d6); box-shadow: 0 0 120px 30px #7c3aed44; }
+.sq-city { position: absolute; left: -6%; right: -6%; bottom: 0; }
+.sq-city::before { content: ""; position: absolute; inset: 0; clip-path: var(--sky); background: var(--c); }
+.sq-far { height: 58%; --c: #2a1745; }
+.sq-near { height: 40%; --c: #0b0614; }
+.sq-near::before { background: radial-gradient(circle, #b69cff 0 1.3px, transparent 1.8px) 0 0 / 16px 20px, #0b0614; }
+.sq-title { position: absolute; inset: 0; display: grid; place-content: center; text-align: center; z-index: 2; padding: 0 16px; }
+.sq-title h3 { font-size: clamp(64px, 20vw, 200px); color: var(--text); text-shadow: 0 0 40px #7c3aed99; }
+.sq-title .ln { display: block; overflow: clip; padding-bottom: .03em; }
+.sq-title .ln > span { display: block; }
+.sq-title .ln:nth-child(2) > span { color: var(--v300); }
+.sq-sub { margin: 18px auto 0; font: 500 13px/1.4 var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--v200); max-width: 28rem; }
+.sq-vig { position: absolute; inset: 0; z-index: 3; pointer-events: none; background: radial-gradient(ellipse at center, transparent 45%, #000000e6 100%); }
+.sq-cue { display: none; }
+.motion .sq-cue { display: block; position: absolute; left: 0; right: 0; bottom: max(84px, calc(env(safe-area-inset-bottom) + 72px)); text-align: center; z-index: 4; }
+.sq-end { padding: 88px 0; }
+
+/* ───────── Notas ───────── */
+.notes { padding: 88px 0 140px; border-top: 1px solid var(--line); display: grid; gap: 40px; }
+.notes h2 { font-size: clamp(44px, 12vw, 96px); }
+.notes h3 { font-size: 28px; color: var(--v300); margin-bottom: 12px; }
+.notes ul { margin: 0; padding-left: 20px; display: grid; gap: 10px; max-width: 46rem; }
+.notes li::marker { color: var(--v500); }
+.notes p { margin: 0; max-width: 46rem; color: var(--muted); }
+.grid2 { display: grid; gap: 40px; }
+@media (min-width: 900px) {
+  .grid2 { grid-template-columns: 1fr 1fr; }
+  .paths { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .path { min-height: 240px; padding: 22px; }
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#e01">Saltar al primer ejercicio</a>
+<div class="progress" aria-hidden="true"></div>
+
+<div class="hud" role="group" aria-label="Controles de la pieza">
+  <span class="fps" hidden aria-live="off">— fps</span>
+  <button type="button" id="fpsBtn" aria-pressed="false">fps</button>
+  <button type="button" id="rmBtn" aria-pressed="false">Movimiento reducido</button>
+</div>
+
+<header class="hero">
+  <div class="wrap">
+    <p class="mono">CINEMA//MOTION LAB · Semana 1 · Ejercicios · Caso Natural Life RP</p>
+    <h1><span class="ln"><span>Alfabeto</span></span><span class="ln"><span>de <em>cámara</em></span></span></h1>
+    <p class="lede">Cinco recetas de cámara aplicadas al servidor: <strong>profundidad, lectura, vértigo, foco y plano secuencia.</strong> Cada movimiento tiene una causa —el scroll, el dedo o el teclado— y ninguno usa opacidad.</p>
+    <div class="rule-box"><span>Restricción S1</span><b>Sin opacidad</b><span>· solo máscaras, escala y color</span></div>
+    <ol class="index" aria-label="Ejercicios">
+      <li><a href="#e01"><b>01</b><span>Parallax</span></a></li>
+      <li><a href="#e02"><b>02</b><span>Scroll nativo</span></a></li>
+      <li><a href="#e03"><b>03</b><span>Dolly zoom</span></a></li>
+      <li><a href="#e04"><b>04</b><span>Foco</span></a></li>
+      <li><a href="#e05"><b>05</b><span>Plano secuencia</span></a></li>
+    </ol>
+  </div>
+</header>
+
+<main>
+<!-- 01 -->
+<section class="ex" id="e01" aria-labelledby="t01">
+  <div class="wrap ex-head">
+    <span class="ex-num" aria-hidden="true">01</span>
+    <h2 id="t01">Los Santos, 3:00</h2>
+    <div class="meta"><span class="tag">Causa · scroll</span><span class="tag">Receta 01 · parallax</span><span class="tag">7 capas</span></div>
+    <p>La ciudad se separa en planos según su distancia: lo lejano casi no se mueve, lo cercano viaja con la página. <b>Mejora sobre la receta:</b> la posición se mide una vez (no en cada frame), el bucle duerme cuando la cámara ya llegó y la neblina se pinta con color, no con transparencia.</p>
+  </div>
+  <div class="px" aria-label="Skyline nocturno de la ciudad con el letrero de Natural Life RP" role="img">
+    <div class="px-layer px-stars" data-depth="0"></div>
+    <div class="px-layer px-moon" data-depth=".08"></div>
+    <div class="px-layer px-city" data-depth=".25" data-seed="3" data-min="44" data-max="64" style="--c:#4a2b7a"></div>
+    <div class="px-layer px-city" data-depth=".45" data-seed="11" data-min="38" data-max="56" style="--c:#311a55"></div>
+    <div class="px-layer px-city lit" data-depth=".65" data-seed="27" data-min="32" data-max="48" style="--c:#1d0f35; --w:#9d7bff"></div>
+    <div class="px-layer px-city lit" data-depth=".85" data-seed="41" data-min="26" data-max="38" style="--c:#0e0719; --w:#d6c8ff"></div>
+    <div class="px-sign"><h3>Natural Life</h3><p>Roleplay · FiveM</p></div>
+    <div class="px-ground"></div>
+  </div>
+</section>
+
+<!-- 02 -->
+<section class="ex" id="e02" aria-labelledby="t02">
+  <div class="wrap ex-head">
+    <span class="ex-num" aria-hidden="true">02</span>
+    <h2 id="t02">Lo que es el servidor</h2>
+    <div class="meta"><span class="tag">Causa · scroll</span><span class="tag">Receta 02 · scroll-driven</span><span class="tag">+ scroll-triggered</span></div>
+    <p>Cada línea se revela con una cortina atada al scroll (<code>animation-timeline: view()</code>): si paras, se para; si vuelves, se recoge. El sello final usa lo nuevo de Chrome 145, <b>animaciones disparadas por scroll</b>: tienen duración propia y se completan aunque dejes de mover el dedo. Sin soporte, un IntersectionObserver hace lo mismo.</p>
+  </div>
+  <div class="wrap">
+    <ol class="rules">
+      <li class="rule"><small>Pilar 1</small><div class="rule-text">Rol <span>serio</span></div><div class="rule-bar"></div><p>Con toques de caos controlado.</p></li>
+      <li class="rule"><small>Pilar 2</small><div class="rule-text"><span>Gratis</span></div><div class="rule-bar"></div><p>Sin pagar por entrar.</p></li>
+      <li class="rule"><small>Pilar 3</small><div class="rule-text">Sin pay <span>to win</span></div><div class="rule-bar"></div><p>Las donaciones son opcionales y solo estéticas.</p></li>
+      <li class="rule"><small>Pilar 4</small><div class="rule-text">Sin <span>whitelist</span></div><div class="rule-bar"></div><p>Se entra por el Discord oficial.</p></li>
+      <li class="rule"><small>Pilar 5</small><div class="rule-text">Tu progreso <span>se queda</span></div><div class="rule-bar"></div><p>Lo que consigas en la beta se mantiene en la apertura.</p></li>
+    </ol>
+  </div>
+  <div class="stamp-row"><p class="stamp">Beta abierta · 18 plazas</p></div>
+</section>
+
+<!-- 03 -->
+<section class="ex" id="e03" aria-labelledby="t03">
+  <div class="wrap ex-head">
+    <span class="ex-num" aria-hidden="true">03</span>
+    <h2 id="t03">Vértigo en el callejón</h2>
+    <div class="meta"><span class="tag">Causa · scroll</span><span class="tag">Receta 03 · dolly zoom</span><span class="tag">sticky, sin pin</span></div>
+    <p>El personaje no cambia de tamaño; el callejón sí. Se consigue cambiando la <code>perspective</code> del mundo mientras el sujeto vive fuera del contexto 3D. <b>Mejora:</b> nada de escuchar el evento scroll; un bucle que solo corre mientras la escena está en pantalla y una fijación con <code>position: sticky</code> en vez de pin.</p>
+  </div>
+  <div class="dz-track">
+    <div class="dz" role="img" aria-label="Callejón con perspectiva que se estira mientras la silueta del personaje se mantiene igual">
+      <div class="dz-world">
+        <div class="dz-plane dz-ceil"></div>
+        <div class="dz-plane dz-floor"></div>
+        <div class="dz-plane dz-wall dz-left"></div>
+        <div class="dz-plane dz-wall dz-right"></div>
+      </div>
+      <div class="dz-glow"></div>
+      <svg class="dz-subject" viewBox="0 0 120 220" aria-hidden="true">
+        <defs><linearGradient id="sg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#d6c8ff"/><stop offset="1" stop-color="#5b2a9c"/></linearGradient></defs>
+        <circle cx="60" cy="30" r="20" fill="url(#sg)"/>
+        <path d="M24 72 Q60 52 96 72 L104 150 L86 150 L84 214 L66 214 L62 160 L58 160 L54 214 L36 214 L34 150 L16 150 Z" fill="url(#sg)"/>
+      </svg>
+      <div class="dz-caption"><span class="mono" id="dzRead">perspective · 700px</span><span class="mono">Sujeto fijo</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- 04 -->
+<section class="ex" id="e04" aria-labelledby="t04">
+  <div class="wrap ex-head">
+    <span class="ex-num" aria-hidden="true">04</span>
+    <h2 id="t04">¿Por dónde empiezas?</h2>
+    <div class="meta"><span class="tag">Causa · dedo, ratón y teclado</span><span class="tag">Receta 04 · foco</span></div>
+    <p>El desenfoque es jerarquía: lo que eliges queda nítido y lo demás se apaga con desenfoque, saturación y brillo (nada de transparencia). En el móvil no hay hover, así que el toque <b>fija</b> la elección; con Tab funciona igual gracias a <code>:focus-visible</code>.</p>
+  </div>
+  <div class="wrap">
+    <div class="paths" role="group" aria-label="Primeros pasos en el servidor">
+      <button class="path" type="button" aria-pressed="false" data-out="Primero, la normativa del Discord: es corta y te ahorra problemas en tu primera escena."><i>1</i><b>Lee la normativa</b><span>Antes de tu primera escena</span></button>
+      <button class="path" type="button" aria-pressed="false" data-out="Piensa quién es tu personaje antes de entrar: de dónde viene y qué quiere."><i>2</i><b>Crea tu personaje</b><span>Historia antes que estética</span></button>
+      <button class="path" type="button" aria-pressed="false" data-out="Todo pasa por el Discord oficial: la entrada a la beta, los avisos y la normativa."><i>3</i><b>Únete al Discord</b><span>La puerta de entrada</span></button>
+      <button class="path" type="button" aria-pressed="false" data-out="La beta tiene 18 plazas y lo que consigas en ella se mantiene en la apertura."><i>4</i><b>Entra en la beta</b><span>18 plazas</span></button>
+    </div>
+    <p class="focus-out" aria-live="polite">Toca o recorre con Tab una de las cuatro tarjetas.</p>
+  </div>
+</section>
+
+<!-- 05 -->
+<section class="ex" id="e05" aria-labelledby="t05">
+  <div class="wrap ex-head">
+    <span class="ex-num" aria-hidden="true">05</span>
+    <h2 id="t05">Plano secuencia</h2>
+    <div class="meta"><span class="tag">Causa · scroll</span><span class="tag">Receta 05 · ScrollTrigger</span><span class="tag">una sola toma</span></div>
+    <p>Una toma continua de unos 2,5 pantallazos: el iris se abre, la cámara retrocede, la ciudad sube, entra el nombre y al final la cámara empuja hacia él. <b>Sin opacidad:</b> la viñeta entra escalando desde fuera de cuadro y los textos salen de máscaras.</p>
+  </div>
+  <div class="sq" aria-label="Escena final: la ciudad de noche y el nombre Natural Life RP">
+    <div class="sq-world">
+      <div class="sq-sky"></div>
+      <div class="sq-moon"></div>
+      <div class="sq-city sq-far" data-seed="7" data-min="30" data-max="80"></div>
+      <div class="sq-city sq-near" data-seed="19" data-min="25" data-max="85"></div>
+    </div>
+    <div class="sq-title">
+      <h3><span class="ln"><span>Natural</span></span><span class="ln"><span>Life RP</span></span></h3>
+      <p class="sq-sub"><span>Beta abierta · 18 plazas · gratis · sin pay to win</span></p>
+    </div>
+    <div class="sq-vig"></div>
+    <p class="sq-cue mono">Sigue bajando ↓</p>
+  </div>
+  <div class="wrap sq-end"><p class="mono">Fin de la toma · se entra por el Discord oficial</p></div>
+</section>
+
+<!-- Notas -->
+<section class="notes wrap" aria-labelledby="tn">
+  <h2 id="tn">Notas de dirección</h2>
+  <div class="grid2">
+    <div>
+      <h3>Aprendizajes</h3>
+      <ul>
+        <li><b>Sin opacidad, todo tiene dirección.</b> Una cortina (<code>clip-path</code>) o una escala dicen de dónde viene algo; un fundido no dice nada. La restricción mejoró las cinco escenas.</li>
+        <li><b>El dolly zoom vive del contraste.</b> Si el sujeto está dentro del contexto 3D, la perspectiva también lo deforma y el efecto desaparece: va fuera, en su propia capa.</li>
+        <li><b>Scroll-driven y scroll-triggered no compiten.</b> Lo primero sirve para leer (sigue al dedo); lo segundo, para momentos (sellos, golpes) que deben completarse aunque el dedo se pare.</li>
+      </ul>
+    </div>
+    <div>
+      <h3>Qué mejorar</h3>
+      <ul>
+        <li>El plano secuencia todavía depende de GSAP para fijar la escena: probar <code>position: sticky</code> + <code>view-timeline</code> y ahorrarse la librería en escenas simples.</li>
+        <li>Medir los fps en un Android de gama media real con el botón «fps»: aquí solo se ha medido en Chromium de escritorio.</li>
+      </ul>
+    </div>
+  </div>
+  <p><b style="color:var(--text)">Estudio:</b> lidera Motion y 3D (dirección de los cinco planos y física del scroll); Diseño UI acompaña (tipografía Fira de una paleta de Adobe, retícula móvil primero); Calidad acompaña (capturas a 390 y 1440 px, ruta reducida, teclado y consola limpia).</p>
+  <p><b style="color:var(--text)">Fuentes de la búsqueda:</b>
+    <a href="https://developer.chrome.com/blog/scroll-triggered-animations">Chrome · Scroll-triggered animations</a> ·
+    <a href="https://web.dev/blog/web-platform-10-2026">web.dev · Novedades de octubre 2026</a> ·
+    <a href="https://tympanus.net/codrops/2025/10/29/building-a-layered-zoom-scroll-effect-with-gsap-scrollsmoother-and-scrolltrigger/">Codrops · Layered zoom con ScrollTrigger</a></p>
+  <p class="mono">Siguiente · miércoles · Laboratorio «Una pantalla, tres películas»</p>
+</section>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.15.1/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.15.1/dist/ScrollTrigger.min.js"></script>
+<script>
+(() => {
+  const root = document.documentElement;
+  const mq = matchMedia('(prefers-reduced-motion: reduce)');
+  const forced = () => root.classList.contains('rm');
+  const reduced = () => mq.matches || forced();
+
+  /* Skyline determinista: el mismo dibujo en cada carga */
+  function rng(seed) { let s = seed * 9301 + 49297; return () => ((s = (s * 9301 + 49297) % 233280) / 233280); }
+  function skyline(seed, min, max) {
+    const r = rng(seed), pts = ['0% 100%'];
+    let x = 0;
+    while (x < 100) {
+      const w = 3 + r() * 7, h = min + r() * (max - min), y = (100 - h).toFixed(1);
+      pts.push(`${x.toFixed(1)}% ${y}%`);
+      if (r() > .78) { const m = x + w / 2; pts.push(`${(m - .4).toFixed(1)}% ${y}%`, `${(m - .4).toFixed(1)}% ${(100 - h - 6).toFixed(1)}%`, `${(m + .4).toFixed(1)}% ${(100 - h - 6).toFixed(1)}%`, `${(m + .4).toFixed(1)}% ${y}%`); }
+      x = Math.min(100, x + w);
+      pts.push(`${x.toFixed(1)}% ${y}%`);
+    }
+    pts.push('100% 100%');
+    return `polygon(${pts.join(',')})`;
+  }
+  document.querySelectorAll('[data-seed]').forEach(el => {
+    // la capa de parallax cubre 144 % de alto: el dibujo se coloca en su franja baja
+    const sky = skyline(+el.dataset.seed, +el.dataset.min, +el.dataset.max);
+    el.style.setProperty('--sky', sky);
+  });
+
+  /* ── 01 Parallax ── */
+  const px = { stage: document.querySelector('.px'), layers: [...document.querySelectorAll('.px-layer')], top: 0, h: 0, cur: 0, on: false, raf: 0 };
+  px.depths = px.layers.map(l => +l.dataset.depth);
+  function pxMeasure() { const r = px.stage.getBoundingClientRect(); px.top = r.top + scrollY; px.h = r.height; }
+  function pxFrame() {
+    if (!px.on) return;
+    const target = (scrollY + innerHeight / 2) - (px.top + px.h / 2);
+    const d = target - px.cur;
+    if (Math.abs(d) > .05) {
+      px.cur += d * .12;
+      for (let i = 0; i < px.layers.length; i++) px.layers[i].style.transform = `translate3d(0, ${(px.cur * (1 - px.depths[i]) * .4).toFixed(2)}px, 0)`;
+    }
+    px.raf = requestAnimationFrame(pxFrame);
+  }
+  const pxIO = new IntersectionObserver(([e]) => {
+    if (e.isIntersecting && !reduced()) { if (!px.on) { px.on = true; pxMeasure(); px.cur = (scrollY + innerHeight / 2) - (px.top + px.h / 2); pxFrame(); } }
+    else { px.on = false; cancelAnimationFrame(px.raf); }
+  });
+
+  /* ── 02 Fallbacks (IO) para cortinas y sello ── */
+  const hasView = CSS.supports('animation-timeline: view()');
+  const hasTrigger = CSS.supports('timeline-trigger: --stamp view()');
+  const revealIO = new IntersectionObserver(es => es.forEach(e => e.target.classList.toggle('in', e.isIntersecting)), { rootMargin: '0px 0px -20% 0px' });
+
+  /* ── 03 Dolly ── */
+  const dz = { track: document.querySelector('.dz-track'), stage: document.querySelector('.dz'), read: document.getElementById('dzRead'), on: false, raf: 0, last: -1 };
+  function dzSet(p) {
+    const e = p < .5 ? 2 * p * p : 1 - Math.pow(-2 * p + 2, 2) / 2;   // ease in-out
+    const persp = Math.round(170 + e * 1500);
+    if (persp === dz.last) return;
+    dz.last = persp;
+    dz.stage.style.setProperty('--persp', persp + 'px');
+    dz.read.textContent = `perspective · ${persp}px`;
+  }
+  function dzFrame() {
+    if (!dz.on) return;
+    const r = dz.track.getBoundingClientRect();
+    const p = Math.min(1, Math.max(0, -r.top / (r.height - innerHeight)));
+    dzSet(p);
+    dz.raf = requestAnimationFrame(dzFrame);
+  }
+  const dzIO = new IntersectionObserver(([e]) => {
+    if (e.isIntersecting && !reduced()) { if (!dz.on) { dz.on = true; dzFrame(); } }
+    else { dz.on = false; cancelAnimationFrame(dz.raf); }
+  });
+
+  /* ── 04 Foco (independiente del movimiento) ── */
+  const paths = [...document.querySelectorAll('.path')], out = document.querySelector('.focus-out');
+  paths.forEach(b => b.addEventListener('click', () => {
+    const on = b.getAttribute('aria-pressed') !== 'true';
+    paths.forEach(o => o.setAttribute('aria-pressed', 'false'));
+    b.setAttribute('aria-pressed', String(on));
+    out.innerHTML = on ? `<b>${b.querySelector('b').textContent}.</b> ${b.dataset.out}` : 'Toca o recorre con Tab una de las cuatro tarjetas.';
+  }));
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') { paths.forEach(o => o.setAttribute('aria-pressed', 'false')); } });
+
+  /* ── 05 Plano secuencia ── */
+  let mm = null;
+  function buildSequence() {
+    if (!window.gsap || !window.ScrollTrigger) return;
+    gsap.registerPlugin(ScrollTrigger);
+    mm = gsap.matchMedia();
+    mm.add('(prefers-reduced-motion: no-preference)', () => {
+      if (forced()) return;
+      const tl = gsap.timeline({
+        defaults: { ease: 'none' },
+        scrollTrigger: { trigger: '.sq', start: 'top top', end: '+=240%', scrub: 0.8, pin: true, anticipatePin: 1 }
+      });
+      tl.fromTo('.sq', { clipPath: 'circle(16% at 50% 55%)' }, { clipPath: 'circle(75% at 50% 55%)', duration: 1, ease: 'power2.inOut' }, 0)
+        .fromTo('.sq-world', { scale: 1.3 }, { scale: 1, duration: 1.6, ease: 'power1.out' }, 0)
+        .fromTo('.sq-moon', { yPercent: 70 }, { yPercent: 0, duration: 1.4 }, .1)
+        .fromTo('.sq-far', { yPercent: 35 }, { yPercent: 0, duration: 1.3, ease: 'power2.out' }, .2)
+        .fromTo('.sq-near', { yPercent: 70 }, { yPercent: 0, duration: 1.3, ease: 'power2.out' }, .35)
+        .fromTo('.sq-vig', { scale: 2.2 }, { scale: 1, duration: 1 }, 1)
+        .fromTo('.sq-title .ln > span', { yPercent: 110 }, { yPercent: 0, duration: .55, stagger: .22, ease: 'power3.out' }, 1.05)
+        .fromTo('.sq-sub', { clipPath: 'inset(0 100% 0 0)' }, { clipPath: 'inset(0 0% 0 0)', duration: .5, ease: 'power2.out' }, 1.6)
+        .fromTo('.sq-cue', { clipPath: 'inset(0 0 0% 0)' }, { clipPath: 'inset(0 0 100% 0)', duration: .3 }, 1.6)
+        .to('.sq-world', { scale: 1.14, duration: 1, ease: 'power1.in' }, 2.15)
+        .to('.sq-title h3', { scale: .94, duration: 1, ease: 'power1.in' }, 2.15);
+    });
+  }
+
+  /* ── Montaje: encender / apagar todo ── */
+  function start() {
+    root.classList.toggle('motion', !reduced());
+    pxIO.observe(px.stage);
+    dzIO.observe(dz.stage);
+    if (reduced()) {
+      px.layers.forEach(l => l.style.transform = '');
+      dzSet(.5);
+    }
+    if (!hasView) document.querySelectorAll('.rule').forEach(r => revealIO.observe(r));
+    if (!hasTrigger) revealIO.observe(document.querySelector('.stamp'));
+    buildSequence();
+    if (window.ScrollTrigger) ScrollTrigger.refresh();
+  }
+  function stop() {
+    pxIO.disconnect(); dzIO.disconnect(); revealIO.disconnect();
+    px.on = false; dz.on = false; cancelAnimationFrame(px.raf); cancelAnimationFrame(dz.raf);
+    document.querySelectorAll('.rule, .stamp').forEach(el => el.classList.remove('in'));
+    if (mm) { mm.revert(); mm = null; }
+  }
+  const rmBtn = document.getElementById('rmBtn');
+  rmBtn.setAttribute('aria-pressed', String(reduced()));
+  rmBtn.addEventListener('click', () => {
+    stop();
+    root.classList.toggle('rm');
+    rmBtn.setAttribute('aria-pressed', String(reduced()));
+    start();
+  });
+  mq.addEventListener('change', () => { stop(); rmBtn.setAttribute('aria-pressed', String(reduced())); start(); });
+  addEventListener('resize', () => { if (px.on) pxMeasure(); }, { passive: true });
+
+  /* ── Medidor de fps (receta 24) ── */
+  const fpsBtn = document.getElementById('fpsBtn'), fpsEl = document.querySelector('.fps');
+  let fpsOn = false, frames = 0, t0 = 0, fraf = 0;
+  function fpsTick(t) {
+    frames++;
+    if (t - t0 >= 500) { const f = Math.round(frames * 1000 / (t - t0)); fpsEl.textContent = f + ' fps'; fpsEl.classList.toggle('low', f < 50); frames = 0; t0 = t; }
+    if (fpsOn) fraf = requestAnimationFrame(fpsTick);
+  }
+  fpsBtn.addEventListener('click', () => {
+    fpsOn = !fpsOn; fpsBtn.setAttribute('aria-pressed', String(fpsOn)); fpsEl.hidden = !fpsOn;
+    if (fpsOn) { frames = 0; t0 = performance.now(); fraf = requestAnimationFrame(fpsTick); } else cancelAnimationFrame(fraf);
+  });
+  document.addEventListener('visibilitychange', () => { if (document.hidden) cancelAnimationFrame(fraf); else if (fpsOn) { t0 = performance.now(); frames = 0; fraf = requestAnimationFrame(fpsTick); } });
+
+  start();
+  // Las fuentes cambian alturas: recalcular el pin cuando estén listas
+  if (document.fonts) document.fonts.ready.then(() => { if (window.ScrollTrigger) ScrollTrigger.refresh(); if (px.on) pxMeasure(); });
+})();
+</script>
+</body>
+</html>
+
+</body></html>
