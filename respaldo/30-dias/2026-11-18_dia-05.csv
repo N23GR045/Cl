@@ -1,0 +1,11 @@
+## Hoja: Hipótesis
+"Natural Life RP · 5 hipótesis A/B para Reels y TikTok, medibles gratis",,,,,,,,
+"Recuperado el 25-11-2026 (tocaba el 18-11-2026). Parte de las 5 variantes del Día 4. Un test cambia una sola cosa; el resto (clip, duración, hora, CTA) queda fijo.",,,,,,,,
+,,,,,,,,
+Test,Si cambiamos…,…esperamos que…,…porque (mecanismo),Métrica principal,Cómo medirlo gratis,Mínimo por variante,Criterio de parada,Orden
+H1 · V3 frente a V5,«Lo que hagas en la beta no se borra» frente a «Sin invitación. Sin pagar. Sin whitelist.»,V3 lleve más gente al perfil,Aversión a la pérdida pesa más que la facilidad de entrada,Visitas al perfil por 1.000 reproducciones,Trial Reels (se enseña solo a no seguidores) o publicar las dos a la misma hora en días equivalentes,1.000 reproducciones de no seguidores,"z ≥ 1,96 en la hoja Registro; si no, empate y se repite con otro clip",1
+H2 · V1 frente a V2,Pregunta abierta frente a identidad de fundador,V1 retenga más hasta el final,Un bucle abierto mantiene la atención,% que ve el vídeo entero,Estadísticas nativas de Instagram y TikTok,1.000 reproducciones,Diferencia ≥ 5 puntos en dos parejas de clips seguidas,2
+H3 · Voz frente a música,Abrir con la línea de diálogo real frente a abrir con música y texto,La voz retenga más en los 3 primeros segundos,Saliencia auditiva: una voz humana capta antes que una pista,% que pasa de los 3 s,Curva de retención nativa,1.000 reproducciones,Diferencia ≥ 8 puntos en el segundo 3,3
+H4 · CTA perfil frente a CTA directo,«El Discord está en el perfil» frente a «Enlace al Discord en la bio: entra y lee la normativa»,El CTA que dice qué pasa después lleve más entradas reales,Reducir incertidumbre baja la fricción,Entradas al Discord por 1.000 reproducciones,Una invitación de Discord distinta por variante: Discord cuenta los usos de cada una,1.000 reproducciones,"z ≥ 1,96; con menos de 10 entradas por variante, no se decide",4
+H5 · Hora,Publicar a las 19:00 frente a las 22:00 (Madrid),Las 22:00 rindan más en la primera hora,Los jugadores de rol conectan de noche,Reproducciones en la primera hora,Mismo tipo de clip durante 2 semanas alternando la hora,4 publicaciones por hora,"Media de 4 frente a 4; si se solapan, quedarse con la que mejor encaje con el directo",5
+

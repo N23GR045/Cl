@@ -1,0 +1,126 @@
+<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Entrenamiento · Día 9 — Componentes base</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#C4B5FD}a:hover{color:#EDE9FE}
+</style>
+<style>body{margin:0;background:#1a1a1f;color:#eee;font-family:Inter,system-ui,sans-serif}.wrap{padding:24px}.ab{margin:0 0 48px}.abt{font:600 16px Inter,sans-serif;color:#C4B5FD;margin:0 0 12px}.frame{overflow:auto}.notes{max-width:900px;line-height:1.5}</style></head>
+<body><div class="wrap"><h1>Entrenamiento · Día 9 — Componentes base</h1><p>Respaldo estático del lienzo de Design (artboards uno debajo de otro; las partes interactivas se ven en su estado inicial).</p>
+<section class="ab"><h2 class="abt">Tokens y componentes base</h2><div class="frame">
+
+<div style="width: 1440px; height: 2160px; box-sizing: border-box; padding: 64px 72px; background: #0B0A10; color: #EDEBF5; font-family: Inter, system-ui, sans-serif; display: flex; flex-direction: column; gap: 48px">
+
+  <div style="display: flex; flex-direction: column; gap: 10px">
+    <p style="margin: 0; font-size: 14px; letter-spacing: 0.14em; text-transform: uppercase; color: #C4B5FD">Día 9 · Componentes base</p>
+    <h1 style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-size: 52px; line-height: 1.05">Nueve piezas para cinco páginas</h1>
+    <p style="margin: 0; font-size: 18px; color: #B8B3C9; max-width: 820px">Violeta sobre negro, como el Discord. Cada color lleva su contraste medido; cada componente, sus estados.</p>
+  </div>
+
+  <section aria-labelledby="t-tokens" style="display: flex; flex-direction: column; gap: 20px">
+    <h2 id="t-tokens" style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-size: 28px">Tokens</h2>
+    <div style="display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 16px">
+      <div style="display: flex; flex-direction: column; gap: 8px"><div style="height: 72px; border-radius: 12px; background: #0B0A10; border: 1px solid #2A2342"></div><strong style="font-size: 14px">fondo · #0B0A10</strong><span style="font-size: 13px; color: #B8B3C9">base de todo</span></div>
+      <div style="display: flex; flex-direction: column; gap: 8px"><div style="height: 72px; border-radius: 12px; background: #15121F"></div><strong style="font-size: 14px">superficie · #15121F</strong><span style="font-size: 13px; color: #B8B3C9">tarjetas</span></div>
+      <div style="display: flex; flex-direction: column; gap: 8px"><div style="height: 72px; border-radius: 12px; background: #EDEBF5"></div><strong style="font-size: 14px">texto · #EDEBF5</strong><span style="font-size: 13px; color: #B8B3C9">16,7:1 sobre fondo</span></div>
+      <div style="display: flex; flex-direction: column; gap: 8px"><div style="height: 72px; border-radius: 12px; background: #B8B3C9"></div><strong style="font-size: 14px">texto suave · #B8B3C9</strong><span style="font-size: 13px; color: #B8B3C9">9,7:1 · 9,1:1 en tarjeta</span></div>
+      <div style="display: flex; flex-direction: column; gap: 8px"><div style="height: 72px; border-radius: 12px; background: #7C3AED"></div><strong style="font-size: 14px">acento · #7C3AED</strong><span style="font-size: 13px; color: #B8B3C9">solo fondo; blanco encima 5,7:1</span></div>
+      <div style="display: flex; flex-direction: column; gap: 8px"><div style="height: 72px; border-radius: 12px; background: #C4B5FD"></div><strong style="font-size: 14px">acento claro · #C4B5FD</strong><span style="font-size: 13px; color: #B8B3C9">enlaces y foco · 10,7:1</span></div>
+    </div>
+    <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px">
+      <div style="background: #15121F; border-radius: 12px; padding: 20px; display: flex; flex-direction: column; gap: 6px"><strong>Tipografía</strong><span style="font-family: 'Space Grotesk', sans-serif; font-size: 32px">Space Grotesk 700</span><span style="color: #B8B3C9">Titulares · 80 / 56 / 36 / 28 / 22 px</span><span>Inter 400–600 · cuerpo 17–20 px, nunca menos de 13</span></div>
+      <div style="background: #15121F; border-radius: 12px; padding: 20px; display: flex; flex-direction: column; gap: 6px"><strong>Espacio y radios</strong><span style="color: #B8B3C9">Escala 4 · 8 · 12 · 16 · 24 · 32 · 48 · 80</span><span style="color: #B8B3C9">Radios 10 (botón) · 14 (tarjeta) · 20 (bloque CTA)</span><span style="color: #B8B3C9">Ancho máximo 1200 px</span></div>
+      <div style="background: #15121F; border-radius: 12px; padding: 20px; display: flex; flex-direction: column; gap: 6px"><strong>Bordes</strong><span style="color: #B8B3C9">Interactivo · #6E5FA8 (3,6:1)</span><span style="color: #B8B3C9">Decorativo · #2A2342</span><span style="color: #B8B3C9">Foco · anillo 3 px #C4B5FD separado 3 px</span></div>
+    </div>
+  </section>
+
+  <section aria-labelledby="t-botones" style="display: flex; flex-direction: column; gap: 20px">
+    <h2 id="t-botones" style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-size: 28px">1 · Botones (altura mínima 48 px)</h2>
+    <div style="display: grid; grid-template-columns: 160px repeat(4, minmax(0, 1fr)); gap: 16px; align-items: center">
+      <span></span><span style="font-size: 13px; color: #B8B3C9">Reposo</span><span style="font-size: 13px; color: #B8B3C9">Hover</span><span style="font-size: 13px; color: #B8B3C9">Foco (teclado)</span><span style="font-size: 13px; color: #B8B3C9">Desactivado</span>
+      <strong style="font-size: 14px">Primario</strong>
+      <a href="#t-botones" style="background: #7C3AED; color: #FFFFFF; text-decoration: none; font-weight: 600; padding: 14px 20px; border-radius: 10px; text-align: center">Entrar por Discord</a>
+      <a href="#t-botones" style="background: #6D28D9; color: #FFFFFF; text-decoration: none; font-weight: 600; padding: 14px 20px; border-radius: 10px; text-align: center">Entrar por Discord</a>
+      <a href="#t-botones" style="background: #7C3AED; color: #FFFFFF; text-decoration: none; font-weight: 600; padding: 14px 20px; border-radius: 10px; text-align: center; outline: 3px solid #C4B5FD; outline-offset: 3px">Entrar por Discord</a>
+      <button type="button" disabled="disabled" style="background: #2A2342; color: #8C86A0; border: 0; font: inherit; font-weight: 600; padding: 14px 20px; border-radius: 10px">Plazas completas</button>
+      <strong style="font-size: 14px">Secundario</strong>
+      <a href="#t-botones" style="border: 1px solid #6E5FA8; color: #EDEBF5; text-decoration: none; font-weight: 500; padding: 14px 20px; border-radius: 10px; text-align: center">Ver cómo entrar</a>
+      <a href="#t-botones" style="border: 1px solid #C4B5FD; background: #15121F; color: #FFFFFF; text-decoration: none; font-weight: 500; padding: 14px 20px; border-radius: 10px; text-align: center">Ver cómo entrar</a>
+      <a href="#t-botones" style="border: 1px solid #6E5FA8; color: #EDEBF5; text-decoration: none; font-weight: 500; padding: 14px 20px; border-radius: 10px; text-align: center; outline: 3px solid #C4B5FD; outline-offset: 3px">Ver cómo entrar</a>
+      <button type="button" disabled="disabled" style="border: 1px solid #2A2342; background: transparent; color: #8C86A0; font: inherit; padding: 14px 20px; border-radius: 10px">Ver cómo entrar</button>
+      <strong style="font-size: 14px">Enlace</strong>
+      <a href="#t-botones" style="font-weight: 600">Abrir la normativa</a>
+      <a href="#t-botones" style="font-weight: 600; color: #EDE9FE">Abrir la normativa</a>
+      <a href="#t-botones" style="font-weight: 600; outline: 3px solid #C4B5FD; outline-offset: 3px; border-radius: 4px">Abrir la normativa</a>
+      <span style="font-size: 13px; color: #B8B3C9">Un enlace no se desactiva: se quita</span>
+    </div>
+    <p style="margin: 0; font-size: 14px; color: #B8B3C9">«Plazas completas» solo aparece si el servidor da el dato en tiempo real; nunca como reclamo.</p>
+  </section>
+
+  <section style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 32px">
+    <div style="display: flex; flex-direction: column; gap: 14px">
+      <h2 style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-size: 28px">2 · Cabecera</h2>
+      <nav aria-label="Principal (ejemplo)" style="border: 1px solid #2A2342; border-radius: 14px; padding: 12px 18px; display: flex; flex-wrap: wrap; gap: 10px 20px; align-items: center">
+        <a href="#t-tokens" style="font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 18px; color: #EDEBF5; text-decoration: none; margin-right: auto">Natural Life <span style="color: #A78BFA">RP</span></a>
+        <a href="#t-tokens" aria-current="page" style="color: #FFFFFF; text-underline-offset: 6px; font-size: 14px; padding: 12px 0">Cómo entrar</a>
+        <a href="#t-tokens" style="color: #D9D4E8; text-decoration: none; font-size: 14px; padding: 12px 0">Normativa</a>
+        <a href="#t-tokens" style="background: #7C3AED; color: #FFFFFF; text-decoration: none; font-weight: 600; font-size: 14px; padding: 12px 16px; border-radius: 10px">Entrar por Discord</a>
+      </nav>
+      <span style="font-size: 14px; color: #B8B3C9">Página actual subrayada y con aria-current. En móvil: logo + botón de menú de 48 px.</span>
+    </div>
+    <div style="display: flex; flex-direction: column; gap: 14px">
+      <h2 style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-size: 28px">3 · Etiqueta de estado</h2>
+      <div style="display: flex; flex-wrap: wrap; gap: 10px">
+        <span style="border: 1px solid #6E5FA8; color: #EDEBF5; padding: 8px 14px; border-radius: 999px; font-size: 14px">Beta · 18 plazas</span>
+        <span style="border: 1px solid #6E5FA8; color: #EDEBF5; padding: 8px 14px; border-radius: 999px; font-size: 14px">Gratis</span>
+        <span style="border: 1px solid #6E5FA8; color: #EDEBF5; padding: 8px 14px; border-radius: 999px; font-size: 14px">Sin whitelist</span>
+      </div>
+      <span style="font-size: 14px; color: #B8B3C9">Datos fijos y verdaderos; no son contadores.</span>
+    </div>
+  </section>
+
+  <section style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px">
+    <div style="display: flex; flex-direction: column; gap: 12px">
+      <h2 style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-size: 24px">4 · Tarjeta de promesa</h2>
+      <div style="background: #15121F; border-radius: 14px; padding: 24px; display: flex; flex-direction: column; gap: 10px">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#C4B5FD" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l7 4v5c0 4-3 7-7 9-4-2-7-5-7-9V7z"></path></svg>
+        <strong style="font-family: 'Space Grotesk', sans-serif; font-size: 20px">Sin pay to win</strong>
+        <span style="color: #B8B3C9; line-height: 1.5">Nadie compra ventaja. Lo que tienes, lo has rolleado.</span>
+      </div>
+    </div>
+    <div style="display: flex; flex-direction: column; gap: 12px">
+      <h2 style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-size: 24px">5 · Paso</h2>
+      <div style="background: #15121F; border-radius: 14px; padding: 24px; display: flex; gap: 16px; align-items: flex-start">
+        <span aria-hidden="true" style="flex: 0 0 44px; height: 44px; border-radius: 999px; background: #2A2050; color: #C4B5FD; font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 20px; display: flex; align-items: center; justify-content: center">2</span>
+        <div style="display: flex; flex-direction: column; gap: 6px"><strong>Únete al Discord</strong><span style="color: #B8B3C9; line-height: 1.5">Ahí están los avisos, el soporte y tu plaza.</span></div>
+      </div>
+    </div>
+    <div style="display: flex; flex-direction: column; gap: 12px">
+      <h2 style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-size: 24px">6 · Entrada de diario</h2>
+      <article style="border-left: 2px solid #6E5FA8; padding: 4px 0 4px 20px; display: flex; flex-direction: column; gap: 8px">
+        <time style="font-size: 14px; color: #C4B5FD">[FECHA]</time>
+        <strong style="font-family: 'Space Grotesk', sans-serif; font-size: 20px">[CAMBIO REAL]</strong>
+        <span style="color: #B8B3C9">Pedido por un tester · <a href="#t-tokens">ver normativa</a></span>
+      </article>
+    </div>
+  </section>
+
+  <section style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px">
+    <div style="display: flex; flex-direction: column; gap: 12px">
+      <h2 style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-size: 24px">7 · Pregunta (pulsa)</h2>
+      <details style="border-top: 1px solid #2A2342; border-bottom: 1px solid #2A2342; padding: 16px 0"><summary style="cursor: pointer; font-weight: 600; font-size: 18px; min-height: 28px">¿Hay whitelist?</summary><p style="color: #B8B3C9; line-height: 1.6; margin: 12px 0 0">No. Se entra por el Discord y se lee la normativa antes de conectar.</p></details>
+      <span style="font-size: 14px; color: #B8B3C9">details/summary nativo: teclado y lector de pantalla sin código extra.</span>
+    </div>
+    <div style="display: flex; flex-direction: column; gap: 12px">
+      <h2 style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-size: 24px">8 · Marcador de medio</h2>
+      <div style="height: 150px; border-radius: 14px; border: 1px dashed #6E5FA8; background: #120F1C; display: flex; align-items: center; justify-content: center; color: #B8B3C9; text-align: center; padding: 16px; font-size: 14px">[CAPTURA REAL DE LA BETA] · nunca imagen inventada</div>
+    </div>
+    <div style="display: flex; flex-direction: column; gap: 12px">
+      <h2 style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-size: 24px">9 · Barra CTA móvil</h2>
+      <div style="width: 320px; border: 1px solid #2A2342; border-radius: 14px; padding: 12px; display: flex; flex-direction: column; gap: 8px; background: #0B0A10">
+        <a href="#t-tokens" style="background: #7C3AED; color: #FFFFFF; text-decoration: none; font-weight: 600; padding: 16px; border-radius: 12px; text-align: center">Entrar por Discord</a>
+        <span style="font-size: 13px; color: #B8B3C9; text-align: center">Fija al pie en Android; respeta la zona de gestos</span>
+      </div>
+    </div>
+  </section>
+</div>
+</div></section><h2>Notas del lienzo</h2><ul class="notes"><li>Recuperado el 25-11-2026 (tocaba el 22-11-2026). Los componentes salen del wireframe del Día 8 y ya los usan las plantillas del Día 12.<br><br>Estudio: lidera Diseño UI/UX (diseno-interfaz + color-experto + accesibilidad). Se compararon: copiar una librería genérica (5/10: no tiene el carácter del servidor), Material para Android (6/10: pesa y no es una app) y 9 componentes propios con tokens (9/10: lo justo para 5 páginas). Gana el tercero.</li><li>Aprendizajes<br>• Calcular el contraste antes de dibujar evita rehacer: el violeta #7C3AED solo vale como fondo con texto blanco (5,7:1); como texto sobre negro da 3,46:1 y no pasa.<br>• El borde #4C3D80 que usan los botones secundarios del Día 12 da 2,15:1 y no llega al 3:1 que pide WCAG 1.4.11; se sustituye por #6E5FA8 (3,63:1).<br>• Cada componente se dibuja con sus estados (reposo, hover, foco, desactivado): el foco visible es parte del diseño, no un añadido.<br><br>Qué mejorar mañana (Día 10)<br>• Montar el prototipo clicable con estos componentes y el recorrido Inicio → Cómo entrar → Normativa → Discord.</li><li>Fuentes<br>• Contrastes calculados con la fórmula de luminancia relativa de WCAG 2.2 el 25-11-2026.<br>• Muzli, «Landing Page Design Trends 2026»: táctil y móvil primero. store.muz.li/articles/landing-page-design-trends-2026<br>• Plantillas del Día 12 de este entrenamiento.</li></ul></div></body></html>

@@ -1,0 +1,28 @@
+## Hoja: Mapa
+Natural Life RP · 10 sesgos y gatillos que sí puede usar un servidor sin comunidad,,,,,,,
+"Recuperado el 25-11-2026 (tocaba el 14-11-2026). Cada fila: el sesgo, la etapa del cerebro donde actúa, cómo se aplica con promesas reales del servidor y su límite ético.",,,,,,,
+,,,,,,,
+#,Sesgo · gatillo,Etapa,Cómo se ve en Natural Life RP,Ejemplo de texto,Formato y red,Límite ético,Prioridad
+1,Curiosidad · bucle abierto,Atención,Empezar el clip en mitad de una escena de rol y no cerrarla hasta el final,«Todavía nadie manda en esta ciudad»,Reel/TikTok 13–25 s,La pregunta se responde dentro del vídeo o en el perfil; nada de cebos sin respuesta,Alta
+2,Efecto de la voz humana (saliencia auditiva),Atención,"El gancho es la línea de diálogo real del rol en el segundo 0, no el logo",Una voz: «¡Que nadie se mueva!» + texto fijo arriba,Reel/TikTok con audio original,Solo metraje real de la beta,Alta
+3,Pertenencia · identidad de fundador,Emoción,Ser de los primeros vecinos de una ciudad que empieza de cero,«Buscamos a los 18 primeros vecinos»,Post fijado + historia,18 plazas es el dato real; sin «quedan X» inventado,Alta
+4,Aversión a la pérdida,Decisión,Quitar el miedo a perder horas: el progreso de la beta se mantiene,«Lo que hagas en la beta no se borra»,Reel + FAQ de la web,"Se usa para quitar un miedo real, nunca para crear uno",Alta
+5,Efecto IKEA,Memoria,Los testers proponen y lo ven aplicado en el Diario de la beta,«Esta ciudad la terminas tú»,Carrusel «Lo que pedisteis»,Solo cambios que de verdad se hicieron,Media
+6,Contraste · anclaje,Decisión,"Frente al rol «solo por invitación» y de pago, aquí se entra gratis y sin whitelist",«Sin invitación. Sin pagar. Sin whitelist.»,"Texto en pantalla, bio",No nombrar ni atacar a otros servidores,Alta
+7,Reciprocidad,Emoción,Dar algo antes de pedir: guías cortas de cómo entrar y de normativa,«Cómo entrar en 4 pasos»,Carrusel guardable,"Valor completo, sin «la parte 2 en el Discord»",Media
+8,Efecto de mera exposición,Memoria,"Misma paleta violeta sobre negro, misma frase de cierre y misma voz en todas las piezas",Cierre fijo: «El Discord está en el perfil»,Todas,Frecuencia sostenible (2–3 piezas por semana),Media
+9,Efecto de reducción de fricción (default),Decisión,Un solo paso siguiente siempre igual: Discord,«Entras por Discord. Ya está.»,"Bio, CTA, web",El CTA dice exactamente lo que pasa al pulsar,Alta
+10,Prueba social honesta (transparencia),Decisión,"Sin comunidad no hay testimonios: se muestra el trabajo real (cambios, horas, decisiones)",«Semana 2 de beta: 3 cambios que pidieron los testers»,Historia semanal,"Prohibido inventar jugadores, cifras o testimonios",Media
+
+## Hoja: Skills verificadas
+Comprobación con integrar-propuestas (25-11-2026) de las 7 skills que proponía el plan,,,
+,,,
+Skill propuesta,¿Instalada?,Qué la cubre hoy,Acción
+marketing-skills,En partes,"marketing-psychology, copywriting, ad-creative, pricing, launch, marketing-plan, content-strategy",Usar las sueltas; no hace falta el paquete
+Landing Page Mastery,No,cro-onboarding + marketing-conductual + flujo-web-completo + gusto-web,Cubierta; revisar en el Día 11
+engineering-skills,No,"ingenieria-addy, flujo-ingenieria, bucle-doble-revision",Cubierta
+ra-qm-skills,No,"auditor-seguridad, auditoria-produccion (parcial; falta calidad regulatoria formal)",Hueco para la semana 3 (Día 18)
+finance-skills,No,Nada específico; data:analyze para cálculos,Se crea modelo-financiero el Día 26
+Gestor Autónomos,No,abogado-espana (parcial: fiscalidad no),Hueco; no inventar datos fiscales
+Decision Toolkit,No,"modelos-mentales, grill-me, puntos-ciegos",Cubierta
+
