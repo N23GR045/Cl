@@ -15,3 +15,6 @@ Copia de las instrucciones de cada entrenamiento activo. Actualizado el 25-11-20
 Todos usan las skills nuevas solos al empezar cada sesión (video-motion, ingenieria-addy, creador-agentes, skills-portables, bucle-doble-revision, negociacion, abogado-espana…) y tienen 22 conectores.
 
 **Aviso 25-11-2026:** las últimas ejecuciones fallaron al preparar el repositorio (`REPO_SETUP_FAILED`) porque el repo `Cl` ya no existe en GitHub. Se arregla volviendo a crear `Cl` (vacío) o creando versiones nuevas de las tareas sin ese repo.
+
+## La Tele
+La app de tele para el Fire TV vive en la rama **la-tele** (código en `la-tele/`). Cada push a esa rama compila la APK y la publica en Releases; los lunes se actualiza sola la lista de «Cine y series».
