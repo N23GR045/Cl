@@ -1,0 +1,416 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Negociación · Sesión 5 — Conseguir el «eso es» y resúmenes</title>
+<meta name="description" content="Sesión 5 del entrenamiento de negociación: resumir la postura y las emociones del otro hasta que diga «eso es», diferencia con «tienes razón», simulador de compra de coche de segunda mano y reto del día.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0B0F0D; --bg2:#111714; --card:#151C18; --line:#24302A; --line2:#2F3D35;
+  --tx:#E9F1EC; --tx2:#A9B8AF; --tx3:#7A8A81;
+  --ac:#3DDC97; --ac2:#2BB57A; --acs:rgba(61,220,151,.12);
+  --bad:#FF7A6B; --bads:rgba(255,122,107,.12); --mid:#F5C451; --mids:rgba(245,196,81,.12);
+  --r:18px; --ease:cubic-bezier(.22,1,.36,1);
+  color-scheme:dark;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--bg:#0B0F0D;--tx:#E9F1EC}}
+:root[data-theme="dark"]{--bg:#0B0F0D;--tx:#E9F1EC}
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%}
+body{background:var(--bg);color:var(--tx);font:16px/1.55 Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+.wrap{max-width:720px;margin:0 auto;padding:0 16px 80px}
+h1,h2{font-family:"Instrument Serif",Georgia,serif;font-weight:400;letter-spacing:-.01em;line-height:1.05}
+h2{font-size:clamp(28px,7vw,38px);margin-bottom:14px}
+h3{font-size:15px;font-weight:600;letter-spacing:.02em}
+p{color:var(--tx2)}
+.eyebrow{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--ac);font-weight:600}
+section{padding:44px 0 8px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:18px}
+
+/* HERO */
+.hero{position:relative;padding:56px 0 28px;isolation:isolate}
+.hero h1{font-size:clamp(46px,13vw,84px);margin:12px 0 14px}
+.hero h1 em{color:var(--ac);font-style:italic}
+.meta{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
+.pill{font-size:12.5px;border:1px solid var(--line2);border-radius:99px;padding:5px 11px;color:var(--tx2);background:var(--bg2)}
+.pill b{color:var(--tx);font-weight:600}
+.nobig{position:absolute;right:-10px;top:18px;z-index:-1;font-family:"Instrument Serif",serif;font-size:min(60vw,360px);line-height:.8;color:transparent;-webkit-text-stroke:1px rgba(61,220,151,.22);user-select:none;pointer-events:none}
+.nobig span{display:inline-block;animation:breathe 6s var(--ease) infinite}
+@keyframes breathe{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+
+.key{display:grid;gap:10px;margin-top:8px}
+.key li{list-style:none;display:flex;gap:12px;align-items:flex-start;padding:14px 16px;background:var(--card);border:1px solid var(--line);border-radius:14px}
+.key li .n{flex:none;width:26px;height:26px;border-radius:50%;background:var(--acs);color:var(--ac);display:grid;place-items:center;font-weight:700;font-size:13px}
+.key li p{color:var(--tx)}
+
+/* compare */
+.cmp{display:grid;gap:12px;grid-template-columns:1fr}
+@media(min-width:620px){.cmp{grid-template-columns:1fr 1fr}}
+.ex{border-radius:var(--r);padding:16px;border:1px solid var(--line)}
+.ex.bad{background:linear-gradient(180deg,var(--bads),transparent 70%)}
+.ex.good{background:linear-gradient(180deg,var(--acs),transparent 70%);border-color:rgba(61,220,151,.35)}
+.tag{display:inline-block;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;border-radius:6px;padding:3px 8px;margin-bottom:10px}
+.bad .tag{background:var(--bads);color:var(--bad)}
+.good .tag{background:var(--acs);color:var(--ac)}
+.bubble{background:var(--bg2);border:1px solid var(--line);border-radius:14px 14px 14px 4px;padding:10px 12px;margin:6px 0;color:var(--tx);font-size:15px}
+.bubble.me{border-radius:14px 14px 4px 14px;background:#17241D;margin-left:18px}
+.ex small{display:block;color:var(--tx3);margin-top:8px;font-size:13.5px}
+
+/* frases */
+.phr{display:grid;gap:8px}
+.phr button{all:unset;cursor:pointer;display:flex;justify-content:space-between;gap:10px;align-items:center;padding:14px 16px;background:var(--card);border:1px solid var(--line);border-radius:14px;color:var(--tx);font-size:15.5px;transition:border-color .2s,transform .2s var(--ease),background .2s}
+.phr button:hover{border-color:var(--line2)}
+.phr button:active{transform:scale(.985)}
+.phr button:focus-visible{outline:2px solid var(--ac);outline-offset:2px}
+.phr button .u{font-size:12px;color:var(--tx3);flex:none}
+.phr button.ok{border-color:var(--ac);background:#132019}
+.phr button.ok .u{color:var(--ac)}
+
+/* SIM */
+.sim{background:var(--bg2);border:1px solid var(--line);border-radius:22px;overflow:hidden}
+.simhead{display:flex;align-items:center;gap:12px;padding:14px 16px;border-bottom:1px solid var(--line);background:var(--card)}
+.av{width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,#3DDC97,#1E7A54);display:grid;place-items:center;font-weight:700;color:#06110B}
+.simhead .who b{display:block;font-size:15px}
+.simhead .who span{font-size:12.5px;color:var(--tx3)}
+.prog{margin-left:auto;font-size:12.5px;color:var(--tx2);font-variant-numeric:tabular-nums}
+.bar{height:3px;background:var(--line)}
+.bar i{display:block;height:100%;width:0;background:var(--ac);transition:width .5s var(--ease)}
+.counters{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;padding:10px 12px;border-bottom:1px solid var(--line)}
+.ctr{text-align:center;padding:6px 2px;border-radius:10px;background:var(--card)}
+.ctr b{display:block;font-size:18px;font-variant-numeric:tabular-nums;transition:color .3s}
+.ctr span{font-size:10.5px;color:var(--tx3);letter-spacing:.02em}
+.ctr.pop b{color:var(--ac);animation:pop .45s var(--ease)}
+@keyframes pop{0%{transform:scale(1)}40%{transform:scale(1.35)}100%{transform:scale(1)}}
+.chat{padding:14px 12px;display:flex;flex-direction:column;gap:8px;min-height:240px}
+.msg{max-width:88%;padding:10px 13px;border-radius:16px;font-size:15px;line-height:1.45;animation:in .42s var(--ease) both}
+.msg.them{align-self:flex-start;background:var(--card);border:1px solid var(--line);border-bottom-left-radius:5px}
+.msg.me{align-self:flex-end;background:#1A3226;border:1px solid rgba(61,220,151,.3);border-bottom-right-radius:5px}
+.why{align-self:stretch;font-size:13.5px;padding:10px 12px;border-radius:12px;border-left:3px solid;animation:in .42s .08s var(--ease) both}
+.why.g{background:var(--acs);border-color:var(--ac);color:#CFF5E3}
+.why.m{background:var(--mids);border-color:var(--mid);color:#F7E6B7}
+.why.b{background:var(--bads);border-color:var(--bad);color:#FFD3CD}
+.why b{font-weight:600}
+@keyframes in{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.typing{align-self:flex-start;display:flex;gap:4px;padding:12px 14px;background:var(--card);border:1px solid var(--line);border-radius:16px}
+.typing i{width:6px;height:6px;border-radius:50%;background:var(--tx3);animation:dot 1s infinite}
+.typing i:nth-child(2){animation-delay:.15s}.typing i:nth-child(3){animation-delay:.3s}
+@keyframes dot{0%,100%{opacity:.3;transform:translateY(0)}50%{opacity:1;transform:translateY(-3px)}}
+.opts{display:grid;gap:8px;padding:12px;border-top:1px solid var(--line);background:var(--card)}
+.opts .lbl{font-size:12px;color:var(--tx3);padding:0 2px}
+.opt{all:unset;cursor:pointer;padding:12px 14px;border-radius:14px;border:1px solid var(--line2);background:var(--bg2);color:var(--tx);font-size:15px;line-height:1.4;transition:border-color .2s,background .2s,transform .2s var(--ease);animation:in .35s var(--ease) both}
+.opt:nth-child(3){animation-delay:.05s}.opt:nth-child(4){animation-delay:.1s}
+.opt:hover{border-color:var(--ac)}
+.opt:active{transform:scale(.985)}
+.opt:focus-visible{outline:2px solid var(--ac);outline-offset:2px}
+.end{padding:20px 16px;text-align:center}
+.score{font-family:"Instrument Serif",serif;font-size:76px;line-height:1;color:var(--ac)}
+.score small{font-size:28px;color:var(--tx3)}
+.end p{margin:8px auto 14px;max-width:46ch}
+.btn{all:unset;cursor:pointer;display:inline-flex;align-items:center;gap:8px;padding:12px 18px;border-radius:99px;background:var(--ac);color:#06110B;font-weight:600;font-size:15px;transition:transform .2s var(--ease),background .2s}
+.btn:hover{background:#5BE6A9}.btn:active{transform:scale(.97)}
+.btn:focus-visible{outline:2px solid #fff;outline-offset:3px}
+.best{font-size:12.5px;color:var(--tx3);margin-top:10px}
+
+.reto{border:1px solid rgba(61,220,151,.4);background:radial-gradient(120% 120% at 100% 0%,rgba(61,220,151,.16),transparent 60%),var(--card)}
+.reto .q{color:var(--tx);font-size:17px;margin:10px 0}
+.list{display:grid;gap:8px;margin-top:6px}
+.list li{list-style:none;padding-left:22px;position:relative;color:var(--tx2)}
+.list li::before{content:"";position:absolute;left:4px;top:.62em;width:7px;height:7px;border-radius:50%;background:var(--ac)}
+.grid2{display:grid;gap:12px}
+@media(min-width:620px){.grid2{grid-template-columns:1fr 1fr}}
+.studio{font-size:13.5px;color:var(--tx3);border-top:1px dashed var(--line2);padding-top:14px;margin-top:18px}
+.src a{color:var(--ac);text-decoration:none;border-bottom:1px solid rgba(61,220,151,.35)}
+.src li{font-size:13.5px}
+.note{font-size:13px;color:var(--tx3);margin-top:10px}
+
+.rv{opacity:0;transform:translateY(16px);transition:opacity .7s var(--ease),transform .7s var(--ease)}
+.rv.on{opacity:1;transform:none}
+.toast{position:fixed;left:50%;bottom:20px;transform:translate(-50%,20px);opacity:0;background:var(--ac);color:#06110B;font-weight:600;font-size:14px;padding:10px 16px;border-radius:99px;transition:all .3s var(--ease);pointer-events:none;z-index:9}
+.toast.on{opacity:1;transform:translate(-50%,0)}
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
+  .rv{opacity:1;transform:none}
+}
+</style>
+<style>
+.hero h1 em{white-space:nowrap}
+.nobig{font-size:min(44vw,260px);top:6px;right:-6px;white-space:nowrap}
+.formula{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:16px 0 4px}
+.formula span{padding:8px 12px;border-radius:12px;background:var(--card);border:1px solid var(--line);font-size:14.5px;color:var(--tx)}
+.formula b{color:var(--ac);font-size:18px}
+.formula span.res{background:var(--acs);border-color:rgba(61,220,151,.45);color:#CFF5E3;font-weight:600}
+.vs{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px}
+.vs div{padding:14px;border-radius:14px;border:1px solid var(--line);background:var(--card)}
+.vs div b{display:block;font-family:"Instrument Serif",serif;font-size:26px;font-weight:400;line-height:1.1;margin-bottom:6px}
+.vs .y b{color:var(--ac)}.vs .n b{color:var(--bad)}
+.vs p{font-size:14px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="hero">
+  <div class="nobig" aria-hidden="true"><span>eso es</span></div>
+  <div class="eyebrow">Entrenamiento Negociación · Semana 2 · Control sin imponer</div>
+  <h1>Sesión 5<br>Conseguir el <em>«eso es»</em></h1>
+  <p>Cuando el otro siente que por fin alguien ha entendido su situación, baja la guardia. Hoy aprendes a provocar ese momento con un buen resumen.</p>
+  <div class="meta">
+    <span class="pill"><b>Caso:</b> coche de segunda mano</span>
+    <span class="pill"><b>Reto:</b> móvil en Wallapop</span>
+    <span class="pill"><b>Tiempo:</b> 15 min</span>
+  </div>
+</header>
+
+<section class="rv" aria-labelledby="k">
+  <div class="eyebrow">Idea clave</div>
+  <h2 id="k">En tres líneas</h2>
+  <ul class="key">
+    <li><span class="n">1</span><p>Nadie cede ante quien no le ha entendido. Antes de pedir nada, demuestra que comprendes su postura y lo que siente.</p></li>
+    <li><span class="n">2</span><p>La prueba es un resumen: lo que te ha contado con tus palabras, más las emociones que hay debajo, hasta que responda «eso es».</p></li>
+    <li><span class="n">3</span><p>Cuidado con «tienes razón»: suele ser una forma educada de quitarte de encima. «Eso es» significa que se siente entendido.</p></li>
+  </ul>
+  <div class="formula" aria-label="Resumen igual a paráfrasis más etiquetas">
+    <span>Paráfrasis<br><small style="color:var(--tx3)">lo que dice</small></span><b>+</b>
+    <span>Etiquetas<br><small style="color:var(--tx3)">lo que siente</small></span><b>=</b>
+    <span class="res">Resumen<br><small>«eso es»</small></span>
+  </div>
+</section>
+
+<section class="rv" aria-labelledby="t">
+  <div class="eyebrow">La técnica</div>
+  <h2 id="t">«Tienes razón» no es un acuerdo</h2>
+  <p style="margin-bottom:14px">Tu jefa te dice que este año no hay margen para mejorar tu horario. Quieres que lo reconsidere.</p>
+  <div class="cmp">
+    <div class="ex bad">
+      <span class="tag">Mal</span>
+      <div class="bubble me">Pero entiendes que llevo dos años haciendo turnos de cierre y que lo justo sería rotar, ¿verdad?</div>
+      <div class="bubble">Sí, sí, tienes razón. Ya lo miraremos.</div>
+      <small>Le has dado tus argumentos y te ha dado la razón para cerrar el tema. Nada ha cambiado y «ya lo miraremos» no tiene fecha.</small>
+    </div>
+    <div class="ex good">
+      <span class="tag">Bien</span>
+      <div class="bubble me">A ver si lo he entendido: vas justa de gente, si cambias mi turno tienes que tocar el de otros y parece que te preocupa que se queje medio equipo.</div>
+      <div class="bubble">Eso es. Ese es el lío.</div>
+      <small>Has resumido su problema, no el tuyo. Ahora se siente entendida y puedes preguntar: «¿cómo podríamos rotar sin que se te desmonte el cuadrante?».</small>
+    </div>
+  </div>
+  <div class="vs">
+    <div class="y"><b>«Eso es»</b><p>Se siente comprendido. Es el momento de proponer.</p></div>
+    <div class="n"><b>«Tienes razón»</b><p>Quiere que pares. Vuelve a escuchar y resume mejor.</p></div>
+  </div>
+  <p class="note">Si oyes «tienes razón» o «vale, vale», no avances: añade una etiqueta que falte o pregunta «¿qué se me escapa?».</p>
+</section>
+
+<section class="rv" aria-labelledby="f">
+  <div class="eyebrow">Frases modelo</div>
+  <h2 id="f">Para copiar</h2>
+  <p style="margin-bottom:12px">Toca una para copiarla al portapapeles.</p>
+  <div class="phr" id="phr"></div>
+</section>
+
+<section class="rv" aria-labelledby="s">
+  <div class="eyebrow">Simulador</div>
+  <h2 id="s">Luis vende el coche de su padre</h2>
+  <p style="margin-bottom:14px">Caso ficticio de práctica. Vas a ver un Seat León de 2017 con 132.000 km anunciado en 9.900 €. Tu objetivo: un precio razonable y una compra segura. Elige tu respuesta en cada turno: verás cómo reacciona y por qué.</p>
+  <div class="sim" id="sim">
+    <div class="simhead">
+      <div class="av" aria-hidden="true">L</div>
+      <div class="who"><b>Luis · vendedor particular</b><span>Estilo complaciente · la relación primero</span></div>
+      <div class="prog" id="prog">1/8</div>
+    </div>
+    <div class="bar"><i id="bar"></i></div>
+    <div class="counters" aria-live="polite">
+      <div class="ctr" id="c-esp"><b>0</b><span>espejos</span></div>
+      <div class="ctr" id="c-eti"><b>0</b><span>etiquetas</span></div>
+      <div class="ctr" id="c-cal"><b>0</b><span>calibradas</span></div>
+      <div class="ctr" id="c-res"><b>0</b><span>resúmenes</span></div>
+      <div class="ctr" id="c-eso"><b>0</b><span>«eso es»</span></div>
+    </div>
+    <div class="chat" id="chat" aria-live="polite"></div>
+    <div id="dock"></div>
+  </div>
+  <p class="note">En una compra real a un particular: pide el informe del vehículo de la DGT, revisa facturas y fecha de la ITV, haz contrato de compraventa por escrito y paga por transferencia. Si aparece un vicio oculto, el Código Civil da 6 meses para reclamar (se revisa con la skill de abogado-espana si llega el caso).</p>
+</section>
+
+<section class="rv" aria-labelledby="r">
+  <div class="eyebrow">Reto del día</div>
+  <h2 id="r">Te toca a ti</h2>
+  <div class="card reto">
+    <h3>Wallapop · el vendedor quemado</h3>
+    <p class="q">Te interesa un móvil Android de segunda mano. Escribes al vendedor y responde seco: «Precio cerrado. Estoy harto de que me regateen, quedo con gente y luego no aparece».</p>
+    <p>Escribe aquí, en la conversación, <b>un único mensaje</b> que resuma su situación y lo que siente para conseguir un «eso es». Todavía sin pedir rebaja. Yo haré de vendedor 2–3 rondas y te pondré nota.</p>
+    <p class="note">Pista: empieza por «Por lo que cuentas…» y nombra dos cosas: lo que le pasa y cómo le hace sentir.</p>
+  </div>
+</section>
+
+<section class="rv" aria-labelledby="a">
+  <div class="grid2">
+    <div class="card">
+      <div class="eyebrow">Aprendizajes</div>
+      <ul class="list" style="margin-top:10px">
+        <li>Un resumen es la suma de las sesiones anteriores: espejos para que cuente, etiquetas para nombrar lo que siente y paráfrasis para juntarlo.</li>
+        <li>El «eso es» marca el giro: antes, escuchas; después, propones con preguntas de «¿cómo…?».</li>
+        <li>Resumir también sirve al cerrar: repetir el acuerdo en voz alta convierte un «trato» vago en un compromiso con fecha y forma.</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="eyebrow">Qué mejorar</div>
+      <ul class="list" style="margin-top:10px">
+        <li>Aplicado de la sesión 4: hoy el simulador incluye el «sí» débil y el «tienes razón» para que aprendas a distinguirlos de un acuerdo real.</li>
+        <li>Los retos de las sesiones anteriores siguen abiertos: puedes responder el de hoy y el del streamer de Natural Life RP en esta conversación.</li>
+        <li>Para la sesión 6: resúmenes cortos (2–3 ideas). Un resumen largo suena a discurso y pierde el efecto.</li>
+      </ul>
+    </div>
+  </div>
+  <p class="studio"><b>Estudio:</b> lidera Contenido (técnica, guion y caso del coche) con Crecimiento (reto de Wallapop y frases para chat); Calidad auditó la página a 390 px, el contraste, el reduced-motion, la parte legal del simulador y que no haya citas literales del libro.</p>
+</section>
+
+<section class="rv src" aria-labelledby="fu">
+  <div class="eyebrow">Fuentes</div>
+  <h2 id="fu" style="font-size:28px">Para el caso del día</h2>
+  <ul class="list">
+    <li><a href="https://noticias.coches.com/noticias-motor/ventas-de-coches-de-segunda-mano-octubre-2026/577710" rel="noopener" target="_blank">coches.com · Ventas de coches de segunda mano en octubre de 2026</a></li>
+    <li><a href="https://www.motor.es/noticias/coche-segunda-mano-movilidad-espana-2026117154.html" rel="noopener" target="_blank">motor.es · Los usados dominan por precio y oferta: casi dos por cada nuevo</a></li>
+    <li><a href="https://www.dgt.es/nuestros-servicios/tu-vehiculo/vas-a-comprar-o-vender-un-vehiculo-de-segunda-mano/index.html" rel="noopener" target="_blank">DGT · Si vas a comprar un vehículo de segunda mano</a></li>
+    <li><a href="https://www.ocu.org/coches/coches/modelos/contrato-de-compraventa-de-un-vehiculo-usado-entre-particulares465394" rel="noopener" target="_blank">OCU · Contrato de compraventa de un vehículo usado entre particulares</a></li>
+    <li><a href="https://www.iese.edu/es/insight/articulos/negociacion-inteligencia-directivos-emociones/" rel="noopener" target="_blank">IESE Insight · Negociación y emociones</a></li>
+    <li>Base del método: <i>Rompe la barrera del no</i>, de Chris Voss y Tahl Raz (explicado con palabras propias).</li>
+  </ul>
+</section>
+
+</div>
+<div class="toast" id="toast">Copiada</div>
+
+<script>
+(function(){
+  var frases=[
+    ["A ver si lo he entendido…","abrir resumen"],
+    ["Por lo que cuentas, parece que…","etiqueta"],
+    ["Corrígeme si me equivoco, pero…","resumen"],
+    ["Da la impresión de que lo que más te preocupa es…","emoción"],
+    ["¿Qué se me escapa?","tras «tienes razón»"],
+    ["Entonces, lo que necesitas es… y lo que no quieres es…","doble lado"],
+    ["Antes de decir que sí, lo repito para que no haya dudas:","cerrar"],
+    ["¿Lo he entendido bien o me falta algo?","comprobar"]
+  ];
+  var ph=document.getElementById('phr'), toast=document.getElementById('toast'), tt;
+  frases.forEach(function(f){
+    var b=document.createElement('button'); b.type='button';
+    b.innerHTML='<span>'+f[0]+'</span><span class="u">'+f[1]+'</span>';
+    b.addEventListener('click',function(){
+      var done=function(){b.classList.add('ok');b.querySelector('.u').textContent='copiada';toast.classList.add('on');clearTimeout(tt);tt=setTimeout(function(){toast.classList.remove('on')},1400)};
+      try{navigator.clipboard.writeText(f[0]).then(done,done)}catch(e){done()}
+    });
+    ph.appendChild(b);
+  });
+
+  var T=[
+    {them:"Hola, ¿vienes por el León? Te aviso: 9.900 € y no bajo, que ya me han llamado varios.",
+     o:[
+      {t:"Parece que has tenido que aguantar a mucha gente regateando sin ganas de comprar.",p:2,k:["eti"],r:"¡Uf, ni te imaginas! Uno me ofreció 6.000 por teléfono sin haberlo visto.",w:"g",x:"<b>Etiqueta.</b> Nombras lo que le cansa antes de que lo diga. Se relaja y te cuenta más."},
+      {t:"¿Varios?",p:1.5,k:["esp"],r:"Bueno… varios preguntando. Venir, has venido tú.",w:"g",x:"<b>Espejo.</b> Funciona: descubres que «varios» eran llamadas, no ofertas. Información útil."},
+      {t:"¿Me lo dejas en 8.000 y me lo llevo hoy?",p:0,k:[],r:"Ya empezamos… No, ya te he dicho el precio.",w:"b",x:"<b>Cifra en el primer minuto.</b> Le confirmas que eres uno más de los que regatean."}
+     ]},
+    {them:"Este coche lo ha cuidado mi padre como a un hijo. Siempre al taller de confianza.",
+     o:[
+      {t:"¿Como a un hijo?",p:2,k:["esp"],r:"Sí… Era su coche. Ya no conduce y me da pena venderlo a cualquiera.",w:"g",x:"<b>Espejo.</b> Tres palabras y aparece lo importante: el valor sentimental."},
+      {t:"Ya, eso lo dice todo el mundo.",p:0,k:[],r:"Pues tengo las facturas, si no te fías.",w:"b",x:"<b>Desconfianza directa.</b> Le pones a la defensiva justo cuando te abría la puerta."},
+      {t:"¿Y por qué lo vendes entonces?",p:0.5,k:[],r:"Porque sí, porque ya no lo usa nadie.",w:"m",x:"<b>El «¿por qué?» suena a sospecha.</b> Responde corto. El espejo saca más."}
+     ]},
+    {them:"…y no quiero que acabe en manos de alguien que lo maltrate.",
+     o:[
+      {t:"Da la impresión de que para ti no es solo un coche: te importa quién se lo lleva.",p:2,k:["eti"],r:"Eso… sí. Es más que el dinero, la verdad.",w:"g",x:"<b>Etiqueta.</b> Nombras la emoción de fondo. Ya no eres un comprador más."},
+      {t:"Tranquilo, yo lo cuidaré, te lo prometo.",p:0.5,k:[],r:"Ya, eso dicen todos.",w:"m",x:"<b>Promesa vacía.</b> Hablas de ti. La etiqueta habla de él, y eso convence más."},
+      {t:"Bueno, vamos a lo importante: el precio.",p:0,k:[],r:"Para mí esto también es importante, ¿eh?",w:"b",x:"<b>Desprecias su emoción.</b> Acabas de decirle que lo que le importa no cuenta."}
+     ]},
+    {them:"Pero tampoco lo voy a regalar, ¿eh? El precio es el precio.",
+     o:[
+      {t:"Claro. ¿Qué mantenimiento le toca en los próximos meses?",p:2,k:["cal"],r:"Pues… la distribución toca a los 140.000 y las ruedas traseras están justas.",w:"g",x:"<b>Pregunta calibrada.</b> Con «¿qué…?» es él quien pone sobre la mesa los gastos pendientes."},
+      {t:"Las ruedas están fatal y le toca la distribución: eso baja el precio sí o sí.",p:0.5,k:[],r:"Hombre, es un coche de 2017, ¿qué esperabas?",w:"m",x:"<b>Dato cierto, tono de ataque.</b> Lo dices tú y como reproche: lo defiende en vez de reconocerlo."},
+      {t:"Vale, 9.900 entonces.",p:0,k:[],r:"¡Perfecto! ¿Lo pagas en efectivo?",w:"b",x:"<b>Cedes sin explorar</b> y además sin saber qué gastos te esperan."}
+     ]},
+    {them:"Pero eso es normal en un coche de esta edad, ¿no?",
+     o:[
+      {t:"A ver si lo he entendido: es el coche de tu padre, quieres que se lo quede alguien que lo cuide, no lo vas a regalar y sabes que pronto le tocan la distribución y las ruedas.",p:2,k:["res","eso"],r:"Eso es. Lo has clavado.",w:"g",x:"<b>Resumen = paráfrasis + etiquetas.</b> «Eso es»: ahora se siente entendido y está listo para escuchar tu propuesta."},
+      {t:"Tienes que reconocer que la distribución cuesta un dineral, ¿verdad?",p:0.5,k:[],r:"Sí, sí, tienes razón… (mira el móvil)",w:"m",x:"<b>«Tienes razón» no es «eso es».</b> Te da la razón para que dejes de insistir. No ha cambiado nada."},
+      {t:"Normal, pero alguien tiene que pagarlo y no voy a ser yo.",p:0,k:[],r:"Pues el siguiente que venga igual sí.",w:"b",x:"<b>Choque.</b> Le recuerdas que tiene alternativa: otro comprador."}
+     ]},
+    {them:"Mira, me has caído bien. ¿Qué me ofreces?",
+     o:[
+      {t:"¿Sería una locura dejarlo en 9.100, contando la distribución y las dos ruedas? Te enseño los presupuestos que pedí.",p:2,k:[],r:"Locura no… Te lo dejo en 9.300 y te regalo las ruedas de invierno del trastero.",w:"g",x:"<b>Propones después del «eso es»</b>, con un criterio objetivo (presupuestos) y buscando el «no». Él mejora la oferta solo."},
+      {t:"8.000 y me lo llevo hoy.",p:0,k:[],r:"Entonces nada, gracias por venir.",w:"b",x:"<b>Ancla agresiva sin criterio.</b> Rompes la confianza que acababas de crear."},
+      {t:"Lo que tú digas, me fío.",p:0.5,k:[],r:"Pues 9.800, que ya es rebaja.",w:"m",x:"<b>Le regalas la decisión.</b> La ilusión de control es que sienta que decide, no que decida él solo."}
+     ]},
+    {them:"9.300 con las ruedas de invierno. ¿Trato?",
+     o:[
+      {t:"Antes de decir que sí, lo repito para que no haya dudas: 9.300 €, ruedas de invierno, contrato firmado, pago por transferencia y la transferencia de titularidad a mi cargo. ¿Lo he entendido bien?",p:2,k:["res","eso"],r:"Eso es. Y te doy el libro de mantenimiento con todas las facturas.",w:"g",x:"<b>Resumen de cierre.</b> Conviertes «trato» en un compromiso concreto. Su segundo «eso es» confirma que no hay malentendidos."},
+      {t:"¡Trato!",p:1,k:[],r:"Perfecto, ya me dirás cuándo.",w:"m",x:"<b>Bien, pero sin el «cómo».</b> «Ya me dirás» sin fecha, pago ni papeles es un sí débil."},
+      {t:"¿Y si lo dejamos en 9.000 redondos?",p:0.5,k:[],r:"Oye, que ya te he bajado 600… No tensemos.",w:"m",x:"<b>Regatear tras un buen acuerdo</b> gasta la confianza que has creado."}
+     ]},
+    {them:"Por cierto, si después le pasa algo, no me llames, ¿eh? Se vende como está.",
+     o:[
+      {t:"Parece que te preocupa que vuelva con reclamaciones. ¿Qué te parece si ponemos en el contrato el estado, los kilómetros y las facturas? Así los dos estamos tranquilos.",p:2,k:["eti","cal"],r:"Eso me deja más tranquilo, sí. Lo hacemos así.",w:"g",x:"<b>Etiqueta + propuesta clara.</b> Calmas su miedo sin renunciar a tus derechos: lo pactado queda por escrito."},
+      {t:"Por ley respondes de los vicios ocultos, así que te llamaré si hace falta.",p:0.5,k:[],r:"Vaya, pues casi que me lo pienso…",w:"m",x:"<b>El dato es correcto</b> (el Código Civil da 6 meses), pero dicho así suena a amenaza."},
+      {t:"Vale, vale, no te llamaré pase lo que pase.",p:0,k:[],r:"Genial, pues así lo ponemos.",w:"b",x:"<b>Renuncias a algo sin necesidad.</b> Si aparece un defecto oculto grave, querrás poder reclamar."}
+     ]}
+  ];
+  var i=0, pts=0, c={esp:0,eti:0,cal:0,res:0,eso:0};
+  var chat=document.getElementById('chat'), dock=document.getElementById('dock'),
+      prog=document.getElementById('prog'), bar=document.getElementById('bar');
+  var rm=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function el(cls,html){var d=document.createElement('div');d.className=cls;d.innerHTML=html;chat.appendChild(d);return d}
+  var user=false;
+  function scroll(){if(!user)return;var s=document.getElementById('sim').getBoundingClientRect();if(s.bottom>innerHeight){window.scrollBy({top:Math.min(s.bottom-innerHeight+16,260),behavior:rm?'auto':'smooth'})}}
+  function bump(k){c[k]++;var n=document.getElementById('c-'+k);n.querySelector('b').textContent=c[k];n.classList.remove('pop');void n.offsetWidth;n.classList.add('pop')}
+  function them(txt,cb){
+    var ty=el('typing','<i></i><i></i><i></i>');
+    setTimeout(function(){ty.remove();el('msg them',txt);scroll();cb&&cb()},rm?0:650);
+  }
+  function showOpts(){
+    var t=T[i]; dock.innerHTML='';
+    var box=document.createElement('div');box.className='opts';
+    box.innerHTML='<div class="lbl">Tu respuesta</div>';
+    t.o.slice().sort(function(){return Math.random()-.5}).forEach(function(o){
+      var b=document.createElement('button');b.type='button';b.className='opt';b.textContent=o.t;
+      b.addEventListener('click',function(){pick(o)});box.appendChild(b);
+    });
+    dock.appendChild(box);
+  }
+  function pick(o){
+    user=true; dock.innerHTML='';
+    el('msg me',o.t); pts+=o.p; o.k.forEach(bump);
+    them(o.r,function(){
+      el('why '+o.w,o.x); scroll();
+      i++; bar.style.width=(i/T.length*100)+'%';
+      if(i<T.length){prog.textContent=(i+1)+'/'+T.length;setTimeout(function(){them(T[i].them,showOpts)},rm?0:700)}
+      else setTimeout(end,rm?0:600);
+    });
+  }
+  function end(){
+    var nota=Math.round(pts/(T.length*2)*100)/10;
+    var best=NaN;try{best=parseFloat(localStorage.getItem('neg-s5-best'));if(!(best>=nota)){localStorage.setItem('neg-s5-best',nota)}}catch(e){}
+    var msg=nota>=9?'Nivel negociador: has escuchado hasta el «eso es» y solo entonces has propuesto.':nota>=6?'Buen camino. Repite y fíjate en cuándo te dicen «tienes razón» en vez de «eso es».':'Has ido a la cifra antes de entenderle. Prueba otra vez: espejo, etiqueta y resumen primero.';
+    dock.innerHTML='<div class="end"><div class="eyebrow">Nota final</div><div class="score">'+nota.toString().replace('.',',')+'<small>/10</small></div><p>'+msg+'</p><p style="font-size:13.5px">Espejos '+c.esp+' · etiquetas '+c.eti+' · calibradas '+c.cal+' · resúmenes '+c.res+' · «eso es» '+c.eso+'</p><button class="btn" type="button" id="again">Repetir el ensayo</button>'+(!isNaN(best)?'<div class="best">Tu mejor nota en este móvil: '+String(Math.max(best,nota)).replace('.',',')+'</div>':'')+'</div>';
+    document.getElementById('again').addEventListener('click',start);
+    scroll();
+  }
+  function start(){
+    i=0;pts=0;for(var k in c){c[k]=0;document.getElementById('c-'+k).querySelector('b').textContent=0}
+    chat.innerHTML='';dock.innerHTML='';bar.style.width='0';prog.textContent='1/'+T.length;
+    them(T[0].them,showOpts);
+  }
+  start();
+
+  var rv=document.querySelectorAll('.rv');
+  if('IntersectionObserver' in window&&!rm){
+    var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('on');io.unobserve(e.target)}})},{rootMargin:'0px 0px -8% 0px'});
+    rv.forEach(function(r){io.observe(r)});
+  } else rv.forEach(function(r){r.classList.add('on')});
+})();
+</script>
+</body>
+</html>

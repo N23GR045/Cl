@@ -1,0 +1,233 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Negociación · Sesión 2 — Espejos</title>
+<meta name="description" content="Sesión 2 del entrenamiento de negociación: el espejo, repetir las últimas palabras y callar, con simulador de petición de aumento de sueldo.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0B0F0D; --bg2:#111714; --card:#151C18; --line:#24302A; --line2:#2F3D35;
+  --tx:#E9F1EC; --tx2:#A9B8AF; --tx3:#7A8A81;
+  --ac:#3DDC97; --ac2:#2BB57A; --acs:rgba(61,220,151,.12);
+  --bad:#FF7A6B; --bads:rgba(255,122,107,.12); --mid:#F5C451; --mids:rgba(245,196,81,.12);
+  --r:18px; --ease:cubic-bezier(.22,1,.36,1);
+  color-scheme:dark;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--bg:#0B0F0D;--tx:#E9F1EC}}
+:root[data-theme="dark"]{--bg:#0B0F0D;--tx:#E9F1EC}
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%}
+body{background:var(--bg);color:var(--tx);font:16px/1.55 Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+.wrap{max-width:720px;margin:0 auto;padding:0 16px 80px}
+h1,h2{font-family:"Instrument Serif",Georgia,serif;font-weight:400;letter-spacing:-.01em;line-height:1.05}
+h2{font-size:clamp(28px,7vw,38px);margin-bottom:14px}
+h3{font-size:15px;font-weight:600;letter-spacing:.02em}
+p{color:var(--tx2)}
+.eyebrow{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--ac);font-weight:600}
+section{padding:44px 0 8px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:18px}
+
+/* HERO */
+.hero{position:relative;padding:56px 0 28px;isolation:isolate}
+.hero h1{font-size:clamp(46px,13vw,84px);margin:12px 0 14px}
+.hero h1 em{color:var(--ac);font-style:italic}
+.meta{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
+.pill{font-size:12.5px;border:1px solid var(--line2);border-radius:99px;padding:5px 11px;color:var(--tx2);background:var(--bg2)}
+.pill b{color:var(--tx);font-weight:600}
+.nobig{position:absolute;right:-10px;top:18px;z-index:-1;font-family:"Instrument Serif",serif;font-size:min(60vw,360px);line-height:.8;color:transparent;-webkit-text-stroke:1px rgba(61,220,151,.22);user-select:none;pointer-events:none}
+.nobig span{display:inline-block;animation:breathe 6s var(--ease) infinite}
+@keyframes breathe{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+
+.key{display:grid;gap:10px;margin-top:8px}
+.key li{list-style:none;display:flex;gap:12px;align-items:flex-start;padding:14px 16px;background:var(--card);border:1px solid var(--line);border-radius:14px}
+.key li .n{flex:none;width:26px;height:26px;border-radius:50%;background:var(--acs);color:var(--ac);display:grid;place-items:center;font-weight:700;font-size:13px}
+.key li p{color:var(--tx)}
+
+/* compare */
+.cmp{display:grid;gap:12px;grid-template-columns:1fr}
+@media(min-width:620px){.cmp{grid-template-columns:1fr 1fr}}
+.ex{border-radius:var(--r);padding:16px;border:1px solid var(--line)}
+.ex.bad{background:linear-gradient(180deg,var(--bads),transparent 70%)}
+.ex.good{background:linear-gradient(180deg,var(--acs),transparent 70%);border-color:rgba(61,220,151,.35)}
+.tag{display:inline-block;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;border-radius:6px;padding:3px 8px;margin-bottom:10px}
+.bad .tag{background:var(--bads);color:var(--bad)}
+.good .tag{background:var(--acs);color:var(--ac)}
+.bubble{background:var(--bg2);border:1px solid var(--line);border-radius:14px 14px 14px 4px;padding:10px 12px;margin:6px 0;color:var(--tx);font-size:15px}
+.bubble.me{border-radius:14px 14px 4px 14px;background:#17241D;margin-left:18px}
+.ex small{display:block;color:var(--tx3);margin-top:8px;font-size:13.5px}
+
+/* frases */
+.phr{display:grid;gap:8px}
+.phr button{all:unset;cursor:pointer;display:flex;justify-content:space-between;gap:10px;align-items:center;padding:14px 16px;background:var(--card);border:1px solid var(--line);border-radius:14px;color:var(--tx);font-size:15.5px;transition:border-color .2s,transform .2s var(--ease),background .2s}
+.phr button:hover{border-color:var(--line2)}
+.phr button:active{transform:scale(.985)}
+.phr button:focus-visible{outline:2px solid var(--ac);outline-offset:2px}
+.phr button .u{font-size:12px;color:var(--tx3);flex:none}
+.phr button.ok{border-color:var(--ac);background:#132019}
+.phr button.ok .u{color:var(--ac)}
+
+/* SIM */
+.sim{background:var(--bg2);border:1px solid var(--line);border-radius:22px;overflow:hidden}
+.simhead{display:flex;align-items:center;gap:12px;padding:14px 16px;border-bottom:1px solid var(--line);background:var(--card)}
+.av{width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,#3DDC97,#1E7A54);display:grid;place-items:center;font-weight:700;color:#06110B}
+.simhead .who b{display:block;font-size:15px}
+.simhead .who span{font-size:12.5px;color:var(--tx3)}
+.prog{margin-left:auto;font-size:12.5px;color:var(--tx2);font-variant-numeric:tabular-nums}
+.bar{height:3px;background:var(--line)}
+.bar i{display:block;height:100%;width:0;background:var(--ac);transition:width .5s var(--ease)}
+.counters{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;padding:10px 12px;border-bottom:1px solid var(--line)}
+.ctr{text-align:center;padding:6px 2px;border-radius:10px;background:var(--card)}
+.ctr b{display:block;font-size:18px;font-variant-numeric:tabular-nums;transition:color .3s}
+.ctr span{font-size:10.5px;color:var(--tx3);letter-spacing:.02em}
+.ctr.pop b{color:var(--ac);animation:pop .45s var(--ease)}
+@keyframes pop{0%{transform:scale(1)}40%{transform:scale(1.35)}100%{transform:scale(1)}}
+.chat{padding:14px 12px;display:flex;flex-direction:column;gap:8px;min-height:240px}
+.msg{max-width:88%;padding:10px 13px;border-radius:16px;font-size:15px;line-height:1.45;animation:in .42s var(--ease) both}
+.msg.them{align-self:flex-start;background:var(--card);border:1px solid var(--line);border-bottom-left-radius:5px}
+.msg.me{align-self:flex-end;background:#1A3226;border:1px solid rgba(61,220,151,.3);border-bottom-right-radius:5px}
+.why{align-self:stretch;font-size:13.5px;padding:10px 12px;border-radius:12px;border-left:3px solid;animation:in .42s .08s var(--ease) both}
+.why.g{background:var(--acs);border-color:var(--ac);color:#CFF5E3}
+.why.m{background:var(--mids);border-color:var(--mid);color:#F7E6B7}
+.why.b{background:var(--bads);border-color:var(--bad);color:#FFD3CD}
+.why b{font-weight:600}
+@keyframes in{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.typing{align-self:flex-start;display:flex;gap:4px;padding:12px 14px;background:var(--card);border:1px solid var(--line);border-radius:16px}
+.typing i{width:6px;height:6px;border-radius:50%;background:var(--tx3);animation:dot 1s infinite}
+.typing i:nth-child(2){animation-delay:.15s}.typing i:nth-child(3){animation-delay:.3s}
+@keyframes dot{0%,100%{opacity:.3;transform:translateY(0)}50%{opacity:1;transform:translateY(-3px)}}
+.opts{display:grid;gap:8px;padding:12px;border-top:1px solid var(--line);background:var(--card)}
+.opts .lbl{font-size:12px;color:var(--tx3);padding:0 2px}
+.opt{all:unset;cursor:pointer;padding:12px 14px;border-radius:14px;border:1px solid var(--line2);background:var(--bg2);color:var(--tx);font-size:15px;line-height:1.4;transition:border-color .2s,background .2s,transform .2s var(--ease);animation:in .35s var(--ease) both}
+.opt:nth-child(3){animation-delay:.05s}.opt:nth-child(4){animation-delay:.1s}
+.opt:hover{border-color:var(--ac)}
+.opt:active{transform:scale(.985)}
+.opt:focus-visible{outline:2px solid var(--ac);outline-offset:2px}
+.end{padding:20px 16px;text-align:center}
+.score{font-family:"Instrument Serif",serif;font-size:76px;line-height:1;color:var(--ac)}
+.score small{font-size:28px;color:var(--tx3)}
+.end p{margin:8px auto 14px;max-width:46ch}
+.btn{all:unset;cursor:pointer;display:inline-flex;align-items:center;gap:8px;padding:12px 18px;border-radius:99px;background:var(--ac);color:#06110B;font-weight:600;font-size:15px;transition:transform .2s var(--ease),background .2s}
+.btn:hover{background:#5BE6A9}.btn:active{transform:scale(.97)}
+.btn:focus-visible{outline:2px solid #fff;outline-offset:3px}
+.best{font-size:12.5px;color:var(--tx3);margin-top:10px}
+
+.reto{border:1px solid rgba(61,220,151,.4);background:radial-gradient(120% 120% at 100% 0%,rgba(61,220,151,.16),transparent 60%),var(--card)}
+.reto .q{color:var(--tx);font-size:17px;margin:10px 0}
+.list{display:grid;gap:8px;margin-top:6px}
+.list li{list-style:none;padding-left:22px;position:relative;color:var(--tx2)}
+.list li::before{content:"";position:absolute;left:4px;top:.62em;width:7px;height:7px;border-radius:50%;background:var(--ac)}
+.grid2{display:grid;gap:12px}
+@media(min-width:620px){.grid2{grid-template-columns:1fr 1fr}}
+.studio{font-size:13.5px;color:var(--tx3);border-top:1px dashed var(--line2);padding-top:14px;margin-top:18px}
+.src a{color:var(--ac);text-decoration:none;border-bottom:1px solid rgba(61,220,151,.35)}
+.src li{font-size:13.5px}
+.note{font-size:13px;color:var(--tx3);margin-top:10px}
+
+.rv{opacity:0;transform:translateY(16px);transition:opacity .7s var(--ease),transform .7s var(--ease)}
+.rv.on{opacity:1;transform:none}
+.toast{position:fixed;left:50%;bottom:20px;transform:translate(-50%,20px);opacity:0;background:var(--ac);color:#06110B;font-weight:600;font-size:14px;padding:10px 16px;border-radius:99px;transition:all .3s var(--ease);pointer-events:none;z-index:9}
+.toast.on{opacity:1;transform:translate(-50%,0)}
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
+  .rv{opacity:1;transform:none}
+}
+</style>
+</head>
+<body>
+<div class="wrap" id="app"></div>
+<div class="toast" id="toast">Copiada</div>
+<script>
+var C = {"n": 2, "title": "Negociación · Sesión 2 — Espejos", "desc": "Sesión 2 del entrenamiento de negociación: el espejo, repetir las últimas palabras y callar, con simulador de petición de aumento de sueldo.", "big": "¿…?", "eyebrow": "Entrenamiento Negociación · Semana 1 · Por qué la emoción decide", "h1": "Sesión 2<br><em>Espejos</em>", "lead": "La técnica más sencilla y la que más información saca: repetir las últimas palabras del otro y quedarte callado.", "pills": [["Caso", "pedir un aumento"], ["Reto", "un presupuesto de taller que se dispara"], ["Tiempo", "15 min"]], "key": ["Un espejo es repetir 1–3 palabras clave de lo último que ha dicho el otro, en tono de pregunta suave.", "Después, silencio de unos cuatro segundos. El otro siente que le escuchas y amplía.", "Al ampliar te da lo que no sabías: plazos, quién decide, qué teme. Eso vale más que cualquier argumento."], "tech": {"h": "Responder o reflejar", "ctx": "Tu jefa te dice que el presupuesto de este año está «muy ajustado».", "bad": {"msgs": [[1, "Ya, pero yo llevo dos años sin subida."], [0, "Como mucha gente aquí, no eres el único."]], "why": "Contestas con tu argumento y chocas con el suyo. No aprendes nada nuevo."}, "good": {"msgs": [[1, "¿Muy ajustado?"], [0, "Sí… congelado hasta marzo, salvo quien asuma más responsabilidades."]], "why": "Dos palabras y silencio. Ahora sabes que existe una vía: más responsabilidades."}, "note": "Si el espejo suena robótico, añade antes un «perdona…» o un «a ver…» y mantén el tono cálido de la sesión 1."}, "frases": [["¿…muy ajustado?", "espejo"], ["Perdona… ¿cambio de responsabilidades?", "espejo suave"], ["Lo siento, ¿en dos minutos?", "espejo"], ["(silencio de 4 segundos)", "pausa"], ["Cuéntame más de eso.", "ampliar"], ["¿Qué quieres decir con «datos»?", "ampliar"], ["Parece que te preocupa cómo lo vea dirección.", "etiqueta"], ["¿Cómo te vendría mejor que lo preparase?", "calibrada"]], "sim": {"h": "Laura y tu sueldo", "intro": "Caso ficticio de práctica: llevas dos años en la empresa y pides una reunión a tu jefa para hablar de tu salario.", "av": "L", "who": "Laura · tu jefa", "style": "Estilo analítico · quiere datos y tiempo", "note": "Criterio objetivo para un caso real: la subida media pactada en convenio rondaba el 3 % en octubre de 2026, por debajo del IPC (ver fuentes). Usa tu convenio y datos de tu puesto."}, "ctr": [["esp", "espejos"], ["sil", "silencios"], ["eti", "etiquetas"], ["calib", "calibradas"], ["eso", "«eso es»"]], "turns": [{"them": "Me dijiste que querías hablar de tu situación. Te adelanto que este año el presupuesto está muy ajustado.", "o": [{"t": "¿Muy ajustado?", "p": 2, "r": "Sí. Dirección ha congelado las bandas hasta marzo, salvo promociones o cambios de responsabilidades.", "w": "g", "x": "<b>Espejo.</b> Dos palabras y te descubre una puerta abierta.", "k": ["esp"]}, {"t": "Ya, pero yo llevo dos años sin subida.", "p": 0.5, "r": "Como mucha gente aquí.", "w": "m", "x": "<b>Argumentas demasiado pronto.</b> Choca con su argumento.", "k": []}, {"t": "Entonces no hay nada que hacer, ¿no?", "p": 0, "r": "Me temo que no, de momento.", "w": "b", "x": "<b>Le das la salida fácil</b> y cierra la conversación.", "k": []}]}, {"them": "…salvo promociones o cambios de responsabilidades.", "o": [{"t": "¿Cambios de responsabilidades? (y te callas)", "p": 2, "r": "…Sí. Si alguien asume más funciones se puede justificar. Lo de coordinar a los nuevos, por ejemplo.", "w": "g", "x": "<b>Espejo + silencio.</b> Aguantar el silencio hace que ella llene el hueco con información útil.", "k": ["esp", "sil"]}, {"t": "Pues yo ya hago más de lo que me toca.", "p": 0.5, "r": "Puede, pero eso hay que demostrarlo.", "w": "m", "x": "<b>Afirmación sin pruebas.</b> Es razonable, pero le das un motivo para dudar.", "k": []}, {"t": "Vale, entonces espero a marzo.", "p": 0, "r": "Perfecto, lo vemos entonces.", "w": "b", "x": "<b>Te rindes</b> justo cuando aparecía la vía.", "k": []}]}, {"them": "…aunque tendría que ir con datos. No me vale con «hago mucho».", "o": [{"t": "Da la impresión de que quieres ayudarme, pero necesitas algo sólido que llevar arriba.", "p": 2, "r": "Exacto. Si llego sin números, me lo tumban en dos minutos.", "w": "g", "x": "<b>Etiqueta.</b> La pones de tu lado: ya no es tu jefa contra ti, sois dos contra el problema.", "k": ["eti"]}, {"t": "Te mando un correo con todo.", "p": 1, "r": "Vale, mándamelo.", "w": "m", "x": "<b>Correcto pero apresurado.</b> No sabes aún qué datos le sirven.", "k": []}, {"t": "¿Por qué siempre piden datos?", "p": 0, "r": "Porque así funcionan las empresas.", "w": "b", "x": "<b>«¿Por qué?»</b> suena a queja y a reproche.", "k": []}]}, {"them": "Si llego sin números, me lo tumban en dos minutos.", "o": [{"t": "¿En dos minutos?", "p": 2, "r": "Sí. El director financiero mira tres cosas: impacto, comparación con el mercado y si hay riesgo de perder a la persona.", "w": "g", "x": "<b>Espejo.</b> Te acaba de dar los criterios de quien decide de verdad.", "k": ["esp"]}, {"t": "(silencio)", "p": 1.5, "r": "…Bueno, ya sabes cómo es Andrés. Mira impacto y mercado, sobre todo.", "w": "g", "x": "<b>Silencio.</b> Funciona, aunque sacas algo menos que con el espejo.", "k": ["sil"]}, {"t": "Pues te preparo los números.", "p": 1, "r": "Vale.", "w": "m", "x": "<b>Bien, pero sin saber cuáles.</b>", "k": []}]}, {"them": "Impacto, mercado y si hay riesgo de que te vayas.", "o": [{"t": "A ver si lo he entendido: necesitas un caso con mi impacto medible, una referencia de mercado y que dirección vea que le conviene mantener a quien ya funciona.", "p": 2, "r": "Eso es. Justo eso.", "w": "g", "x": "<b>Resumen.</b> Consigues el «eso es»: se siente entendida.", "k": ["eso"]}, {"t": "¿Me estás diciendo que diga que me voy?", "p": 0, "r": "Yo no he dicho eso.", "w": "b", "x": "<b>Malinterpretas en voz alta</b> y la pones a la defensiva.", "k": []}, {"t": "Si no me suben, me iré.", "p": 0, "r": "Bueno, eso es decisión tuya.", "w": "b", "x": "<b>Farol o amenaza.</b> Firmeza sí, engaño no.", "k": []}]}, {"them": "Eso es. ¿Qué puedes traerme?", "o": [{"t": "¿Cómo te vendría mejor: una página con los tres puntos, o lo vemos juntas antes de enviarlo?", "p": 2, "r": "Una página, y la repasamos el jueves antes de subirla.", "w": "g", "x": "<b>Pregunta calibrada.</b> Ella decide el formato y se compromete a una fecha.", "k": ["calib"]}, {"t": "Lo que sea, tú dime.", "p": 0.5, "r": "Pues algo con datos.", "w": "m", "x": "<b>Demasiado vago.</b>", "k": []}, {"t": "Te lo traigo la semana que viene.", "p": 1, "r": "Vale.", "w": "m", "x": "<b>Bien, pero sin fecha ni formato.</b>", "k": []}]}, {"them": "Una página y la repasamos el jueves.", "o": [{"t": "Perfecto. ¿Y qué pasaría si dirección dice que no hasta marzo?", "p": 2, "r": "Entonces lo dejo por escrito: en marzo entras la primera, con efecto desde enero si se aprueba.", "w": "g", "x": "<b>Preguntas por el plan B.</b> Consigues un compromiso incluso si sale mal.", "k": ["calib"]}, {"t": "Genial, gracias.", "p": 1, "r": "A ti.", "w": "m", "x": "<b>Bien, pero sin plan B.</b>", "k": []}, {"t": "¿Me prometes algo si no lo aprueban?", "p": 0.5, "r": "No puedo prometer nada.", "w": "m", "x": "<b>Pedir una promesa</b> invita a decir que no. Mejor un «¿qué pasaría si…?».", "k": []}]}], "end": ["Nivel negociador: has escuchado, has nombrado lo que sentía y has cerrado con un «cómo».", "Buen camino. Repite y prueba a escuchar más antes de hablar de cifras.", "Has ido al choque o a la cifra demasiado pronto. Vuelve a intentarlo con más calma."], "reto": {"h": "El presupuesto del taller se dispara", "q": "Llevaste el coche a revisión y te llaman: «Esto es bastante más caro de lo que pensábamos».", "ask": "Escribe aquí <b>tus tres primeras respuestas usando solo espejos</b> (y silencios). Yo haré de jefe de taller 2–3 rondas y te pondré nota según lo que consigas averiguar.", "hint": "Pista: tu primer espejo podría ser «¿bastante más caro?». Luego, calla."}, "apr": ["Un espejo son 1–3 palabras del otro en tono de pregunta, seguido de silencio.", "El silencio incomoda más al otro que a ti: deja que lo llene.", "Los espejos te descubren quién decide y con qué criterios."], "mej": ["De la sesión 1: mantén el tono cálido al hacer espejos para que no suenen a interrogatorio.", "No encadenes más de dos o tres espejos seguidos: alterna con etiquetas.", "Practica el silencio de cuatro segundos sin rellenarlo."], "estudio": "lidera Contenido (técnica y caso del sueldo) con Crecimiento (reto del taller); Calidad auditó la página a 390 px, el reduced-motion y que no haya citas literales del libro.", "src": [["El Demócrata · La subida salarial media en convenio alcanza el 3,06 % en octubre", "https://www.democrata.es/economia/la-subida-salarial-media-en-convenio-alcanza-el-3-06-en-octubre-aun-por-debajo-del-ipc/"], ["El Independiente · Los sindicatos y la negociación colectiva en 2026", "https://www.elindependiente.com/economia/2026/01/27/sindicatos-exigen-alzas-salariales-hasta-8-cada-ano-negociacion-colectiva/amp/"], ["Base del método: <i>Rompe la barrera del no</i>, de Chris Voss y Tahl Raz (explicado con palabras propias).", ""]]};
+(function(){
+  var app=document.getElementById('app');
+  function esc(s){return s}
+  var h='';
+  h+='<header class="hero"><div class="nobig" aria-hidden="true"><span>'+C.big+'</span></div>'+
+     '<div class="eyebrow">'+C.eyebrow+'</div><h1>'+C.h1+'</h1><p>'+C.lead+'</p><div class="meta">'+
+     C.pills.map(function(p){return '<span class="pill"><b>'+p[0]+':</b> '+p[1]+'</span>'}).join('')+'</div></header>';
+  h+='<section class="rv"><div class="eyebrow">Idea clave</div><h2>En tres líneas</h2><ul class="key">'+
+     C.key.map(function(k,i){return '<li><span class="n">'+(i+1)+'</span><p>'+k+'</p></li>'}).join('')+'</ul></section>';
+  h+='<section class="rv"><div class="eyebrow">La técnica</div><h2>'+C.tech.h+'</h2><p style="margin-bottom:14px">'+C.tech.ctx+'</p>'+
+     (C.tech.extra?'<div class="card" style="margin-bottom:14px">'+C.tech.extra+'</div>':'')+
+     '<div class="cmp">'+[['bad','Mal',C.tech.bad],['good','Bien',C.tech.good]].map(function(x){
+       return '<div class="ex '+x[0]+'"><span class="tag">'+x[1]+'</span>'+x[2].msgs.map(function(m){return '<div class="bubble'+(m[0]?' me':'')+'">'+m[1]+'</div>'}).join('')+'<small>'+x[2].why+'</small></div>'}).join('')+
+     '</div>'+(C.tech.note?'<p class="note">'+C.tech.note+'</p>':'')+'</section>';
+  h+='<section class="rv"><div class="eyebrow">Frases modelo</div><h2>Para copiar</h2><p style="margin-bottom:12px">Toca una para copiarla al portapapeles.</p><div class="phr" id="phr"></div></section>';
+  h+='<section class="rv"><div class="eyebrow">Simulador</div><h2>'+C.sim.h+'</h2><p style="margin-bottom:14px">'+C.sim.intro+'</p>'+
+     '<div class="sim" id="sim"><div class="simhead"><div class="av" aria-hidden="true">'+C.sim.av+'</div><div class="who"><b>'+C.sim.who+'</b><span>'+C.sim.style+'</span></div><div class="prog" id="prog"></div></div><div class="bar"><i id="bar"></i></div>'+
+     '<div class="counters" aria-live="polite">'+C.ctr.map(function(c){return '<div class="ctr" id="c-'+c[0]+'"><b>0</b><span>'+c[1]+'</span></div>'}).join('')+'</div>'+
+     '<div class="chat" id="chat" aria-live="polite"></div><div id="dock"></div></div>'+(C.sim.note?'<p class="note">'+C.sim.note+'</p>':'')+'</section>';
+  h+='<section class="rv"><div class="eyebrow">Reto del día</div><h2>Te toca a ti</h2><div class="card reto"><h3>'+C.reto.h+'</h3><p class="q">'+C.reto.q+'</p><p>'+C.reto.ask+'</p><p class="note">'+C.reto.hint+'</p></div></section>';
+  h+='<section class="rv"><div class="grid2"><div class="card"><div class="eyebrow">Aprendizajes</div><ul class="list" style="margin-top:10px">'+C.apr.map(function(a){return '<li>'+a+'</li>'}).join('')+
+     '</ul></div><div class="card"><div class="eyebrow">Qué mejorar</div><ul class="list" style="margin-top:10px">'+C.mej.map(function(a){return '<li>'+a+'</li>'}).join('')+
+     '</ul></div></div><p class="studio"><b>Estudio:</b> '+C.estudio+'</p></section>';
+  h+='<section class="rv src"><div class="eyebrow">Fuentes</div><h2 style="font-size:28px">Para el caso del día</h2><ul class="list">'+
+     C.src.map(function(s){return s[1]?'<li><a href="'+s[1]+'" rel="noopener" target="_blank">'+s[0]+'</a></li>':'<li>'+s[0]+'</li>'}).join('')+'</ul></section>';
+  app.innerHTML=h;
+
+  var ph=document.getElementById('phr'), toast=document.getElementById('toast'), tt;
+  C.frases.forEach(function(f){
+    var b=document.createElement('button'); b.type='button';
+    b.innerHTML='<span>'+f[0]+'</span><span class="u">'+f[1]+'</span>';
+    b.addEventListener('click',function(){
+      var done=function(){b.classList.add('ok');b.querySelector('.u').textContent='copiada';toast.classList.add('on');clearTimeout(tt);tt=setTimeout(function(){toast.classList.remove('on')},1400)};
+      try{navigator.clipboard.writeText(f[0].replace(/<[^>]+>/g,'')).then(done,done)}catch(e){done()}
+    });
+    ph.appendChild(b);
+  });
+
+  var T=C.turns, i=0, pts=0, c={};
+  var chat=document.getElementById('chat'), dock=document.getElementById('dock'),
+      prog=document.getElementById('prog'), bar=document.getElementById('bar');
+  var rm=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches, user=false;
+  function el(cls,html){var d=document.createElement('div');d.className=cls;d.innerHTML=html;chat.appendChild(d);return d}
+  function scroll(){if(!user)return;var s=document.getElementById('sim').getBoundingClientRect();if(s.bottom>innerHeight){window.scrollBy({top:Math.min(s.bottom-innerHeight+16,260),behavior:rm?'auto':'smooth'})}}
+  function bump(k){if(!(k in c))return;c[k]++;var n=document.getElementById('c-'+k);n.querySelector('b').textContent=c[k];n.classList.remove('pop');void n.offsetWidth;n.classList.add('pop')}
+  function them(txt,cb){var ty=el('typing','<i></i><i></i><i></i>');setTimeout(function(){ty.remove();el('msg them',txt);scroll();cb&&cb()},rm?0:650)}
+  function showOpts(){
+    var t=T[i]; dock.innerHTML='';
+    var box=document.createElement('div');box.className='opts';box.innerHTML='<div class="lbl">Tu respuesta</div>';
+    t.o.slice().sort(function(){return Math.random()-.5}).forEach(function(o){
+      var b=document.createElement('button');b.type='button';b.className='opt';b.textContent=o.t;
+      b.addEventListener('click',function(){pick(o)});box.appendChild(b);
+    });
+    dock.appendChild(box);
+  }
+  function pick(o){
+    user=true; dock.innerHTML=''; el('msg me',o.t); pts+=o.p; (o.k||[]).forEach(bump);
+    them(o.r,function(){
+      el('why '+o.w,o.x); scroll();
+      i++; bar.style.width=(i/T.length*100)+'%';
+      if(i<T.length){prog.textContent=(i+1)+'/'+T.length;setTimeout(function(){them(T[i].them,showOpts)},rm?0:700)}
+      else setTimeout(end,rm?0:600);
+    });
+  }
+  function end(){
+    var nota=Math.round(pts/(T.length*2)*100)/10, key='neg-s'+C.n+'-best', best=NaN;
+    try{best=parseFloat(localStorage.getItem(key));if(!(best>=nota))localStorage.setItem(key,nota)}catch(e){}
+    var msg=nota>=9?C.end[0]:nota>=6?C.end[1]:C.end[2];
+    dock.innerHTML='<div class="end"><div class="eyebrow">Nota final</div><div class="score">'+String(nota).replace('.',',')+'<small>/10</small></div><p>'+msg+'</p><p style="font-size:13.5px">'+
+      C.ctr.map(function(x){return x[1]+' '+c[x[0]]}).join(' · ')+'</p><button class="btn" type="button" id="again">Repetir el ensayo</button>'+
+      (!isNaN(best)?'<div class="best">Tu mejor nota en este móvil: '+String(Math.max(best,nota)).replace('.',',')+'</div>':'')+'</div>';
+    document.getElementById('again').addEventListener('click',start); scroll();
+  }
+  function start(){
+    i=0;pts=0;C.ctr.forEach(function(x){c[x[0]]=0;document.getElementById('c-'+x[0]).querySelector('b').textContent=0});
+    chat.innerHTML='';dock.innerHTML='';bar.style.width='0';prog.textContent='1/'+T.length;
+    them(T[0].them,showOpts);
+  }
+  start();
+
+  var rv=document.querySelectorAll('.rv');
+  if('IntersectionObserver' in window&&!rm){
+    var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('on');io.unobserve(e.target)}})},{rootMargin:'0px 0px -8% 0px'});
+    rv.forEach(function(r){io.observe(r)});
+  } else rv.forEach(function(r){r.classList.add('on')});
+})();
+</script>
+</body>
+</html>
