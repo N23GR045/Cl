@@ -14,5 +14,6 @@ Copia de cada día del entrenamiento. Los Docs se guardan en .md, las Sheets en 
 | 2026-11-21 | 8 | Wireframe de home (recuperado el 25-11) | https://claude.ai/artifact/QyAjqTC4ojjuUPMzcpRxXg | 2026-11-21_dia-08.html |
 | 2026-11-22 | 9 | Componentes base (recuperado el 25-11) | https://claude.ai/artifact/VnAXNTYvQmjFA547SMMyV6 | 2026-11-22_dia-09.html |
 | 2026-11-23 | 10 | Prototipo clicable (recuperado el 25-11) | https://claude.ai/artifact/Bf3ed3vq2hZ2K2fZKNe46p | 2026-11-23_dia-10.html |
-| 2026-11-24 | 11 | Landing funcional — PENDIENTE (se hace al principio de la próxima ejecución) | — | — |
+| 2026-11-24 | 11 | Landing funcional (recuperado el 26-11) | https://claude.ai/artifact/KQ5nvcHrpG1JzEUr3zoX3G | 2026-11-24_dia-11.html · 2026-11-24_dia-11_landing-v2.html |
 | 2026-11-25 | 12 | Estructura multipágina | https://claude.ai/artifact/8kKotm6Mk4LuuBqD34AY55 | 2026-11-25_dia-12.html |
+| 2026-11-26 | 13 | Auditoría responsive y accesibilidad | https://claude.ai/artifact/5zKev65crA7XdDFizhJsTM | 2026-11-26_dia-13.md |

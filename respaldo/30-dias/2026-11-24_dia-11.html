@@ -1,0 +1,205 @@
+<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Entrenamiento · Día 11 — Landing funcional</title><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;600&display=swap" rel="stylesheet"><style>body{margin:0;background:#0B0A10}
+.nl{--bg:#0B0A10;--sf:#15131D;--ln:#2A2638;--tx:#EDEBF5;--mu:#A9A3BC;--vi:#7C3AED;--vl:#C4B5FD;background:var(--bg);color:var(--tx);font-family:Inter,system-ui,sans-serif;font-size:1rem;line-height:1.55}
+.nl *{box-sizing:border-box}
+.nl a{color:var(--vl)}
+.nl .wrap{max-width:1120px;margin:0 auto;padding:0 20px}
+.nl header{position:sticky;top:0;z-index:5;background:rgba(11,10,16,.92);border-bottom:1px solid var(--ln)}
+.nl .bar{display:flex;align-items:center;justify-content:space-between;gap:16px;height:60px}
+.nl .logo{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:1.1rem;color:var(--tx);text-decoration:none;letter-spacing:.02em}
+.nl .logo span{color:var(--vl)}
+.nl nav ul{display:flex;gap:20px;list-style:none;margin:0;padding:0}
+.nl nav a{color:var(--mu);text-decoration:none;font-size:.9rem}
+.nl nav a:hover{color:var(--tx)}
+.nl .btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:48px;padding:0 22px;border-radius:12px;background:var(--vi);color:#fff;font-weight:600;text-decoration:none;border:0}
+.nl .btn:hover{background:#6D28D9}
+.nl .btn.sm{min-height:40px;padding:0 16px;font-size:.9rem}
+.nl .ghost{display:inline-flex;align-items:center;min-height:48px;padding:0 18px;border-radius:12px;border:1px solid var(--ln);color:var(--tx);text-decoration:none}
+.nl .hero{padding:72px 0 56px;background:radial-gradient(60% 80% at 80% 0%,rgba(124,58,237,.28),transparent 70%)}
+.nl .tag{display:inline-block;font-size:.8rem;letter-spacing:.12em;text-transform:uppercase;color:var(--vl);border:1px solid #3B2F5C;border-radius:999px;padding:4px 12px}
+.nl h1{font-family:'Space Grotesk',sans-serif;font-size:clamp(2.3rem,6vw,4.4rem);line-height:1.02;margin:18px 0 16px;max-width:14ch}
+.nl .lead{font-size:1.15rem;color:var(--mu);max-width:56ch;margin:0 0 28px}
+.nl .ctas{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
+.nl .facts{display:flex;flex-wrap:wrap;gap:10px 22px;margin:28px 0 0;padding:0;list-style:none;color:var(--mu);font-size:.95rem}
+.nl .facts strong{color:var(--tx)}
+.nl section{padding:64px 0;border-top:1px solid var(--ln)}
+.nl h2{font-family:'Space Grotesk',sans-serif;font-size:clamp(1.7rem,3.6vw,2.4rem);line-height:1.1;margin:0 0 10px}
+.nl .sub{color:var(--mu);margin:0 0 32px;max-width:60ch}
+.nl .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.nl .card{background:var(--sf);border:1px solid var(--ln);border-radius:16px;padding:22px}
+.nl .card h3{margin:12px 0 6px;font-size:1.1rem}
+.nl .card p{margin:0;color:var(--mu)}
+.nl .num{font-family:'Space Grotesk',sans-serif;font-size:.85rem;color:var(--vl)}
+.nl ol.steps{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(3,1fr);gap:16px;counter-reset:s}
+.nl details{background:var(--sf);border:1px solid var(--ln);border-radius:14px;margin:0 0 10px}
+.nl summary{cursor:pointer;padding:16px 20px;font-weight:600;min-height:48px;list-style-position:inside}
+.nl details p{margin:0;padding:0 20px 18px;color:var(--mu)}
+.nl .final{text-align:center;padding:72px 0}
+.nl .final .ctas{justify-content:center}
+.nl footer{border-top:1px solid var(--ln);padding:28px 0 96px;color:var(--mu);font-size:.85rem}
+.nl footer .row{display:flex;flex-wrap:wrap;justify-content:space-between;gap:16px}
+.nl footer ul{display:flex;gap:18px;list-style:none;margin:0;padding:0}
+.nl .dock{position:fixed;left:12px;right:12px;bottom:12px;z-index:6;display:none}
+.nl .dock .btn{width:100%}
+@media (max-width:760px){.nl nav{display:none}.nl .grid,.nl ol.steps{grid-template-columns:1fr}.nl .dock{display:block}.nl .hero{padding:48px 0 40px}.nl section{padding:48px 0}}
+@media (prefers-reduced-motion:no-preference){.nl .btn{transition:background .15s ease,transform .15s ease}.nl .btn:active{transform:scale(.98)}}
+</style></head><body><div class="nl">
+<header>
+<div class="wrap bar">
+<a class="logo" href="#inicio">NATURAL <span>LIFE</span> RP</a>
+<nav aria-label="Principal"><ul>
+<li><a href="#que-es">Qué es</a></li>
+<li><a href="#como-entrar">Cómo entrar</a></li>
+<li><a href="#beta">La beta</a></li>
+<li><a href="#faq">Preguntas</a></li>
+</ul></nav>
+<a class="btn sm" href="https://discord.gg/[INVITACION-WEB]">Discord</a>
+</div>
+</header>
+<main id="inicio">
+<div class="hero">
+<div class="wrap">
+<span class="tag">Beta abierta · FiveM · GTA V</span>
+<h1>Rol serio. Caos controlado.</h1>
+<p class="lead">Natural Life RP es un servidor de rol en español que empieza de cero. Entra en la beta, ayúdanos a darle forma y quédate con tu progreso cuando abramos.</p>
+<div class="ctas">
+<a class="btn" href="https://discord.gg/[INVITACION-WEB]">Entrar al Discord de la beta</a>
+<a class="ghost" href="#como-entrar">Cómo funciona</a>
+</div>
+<ul class="facts">
+<li><strong>18</strong> plazas en la beta</li>
+<li><strong>Gratis</strong>, sin pay to win</li>
+<li><strong>Sin whitelist</strong></li>
+</ul>
+</div>
+</div>
+
+<section id="que-es">
+<div class="wrap">
+<h2>Qué es Natural Life</h2>
+<p class="sub">Tres reglas que no cambian, ni en la beta ni después.</p>
+<div class="grid">
+<article class="card"><span class="num">01</span><h3>Rol primero</h3><p>Personajes con historia y consecuencias. La normativa está publicada y se aplica igual para todos.</p></article>
+<article class="card"><span class="num">02</span><h3>Nadie compra ventaja</h3><p>Las donaciones son opcionales y solo estéticas. Lo que consigues en la ciudad, lo consigues jugando.</p></article>
+<article class="card"><span class="num">03</span><h3>Caos con medida</h3><p>Persecuciones, golpes y sorpresas, pero dentro de unas reglas que protegen la historia de todos.</p></article>
+</div>
+</div>
+</section>
+
+<section id="como-entrar">
+<div class="wrap">
+<h2>Cómo entrar</h2>
+<p class="sub">Sin formularios ni esperas: todo pasa en Discord.</p>
+<ol class="steps">
+<li class="card"><span class="num">Paso 1</span><h3>Únete al Discord</h3><p>Con el botón de esta página. Ahí están la normativa, los anuncios y el soporte.</p></li>
+<li class="card"><span class="num">Paso 2</span><h3>Lee la normativa</h3><p>Cinco minutos. Es corta y es la base de cualquier sanción o ticket.</p></li>
+<li class="card"><span class="num">Paso 3</span><h3>Conecta en FiveM</h3><p>Necesitas GTA V original en PC y FiveM instalado. La IP está en el canal de bienvenida.</p></li>
+</ol>
+</div>
+</section>
+
+<section id="beta">
+<div class="wrap">
+<h2>Lo que te llevas por entrar ahora</h2>
+<p class="sub">La beta es pequeña a propósito: 18 personas a las que escuchamos de verdad.</p>
+<div class="grid">
+<article class="card"><h3>Tu progreso se queda</h3><p>Lo que hagas en la beta se mantiene en la apertura. No se reinicia.</p></article>
+<article class="card"><h3>Recompensas a los testers</h3><p>Los testers más activos reciben recompensas estéticas cuando abramos.</p></article>
+<article class="card"><h3>Tu voz en el diseño</h3><p>Reportes y propuestas en Discord. Lo que se cambia, se anuncia.</p></article>
+</div>
+</div>
+</section>
+
+<section id="faq">
+<div class="wrap">
+<h2>Preguntas</h2>
+<p class="sub">Lo que suele preguntar quien llega desde TikTok o Instagram.</p>
+<details><summary>¿Cuesta algo?</summary><p>No. El servidor es gratis y no vende ventajas. Las donaciones, si las haces, son solo estéticas.</p></details>
+<details><summary>¿Hay whitelist?</summary><p>No. Entras por Discord, lees la normativa y conectas.</p></details>
+<details><summary>¿Qué necesito para jugar?</summary><p>GTA V original en PC y el cliente gratuito de FiveM.</p></details>
+<details><summary>¿Perderé lo que haga en la beta?</summary><p>No. El progreso de la beta se mantiene cuando abramos.</p></details>
+<details><summary>¿Hay edad mínima?</summary><p>[EDAD MÍNIMA DEL SERVIDOR — definir en la normativa].</p></details>
+</div>
+</section>
+
+<div class="final">
+<div class="wrap">
+<h2>La ciudad está vacía. Todavía.</h2>
+<p class="sub" style="margin-left:auto;margin-right:auto">Las primeras 18 personas deciden cómo suena Natural Life.</p>
+<div class="ctas"><a class="btn" href="https://discord.gg/[INVITACION-WEB]">Entrar al Discord de la beta</a></div>
+</div>
+</div>
+</main>
+<footer>
+<div class="wrap row">
+<span>Natural Life RP · Proyecto de fans, sin relación con Rockstar Games ni Take-Two.</span>
+<ul>
+<li><a href="https://www.instagram.com/[USUARIO]">Instagram</a></li>
+<li><a href="https://www.tiktok.com/@[USUARIO]">TikTok</a></li>
+<li><a href="/normativa">Normativa</a></li>
+</ul>
+</div>
+</footer>
+<div class="dock"><a class="btn" href="https://discord.gg/[INVITACION-WEB]">Entrar al Discord de la beta</a></div>
+</div>
+<hr style="border-color:#2A2638">
+<div style="width: 1440px; min-height: 1240px; box-sizing: border-box; padding: 64px 72px; background: #0B0A10; color: #EDEBF5; font-family: Inter, system-ui, sans-serif; display: flex; flex-direction: column; gap: 36px">
+<div style="display: flex; flex-direction: column; gap: 10px">
+<p style="margin: 0; font-size: 14px; letter-spacing: 0.14em; text-transform: uppercase; color: #C4B5FD">Día 11 · Landing funcional</p>
+<h1 style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-size: 48px; line-height: 1.05">Una página, un botón, una invitación por origen</h1>
+<p style="margin: 0; font-size: 18px; color: #B8B3C9; max-width: 900px">La landing de la izquierda es real: FAQ desplegable nativo (funciona con teclado y lector de pantalla), barra fija con el botón en móvil y seis bloques que responden, por orden, a las dudas de quien llega desde TikTok o Instagram.</p>
+</div>
+
+<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px">
+<div style="background: #15131D; border: 1px solid #2A2638; border-radius: 16px; padding: 28px; display: flex; flex-direction: column; gap: 12px">
+<h2 style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-size: 24px">Medición por invitación propia</h2>
+<p style="margin: 0; color: #B8B3C9; line-height: 1.55">Discord no lee parámetros UTM, así que el origen se mide con invitaciones distintas. En Ajustes del servidor › Invitaciones, crea tres permanentes y ponles nombre:</p>
+<ul style="margin: 0; padding-left: 20px; color: #EDEBF5; line-height: 1.8">
+<li><strong>web</strong>: todos los botones de esta landing</li>
+<li><strong>ig-bio</strong>: enlace de la bio de Instagram</li>
+<li><strong>tiktok-bio</strong>: enlace de la bio de TikTok</li>
+</ul>
+<p style="margin: 0; color: #B8B3C9; line-height: 1.55">Cada lunes, apunta la columna «Usos» de cada una. La URL personalizada (vanity) no separa usos por origen; por eso no se usa en piezas que quieras medir. Sin cookies de seguimiento, la web no necesita banner de consentimiento.</p>
+</div>
+<div style="background: #15131D; border: 1px solid #2A2638; border-radius: 16px; padding: 28px; display: flex; flex-direction: column; gap: 12px">
+<h2 style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-size: 24px">Estudio: lidera Crecimiento</h2>
+<p style="margin: 0; color: #B8B3C9; line-height: 1.55">Crecimiento (cro-onboarding + marketing-conductual) lidera, con Diseño UI/UX (flujo-web-completo, ux-copy, gusto-web) y Calidad (accesibilidad). Matriz sobre claridad, fricción, peso en móvil y honestidad:</p>
+<ul style="margin: 0; padding-left: 20px; line-height: 1.8">
+<li>A · Larga con vídeo de fondo: <strong>6/10</strong> (pesa en móvil y aún no hay tráiler final)</li>
+<li>B · Corta de 6 bloques y un solo destino: <strong>9/10</strong> ✓</li>
+<li>C · Con formulario de solicitud: <strong>4/10</strong> (no hay whitelist; añade una espera falsa)</li>
+</ul>
+<p style="margin: 0; color: #B8B3C9; line-height: 1.55">Ética: las 18 plazas son un dato fijo, sin contador de «quedan X». Lo que no sabemos queda entre corchetes: [EDAD MÍNIMA], [INVITACION-WEB], [USUARIO].</p>
+</div>
+</div>
+
+<div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 24px">
+<div style="background: #15131D; border: 1px solid #2A2638; border-radius: 16px; padding: 28px; display: flex; flex-direction: column; gap: 10px">
+<h2 style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-size: 22px">Aprendizajes</h2>
+<ul style="margin: 0; padding-left: 20px; line-height: 1.6; color: #EDEBF5">
+<li>Si el destino es otra app, la landing solo tiene que quitar miedos: coste, whitelist, requisitos y progreso.</li>
+<li>Un FAQ con <code>details</code> nativo da accesibilidad gratis; uno hecho con divs y JavaScript suele romperla.</li>
+<li>Medir sin cookies es posible: una invitación por canal basta para una beta de 18.</li>
+</ul>
+</div>
+<div style="background: #15131D; border: 1px solid #2A2638; border-radius: 16px; padding: 28px; display: flex; flex-direction: column; gap: 10px">
+<h2 style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-size: 22px">Qué mejorar mañana</h2>
+<ul style="margin: 0; padding-left: 20px; line-height: 1.6">
+<li>Auditar esta landing con axe-core, teclado y capturas en Android y Fire TV (Día 13).</li>
+<li>Comprobar el foco con la cabecera y la barra fijas, que suelen taparlo.</li>
+</ul>
+</div>
+<div style="background: #15131D; border: 1px solid #2A2638; border-radius: 16px; padding: 28px; display: flex; flex-direction: column; gap: 10px">
+<h2 style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-size: 22px">Herramientas</h2>
+<p style="margin: 0; color: #B8B3C9; line-height: 1.55">Lienzo de Design en lugar de Figma, Framer o Wonder: deja ver la página real sin gastar cuota. Adobe iniciado; se mantienen Space Grotesk e Inter del Día 9 (Google Fonts, gratis). Sin despliegue en Vercel ni Netlify: sería publicar en tu nombre.</p>
+</div>
+</div>
+
+<div style="font-size: 14px; color: #B8B3C9; line-height: 1.7">
+<strong style="color: #EDEBF5">Fuentes (consultadas el 26-11-2026):</strong>
+Discord, «Understanding Your Community Through Insights» (discord.com/community/understanding-your-community-through-insights) ·
+Foro de soporte de Discord, «Vanity Invite Link tracking» (support.discord.com/hc/en-us/community/posts/14733108797975) ·
+FiveMX, «How to create a website for gaming server» (fivemx.com/how-to-create-a-website-for-gaming-server).
+Hecho el 26-11-2026 al recuperar el día 11, que no se generó el 24-11.
+</div>
+</div>
+</body></html>
