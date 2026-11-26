@@ -1,0 +1,178 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>IA Visual · Sesión 2</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75..125,400..800&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* VOICE everyday · IDEA una hoja de guion anotada: cada frase del prompt subrayada con su función
+   PICTURE el prompt de ejemplo con sus partes coloreadas y la leyenda debajo, interactivo al tocar
+   COLOUR fondo #101114, acento #FFC83D + 5 tonos de función · TYPE Archivo + IBM Plex Sans/Mono
+   LAYOUT anatomía a ancho completo, debajo reescritura en 3 pasos */
+:root{--bg:#101114;--panel:#17191E;--line:#2A2D35;--fg:#ECEAE4;--muted:#A3A5AD;--accent:#FFC83D;--accent-ink:#1A1405;--warm:#E8914A;--cool:#6F95C4;--display:"Archivo","Arial Narrow",system-ui,sans-serif;--body:"IBM Plex Sans",system-ui,sans-serif;--mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;color-scheme:dark}
+*{box-sizing:border-box;min-width:0}
+body{background:var(--bg);color:var(--fg);font:16px/1.6 var(--body);overflow-x:clip;padding-left:max(5vw,16px,env(safe-area-inset-left,0px));padding-right:max(5vw,16px,env(safe-area-inset-right,0px));padding-block:0 64px}
+.wrap{max-width:1120px;margin:0 auto}
+h1,h2,h3{font-family:var(--display);line-height:1.05;margin:0;text-wrap:balance;letter-spacing:-.01em}
+h1{font-size:clamp(2.2rem,6vw,3.4rem);font-weight:800;font-stretch:78%}
+h2{font-size:clamp(1.5rem,3.6vw,2.1rem);font-weight:700;font-stretch:85%}
+h3{font-size:1.1rem;font-weight:700;font-stretch:95%}
+p{margin:0}
+a{color:var(--accent)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+header{padding-block:44px 24px;display:grid;gap:14px}
+.slate{display:flex;flex-wrap:wrap;gap:8px;font-size:.85rem;color:var(--muted)}
+.slate span{border:1px solid var(--line);padding:3px 10px;border-radius:3px}
+.slate span:first-child{background:var(--accent);color:var(--accent-ink);border-color:var(--accent);font-weight:600}
+.lede{font-size:1.12rem;max-width:64ch}
+.lede b{color:var(--accent);font-weight:600}
+.notice{font-size:.9rem;color:var(--muted);border-left:2px solid var(--warm);padding-left:12px;max-width:70ch}
+section{padding-top:52px;display:grid;gap:18px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:18px;display:grid;gap:12px;align-content:start}
+.key{border-left:3px solid var(--accent);padding:4px 0 4px 18px;font-size:1.12rem;max-width:66ch}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr));gap:14px}
+.two{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,340px),1fr));gap:18px;align-items:start}
+.card p,.card li{font-size:.93rem}
+.card h3 span{color:var(--accent)}
+pre{margin:0;font:.82rem/1.55 var(--mono);white-space:pre-wrap;overflow-wrap:anywhere;background:#0B0C0F;border:1px solid var(--line);border-radius:4px;padding:12px 14px;color:#D9D6CD}
+pre mark{background:none;color:var(--accent)}
+.copy{justify-self:start;font:600 .85rem var(--body);min-height:40px;background:transparent;border:1px solid var(--accent);color:var(--accent);border-radius:4px;padding:0 14px;cursor:pointer}
+.copy:hover{background:var(--accent);color:var(--accent-ink)}
+ul{margin:0;padding-left:1.1em;display:grid;gap:6px}
+.ok::marker{color:var(--accent)}.ko::marker{color:var(--warm)}
+.meta{font-size:.85rem;color:var(--muted)}
+.meta b{color:var(--accent);font-weight:600}
+.ex{border:1px dashed var(--accent);border-radius:6px;padding:18px 20px;display:grid;gap:12px}
+.ex ol{margin:0;padding-left:1.2em;display:grid;gap:8px}
+.studio{font-size:.88rem;color:var(--muted);border-top:1px solid var(--line);padding-top:16px}
+.studio b{color:var(--accent)}
+.src{font-size:.85rem;color:var(--muted)}
+.scroll{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:.9rem}
+th,td{text-align:left;padding:9px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+th{color:var(--muted);font-weight:500}
+td.n{white-space:nowrap;font-variant-numeric:tabular-nums}
+img.ph{width:100%;display:block;border-radius:4px;border:1px solid var(--line)}
+.fig{border:1px solid var(--line);border-radius:6px;background:var(--panel);padding:12px}
+.fig svg{display:block;width:100%;height:auto}
+svg text{font-family:var(--body)}
+@media(max-width:600px){table{font-size:13px}th,td{padding:6px 4px}}
+
+.anat{font:1.05rem/1.9 var(--body);background:#0B0C0F;border:1px solid var(--line);border-radius:6px;padding:18px 20px}
+.anat span{border-bottom:3px solid;padding-bottom:1px;cursor:pointer;transition:background .15s}
+.anat span.dim{opacity:.35}
+.s{border-color:#FFC83D}.a{border-color:#E8914A}.l{border-color:#6F95C4}.c{border-color:#9BC48A}.i{border-color:#D98BC0}.e{border-color:#B9B4A8}
+.legend{display:flex;flex-wrap:wrap;gap:8px}
+.legend button{font:500 .85rem var(--body);min-height:40px;padding:0 12px;border-radius:20px;background:transparent;color:var(--fg);border:1px solid var(--line);cursor:pointer;display:flex;gap:8px;align-items:center}
+.legend button i{width:12px;height:12px;border-radius:2px;display:inline-block}
+.legend button[aria-pressed=true]{border-color:var(--fg)}
+.steps{display:grid;gap:14px;counter-reset:n}
+.step{display:grid;grid-template-columns:2.4em 1fr;gap:12px}
+.step b.n{font:800 1.6rem var(--display);color:var(--accent)}
+@media(prefers-reduced-motion:reduce){.anat span{transition:none}}
+</style>
+<div class="wrap">
+<header>
+  <div class="slate"><span>Sesión 2</span><span>Semana 1 · Fundamentos de imagen</span><span>Anatomía del prompt</span><span>Recuperada el 25-11-2026 (tocaba el 19-11)</span></div>
+  <h1>Un prompt es una escena contada en orden</h1>
+  <p class="lede">Nano Banana no quiere etiquetas sueltas («cool, 4k, cinematic»): quiere <b>uno o dos párrafos que se lean como el encargo a un fotógrafo</b>. El orden que mejor le funciona: sujeto, acción, lugar, composición, luz y estilo.</p>
+  <p class="notice">Sesión recuperada. La cuota de imágenes de IA de Canva se agotó en esta tanda, así que aquí van los prompts listos para que los generes tú en Gemini.</p>
+</header>
+
+<section>
+  <h2>Disección de un prompt de director</h2>
+  <p class="meta">Toca una función para aislarla en el texto.</p>
+  <div class="legend" id="legend"></div>
+  <div class="anat" id="anat">
+    <span class="s">Una fotografía de reportaje de un joven mecánico ficticio</span>
+    <span class="a">tumbado en una camilla bajo un coche antiguo sin marcas, aprieta una tuerca con la llave mirando hacia arriba, concentrado.</span>
+    <span class="l">Un taller pequeño de barrio en una tarde de lluvia; la puerta abierta da a la calle mojada.</span>
+    <span class="c">Encuadre a ras de suelo, con un charco de aceite en primer término y el fondo desenfocado.</span>
+    <span class="i">Luz gris y suave desde la puerta, y una lámpara de inspección bajo el coche que le calienta la cara.</span>
+    <span class="e">Tono documental, colores apagados con un acento naranja en el mono, grano fino de película. Sin texto, sin logos. Formato 16:9.</span>
+  </div>
+</section>
+
+<section>
+  <p class="key">Lo que Nano Banana ignora o castiga: números de objetivo (85 mm, f/2.8, ISO), alabanzas («masterpiece, stunning») y listas de etiquetas. Lo que premia: frases completas con verbos, relaciones espaciales («en primer término», «detrás de») y el formato al final.</p>
+  <h2>Las seis piezas</h2>
+  <div class="grid">
+    <div class="card"><h3><span>1 ·</span> Sujeto</h3><p>Quién o qué, con 2–3 rasgos concretos. «Joven mecánico ficticio» es mejor que «persona».</p></div>
+    <div class="card"><h3><span>2 ·</span> Acción</h3><p>Un verbo en presente que el modelo pueda congelar: aprieta, coloca, mira. Sin acción, la gente posa.</p></div>
+    <div class="card"><h3><span>3 ·</span> Lugar</h3><p>Dónde y cuándo: tipo de sitio, hora, tiempo. Da la mitad de la luz y del color gratis.</p></div>
+    <div class="card"><h3><span>4 ·</span> Composición</h3><p>Altura de cámara, qué hay en primer término y qué se desenfoca. En palabras, no en milímetros.</p></div>
+    <div class="card"><h3><span>5 ·</span> Luz</h3><p>Fuente, dirección y color (lo vimos en la sesión 4). Mejor una fuente real que un adjetivo.</p></div>
+    <div class="card"><h3><span>6 ·</span> Estilo y formato</h3><p>Género de foto, paleta, textura y proporción. Y lo que no quieres, dicho en positivo cuando puedas.</p></div>
+  </div>
+</section>
+
+<section>
+  <h2>De flojo a director en tres pasos</h2>
+  <div class="steps">
+    <div class="step"><b class="n">1</b><div class="card"><p class="meta">Punto de partida</p><pre>mecánico arreglando coche, realista, cinematográfico, 4k</pre><p>Cuatro etiquetas y ninguna decisión: el modelo rellena con su media, que es lo que se ve «hecho con IA».</p></div></div>
+    <div class="step"><b class="n">2</b><div class="card"><p class="meta">Añade sujeto, acción y lugar</p><pre>Un joven mecánico tumbado bajo un coche antiguo aprieta una tuerca en un taller de barrio una tarde de lluvia.</pre><p>Ya hay historia: quién, qué hace y dónde. La luz y el color empiezan a salir solos de «tarde de lluvia».</p></div></div>
+    <div class="step"><b class="n">3</b><div class="card"><p class="meta">Añade composición, luz y estilo</p><pre>… Encuadre a ras de suelo con un charco de aceite en primer término. Luz gris de la puerta y una lámpara de inspección cálida en su cara. Tono documental, colores apagados con acento naranja, grano fino. Sin texto ni logos. Formato 16:9.</pre><p>Cada frase es una decisión que puedes corregir después sin reescribir lo demás.</p></div></div>
+  </div>
+</section>
+
+<section>
+  <h2>Tres prompts listos</h2>
+  <div class="grid">
+    <div class="card"><p class="meta"><b>Nano Banana 2.1 (Gemini)</b> · el de la disección, en inglés</p><pre id="p0">A documentary photograph of a young fictional mechanic lying on a creeper under an unbadged vintage car, tightening a nut with a wrench and looking up in concentration. A small neighbourhood garage on a rainy afternoon; the open door shows the wet street. Ground-level framing with a puddle of oil in the foreground and a soft, out-of-focus background. Soft grey daylight from the door and a warm inspection lamp under the car lighting his face. Documentary tone, muted colours with one orange accent on his overalls, fine film grain. No text, no logos. Format 16:9.</pre><button class="copy" data-t="p0">Copiar</button></div>
+    <div class="card"><p class="meta"><b>Nano Banana Pro</b> · JSON para escenas de 5+ elementos</p><pre id="p1">{
+ "subject": {"description": "fictional roleplay character, a courier in her 30s with a yellow rain jacket", "pose": "checking a paper map against a wet wall"},
+ "scene": {"setting": "invented city alley at night, steam from a vent, puddles", "props": ["parked scooter without brand", "neon sign with no readable text", "stack of crates"]},
+ "photography": {"shot": "medium wide, eye level", "depth": "shallow, background in bokeh", "aspect_ratio": "4:5"},
+ "lighting": "cyan neon from the right, warm shop window from the left meeting on her face",
+ "style": "cinematic still, natural contrast, no HDR look"
+}</pre><button class="copy" data-t="p1">Copiar</button></div>
+    <div class="card"><p class="meta"><b>Canva generate-image</b> · prosa en español</p><pre id="p2">Bodegón cenital de un banco de trabajo de mecánico: llaves de vaso ordenadas por tamaño, un filtro de aceite usado sin marca, un trapo rojo y una taza de café a medio beber. Luz suave de ventana desde arriba a la izquierda, sombras cortas. Madera gastada con manchas de grasa. Composición en rejilla perfecta (knolling), mucho aire alrededor. Colores naturales, sin texto, sin logos. Formato 1:1.</pre><button class="copy" data-t="p2">Copiar</button></div>
+  </div>
+</section>
+
+<section>
+  <div class="ex">
+    <h2>Ejercicio (15 min)</h2>
+    <ol>
+      <li>Escribe un prompt flojo de 5 palabras sobre algo de Natural Life RP o de Averías Comunes.</li>
+      <li>Reescríbelo con las seis piezas, en este orden y en un solo párrafo.</li>
+      <li>Genera los dos en Gemini y apunta qué pieza cambió más el resultado.</li>
+      <li>Bonus: quita todos los adjetivos de calidad («increíble», «4k») y comprueba que no empeora.</li>
+    </ol>
+  </div>
+</section>
+
+<section class="two">
+  <div class="card"><h3>Aprendizajes</h3><ul>
+    <li>El orden sujeto → acción → lugar → composición → luz → estilo hace que cada frase sea una decisión corregible.</li>
+    <li>En Nano Banana la composición y el objetivo se describen con palabras, no con números.</li>
+    <li>JSON solo compensa con 5 o más elementos que deben convivir sin mezclarse.</li>
+  </ul></div>
+  <div class="card"><h3>Qué mejorar</h3><ul>
+    <li>Repartir mejor la cuota de Canva entre sesiones cuando haya que recuperar varias seguidas.</li>
+    <li>Corregido en la sesión 4: su prompt de Nano Banana llevaba «85 mm, f/2»; en NB hay que decir «poca profundidad de campo».</li>
+    <li>Sesión 3: la plantilla de 5 bloques de GPT Image y el texto dentro de la imagen.</li>
+  </ul></div>
+</section>
+
+<p class="studio"><b>Estudio:</b> lidera IA visual (prompts-imagen, guía nano-banana de visual-skills), Creativo eligió el caso del taller, Calidad revisó que ningún prompt use personas reales, marcas ni logos.</p>
+
+<section class="src"><h3>Fuentes</h3><ul>
+  <li><a href="https://cloud.google.com/blog/products/ai-machine-learning/ultimate-prompting-guide-for-nano-banana">Google Cloud · Ultimate prompting guide for Nano Banana</a></li>
+  <li><a href="https://blog.google/products/gemini/prompting-tips-nano-banana-pro/">Google · 7 tips to get the most out of Nano Banana Pro</a></li>
+  <li><a href="https://morphic.com/resources/how-to/nano-banana-2-1-guide">Morphic · Nano Banana 2.1: the complete prompt guide</a></li>
+  <li><a href="https://github.com/smixs/visual-skills">smixs/visual-skills</a> (CC BY 4.0, Serge Shima): nano-banana.md y prompt-framework.md</li>
+</ul></section>
+</div>
+<script>
+{
+const F=[["s","Sujeto","#FFC83D"],["a","Acción","#E8914A"],["l","Lugar","#6F95C4"],["c","Composición","#9BC48A"],["i","Luz","#D98BC0"],["e","Estilo y formato","#B9B4A8"]];
+const lg=document.getElementById('legend'),sp=[...document.querySelectorAll('#anat span')];let cur=null;
+lg.innerHTML=F.map(f=>`<button data-k="${f[0]}" aria-pressed="false"><i style="background:${f[2]}"></i>${f[1]}</button>`).join('');
+lg.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;cur=cur===b.dataset.k?null:b.dataset.k;
+ [...lg.children].forEach(x=>x.setAttribute('aria-pressed',x.dataset.k===cur));sp.forEach(s=>s.classList.toggle('dim',!!cur&&!s.classList.contains(cur)))});
+document.addEventListener('click',async e=>{const b=e.target.closest('.copy');if(!b)return;const t=document.getElementById(b.dataset.t).textContent;const o=b.textContent;try{await navigator.clipboard.writeText(t);b.textContent='Copiado'}catch(_){b.textContent='Selecciona y copia a mano'}setTimeout(()=>{b.textContent=o},1800)});
+
+}
+</script>
+
+</body></html>

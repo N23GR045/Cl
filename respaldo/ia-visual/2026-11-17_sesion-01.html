@@ -1,0 +1,179 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>IA Visual · Sesión 1</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75..125,400..800&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* VOICE everyday · IDEA la cartelera de un rodaje: qué cámara alquilas para cada plano
+   PICTURE la clasificación LMArena como filas de barras + mapa tarea→modelo
+   COLOUR fondo #101114, tinta #ECEAE4, acento #FFC83D · TYPE Archivo + IBM Plex Sans
+   LAYOUT título, ranking a ancho completo, luego mapa de uso y prueba */
+:root{--bg:#101114;--panel:#17191E;--line:#2A2D35;--fg:#ECEAE4;--muted:#A3A5AD;--accent:#FFC83D;--accent-ink:#1A1405;--warm:#E8914A;--cool:#6F95C4;--display:"Archivo","Arial Narrow",system-ui,sans-serif;--body:"IBM Plex Sans",system-ui,sans-serif;--mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;color-scheme:dark}
+*{box-sizing:border-box;min-width:0}
+body{background:var(--bg);color:var(--fg);font:16px/1.6 var(--body);overflow-x:clip;padding-left:max(5vw,16px,env(safe-area-inset-left,0px));padding-right:max(5vw,16px,env(safe-area-inset-right,0px));padding-block:0 64px}
+.wrap{max-width:1120px;margin:0 auto}
+h1,h2,h3{font-family:var(--display);line-height:1.05;margin:0;text-wrap:balance;letter-spacing:-.01em}
+h1{font-size:clamp(2.2rem,6vw,3.4rem);font-weight:800;font-stretch:78%}
+h2{font-size:clamp(1.5rem,3.6vw,2.1rem);font-weight:700;font-stretch:85%}
+h3{font-size:1.1rem;font-weight:700;font-stretch:95%}
+p{margin:0}
+a{color:var(--accent)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+header{padding-block:44px 24px;display:grid;gap:14px}
+.slate{display:flex;flex-wrap:wrap;gap:8px;font-size:.85rem;color:var(--muted)}
+.slate span{border:1px solid var(--line);padding:3px 10px;border-radius:3px}
+.slate span:first-child{background:var(--accent);color:var(--accent-ink);border-color:var(--accent);font-weight:600}
+.lede{font-size:1.12rem;max-width:64ch}
+.lede b{color:var(--accent);font-weight:600}
+.notice{font-size:.9rem;color:var(--muted);border-left:2px solid var(--warm);padding-left:12px;max-width:70ch}
+section{padding-top:52px;display:grid;gap:18px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:18px;display:grid;gap:12px;align-content:start}
+.key{border-left:3px solid var(--accent);padding:4px 0 4px 18px;font-size:1.12rem;max-width:66ch}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr));gap:14px}
+.two{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,340px),1fr));gap:18px;align-items:start}
+.card p,.card li{font-size:.93rem}
+.card h3 span{color:var(--accent)}
+pre{margin:0;font:.82rem/1.55 var(--mono);white-space:pre-wrap;overflow-wrap:anywhere;background:#0B0C0F;border:1px solid var(--line);border-radius:4px;padding:12px 14px;color:#D9D6CD}
+pre mark{background:none;color:var(--accent)}
+.copy{justify-self:start;font:600 .85rem var(--body);min-height:40px;background:transparent;border:1px solid var(--accent);color:var(--accent);border-radius:4px;padding:0 14px;cursor:pointer}
+.copy:hover{background:var(--accent);color:var(--accent-ink)}
+ul{margin:0;padding-left:1.1em;display:grid;gap:6px}
+.ok::marker{color:var(--accent)}.ko::marker{color:var(--warm)}
+.meta{font-size:.85rem;color:var(--muted)}
+.meta b{color:var(--accent);font-weight:600}
+.ex{border:1px dashed var(--accent);border-radius:6px;padding:18px 20px;display:grid;gap:12px}
+.ex ol{margin:0;padding-left:1.2em;display:grid;gap:8px}
+.studio{font-size:.88rem;color:var(--muted);border-top:1px solid var(--line);padding-top:16px}
+.studio b{color:var(--accent)}
+.src{font-size:.85rem;color:var(--muted)}
+.scroll{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:.9rem}
+th,td{text-align:left;padding:9px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+th{color:var(--muted);font-weight:500}
+td.n{white-space:nowrap;font-variant-numeric:tabular-nums}
+img.ph{width:100%;display:block;border-radius:4px;border:1px solid var(--line)}
+.fig{border:1px solid var(--line);border-radius:6px;background:var(--panel);padding:12px}
+.fig svg{display:block;width:100%;height:auto}
+svg text{font-family:var(--body)}
+@media(max-width:600px){table{font-size:13px}th,td{padding:6px 4px}}
+
+.rank{display:grid;gap:8px}
+.row{display:grid;grid-template-columns:minmax(9em,13em) 1fr 3.4em;gap:10px;align-items:center;font-size:.92rem}
+.bar{height:14px;background:#2A2D35;border-radius:2px;position:relative}
+.bar i{position:absolute;inset:0 auto 0 0;background:var(--muted);border-radius:2px}
+.row.hi .bar i{background:var(--accent)}
+.row .v{font-variant-numeric:tabular-nums;text-align:right;color:var(--muted)}
+@media(max-width:520px){.row{grid-template-columns:1fr 3em}.row .bar{grid-column:1/-1;order:3}}
+</style>
+<div class="wrap">
+<header>
+  <div class="slate"><span>Sesión 1</span><span>Semana 1 · Fundamentos de imagen</span><span>Mapa de modelos</span><span>Recuperada el 25-11-2026 (tocaba el 17-11)</span></div>
+  <h1>Cada modelo es una cámara distinta</h1>
+  <p class="lede">No existe «la mejor IA de imágenes». Hay modelos que escriben texto perfecto, otros que entienden la física de la luz y otros que son baratos para probar. <b>Elegir el modelo es la primera decisión de dirección</b>, antes de escribir una palabra del prompt.</p>
+  <p class="notice">Sesión recuperada: las ejecuciones del 17 al 21-11 fallaron por un error técnico. Datos de modelos a fecha de 25-11-2026.</p>
+</header>
+
+<section>
+  <h2>Quién manda esta semana: preferencia humana a ciegas</h2>
+  <p class="meta">Clasificación de LMArena (texto a imagen), tabla del 12-11-2026 citada por WaveSpeed. Puntos Elo: más alto = la gente lo prefiere más en comparaciones a ciegas. La escala empieza en 1250 para que se vean las diferencias.</p>
+  <div class="card rank" id="rank"></div>
+  <p class="meta">Ojo: GPT Image 2.6 tiene pocas votaciones (unas 2.500) y en Artificial Analysis (16-11) aparece primero. Que 2.5 y 2.6 estén tan cerca significa que, para ti, el precio y el acceso gratis pesan más que la posición.</p>
+</section>
+
+<section>
+  <p class="key">Regla práctica: prueba barato, termina caro. Borradores en el modelo rápido (Flare, Nano Banana 2.1 o Canva), y solo la imagen elegida al modelo fino o a más resolución.</p>
+  <h2>Mapa de uso: qué cámara para cada plano</h2>
+  <div class="scroll"><table>
+    <thead><tr><th>Si necesitas…</th><th>Modelo</th><th>Por qué</th><th>Acceso gratis</th></tr></thead>
+    <tbody>
+      <tr><td>Texto exacto en carteles, menús, interfaces</td><td>GPT Image 2.6 / 2.5 Sunburst</td><td>El mejor con texto pequeño y maquetas; plantilla de 5 bloques</td><td>ChatGPT gratis con límite</td></tr>
+      <tr><td>Fotos realistas, luz y física complejas</td><td>Nano Banana Pro · 2.1</td><td>Razona la escena antes de dibujar; hasta 14 referencias</td><td>App de Gemini con límite</td></tr>
+      <tr><td>Lugares, animales y plantas reales</td><td>Nano Banana 2.1</td><td>Busca imágenes reales en la web antes de generar (grounding)</td><td>App de Gemini con límite</td></tr>
+      <tr><td>Formatos extremos (4:1, 1:8) y tiras de cómic</td><td>Nano Banana 2.1</td><td>Único con proporciones extremas</td><td>App de Gemini con límite</td></tr>
+      <tr><td>Arte, estilo, moodboards</td><td>Midjourney V8.2</td><td>Dirección de arte más «autoral»</td><td>No (desde unos 10 $/mes)</td></tr>
+      <tr><td>Tipografía de cartel y edición precisa</td><td>Ideogram 4.5</td><td>Especialista en letras</td><td>Tiene plan gratis (límites variables)</td></tr>
+      <tr><td>Producto con fondo transparente, comercio</td><td>Seedream 5.5 (9-11-2026)</td><td>PNG transparente y edición rápida</td><td>Vía apps de terceros</td></tr>
+      <tr><td>Iconos, vectores, marca</td><td>Recraft V4.1</td><td>Exporta vector</td><td>Plan gratis limitado</td></tr>
+      <tr><td>Tu día a día dentro del entrenamiento</td><td>Canva generate-image</td><td>Ya conectado; 1–2 imágenes por sesión</td><td>Cuota de tu plan</td></tr>
+    </tbody>
+  </table></div>
+  <p class="meta">«Acceso gratis» según las fuentes de la sesión; los límites cambian a menudo y no siempre se publican.</p>
+</section>
+
+<section>
+  <h2>Prueba estándar: un prompt que destapa fallos</h2>
+  <div class="two">
+    <img class="ph" src="data:image/jpeg;base64,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" alt="Vendedora ficticia colocando tomates en un puesto de mercado con pizarra">
+    <div class="card">
+      <h3>Qué mide este prompt</h3>
+      <p>Tres trampas a la vez: <b>manos</b> sujetando un objeto, <b>texto exacto</b> en una pizarra («TOMATES 2,40 €/kg») y <b>luz rasante</b> con sombras largas. Úsalo igual en cada modelo nuevo y compara.</p>
+      <h3>Revisión de la imagen (Canva)</h3>
+      <ul>
+        <li class="ok">Manos creíbles con el tomate; postura y ropa naturales.</li>
+        <li class="ok">Color natural, sin HDR, calle y casas coherentes.</li>
+        <li class="ko">La luz no es rasante: sale de frente y alta, sin sombras largas.</li>
+        <li class="ko">La pizarra no se lee en la vista previa; hay que abrirla en Canva a tamaño completo para comprobar el «€/kg». El texto pequeño es justo donde fallan los modelos generalistas.</li>
+      </ul>
+      <p class="meta">Abre la imagen en Canva: media MAHb7q716OI.</p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2>Tres prompts listos</h2>
+  <div class="grid">
+    <div class="card"><p class="meta"><b>Nano Banana 2.1 (Gemini)</b> · prosa, sin números de objetivo</p><pre id="p0">A documentary photograph of a fictional vegetable stall on a cobbled street of an invented Mediterranean village, early morning. A woman in her sixties, seen in profile, places tomatoes into wooden crates, one tomato held in her hand. A chalkboard leaning on the stall reads exactly "TOMATES 2,40 €/kg". Low raking sunlight from the left casts long shadows across the cobbles; steam rises from a glass of coffee on a crate. Natural colour, natural contrast, no HDR look. No logos, no brands.</pre><button class="copy" data-t="p0">Copiar</button></div>
+    <div class="card"><p class="meta"><b>GPT Image 2.6 (ChatGPT)</b> · 5 bloques</p><pre id="p1">Scene: invented Mediterranean village, cobbled street, early morning, low sun from the left.
+Subject: woman in her sixties in profile placing tomatoes in wooden crates, one tomato in hand.
+Important details: chalkboard on the stall with the exact text "TOMATES 2,40 €/kg" written once in chalk; long shadows; steam from a glass of coffee.
+Use case: documentary photography test.
+Constraints: text exactly as written, no extra words, no logos, natural hands with five fingers.</pre><button class="copy" data-t="p1">Copiar</button></div>
+    <div class="card"><p class="meta"><b>Canva generate-image</b> · en español</p><pre id="p2">Puesto de verduras en una calle empedrada de un pueblo mediterráneo inventado, primera hora. Una vendedora ficticia de unos 60 años, de perfil, coloca tomates en cajas de madera con un tomate en la mano. Pizarra con el texto exacto "TOMATES 2,40 €/kg" a tiza. Sol bajo y rasante desde la izquierda que deja sombras largas sobre el empedrado. Color natural, sin HDR, sin logos.</pre><button class="copy" data-t="p2">Copiar</button></div>
+  </div>
+</section>
+
+<section>
+  <div class="ex">
+    <h2>Ejercicio (15 min)</h2>
+    <ol>
+      <li>Pega el prompt de prueba en Gemini (Nano Banana) y en ChatGPT (Images 2.6), las dos con su versión gratis.</li>
+      <li>Puntúa cada imagen de 0 a 2 en manos, texto, luz y aspecto plástico (máximo 8).</li>
+      <li>Apunta quién gana en cada apartado: esa es tu tabla personal de «qué cámara uso para qué».</li>
+    </ol>
+  </div>
+</section>
+
+<section class="two">
+  <div class="card"><h3>Aprendizajes</h3><ul>
+    <li>En noviembre de 2026 OpenAI lidera la preferencia a ciegas (GPT Image 2.5/2.6) y Google la física y el grounding (Nano Banana 2.1 y Pro).</li>
+    <li>Cada familia pide una sintaxis: prosa para Nano Banana, bloques etiquetados para GPT Image.</li>
+    <li>Un prompt de prueba fijo es la forma más rápida de juzgar un modelo nuevo.</li>
+  </ul></div>
+  <div class="card"><h3>Qué mejorar</h3><ul>
+    <li>Pedir la luz con el efecto visible («sombras largas que cruzan el empedrado»), no solo su nombre.</li>
+    <li>Revisar el texto siempre a tamaño completo, nunca en miniatura.</li>
+    <li>Sesión 2: la anatomía del prompt y la prosa de Nano Banana.</li>
+  </ul></div>
+</section>
+
+<p class="studio"><b>Estudio:</b> lidera IA visual (prompts-imagen y estudio-ia-visual), Creativo diseñó el prompt de prueba, Calidad revisó manos, texto, ojos y aspecto plástico. Skill nueva usada: diseno-diagramas, para los gráficos de estas sesiones.</p>
+
+<section class="src"><h3>Fuentes</h3><ul>
+  <li><a href="https://wavespeed.ai/blog/posts/best-ai-image-generators-2026/">WaveSpeed · 10 Best AI Image Generators in 2026</a> (actualizado el 16-11-2026; vende acceso a estos modelos)</li>
+  <li><a href="https://www.teamday.ai/blog/best-ai-image-models-2026">Teamday · Best AI Image Models Nov 2026</a> (actualizado el 29-10-2026)</li>
+  <li><a href="https://openai.com/index/introducing-images-2-6/">OpenAI · Introducing Images 2.6</a></li>
+  <li><a href="https://blog.google/innovation-and-ai/technology/ai/nano-banana-2/">Google · Nano Banana 2</a></li>
+  <li><a href="https://github.com/smixs/visual-skills">smixs/visual-skills</a> (CC BY 4.0, Serge Shima): models.md</li>
+</ul></section>
+</div>
+<script>
+{
+const R=[["GPT Image 2.5 Sunburst",1429,1],["GPT Image 2.6 Sunburst",1406,1],["GPT Image 2.5 Flare",1398,0],["GPT Image 2",1382,0],["MAI Image 2.6 (Microsoft)",1330,0],["Nano Banana 2.1 (Google)",1327,0],["Grok Imagine 2.0 (xAI)",1318,0],["Reve 2.1",1301,0]];
+const lo=1250,hi=1440;
+document.getElementById('rank').innerHTML=R.map(r=>`<div class="row${r[2]?' hi':''}"><span>${r[0]}</span><div class="bar"><i style="width:${((r[1]-lo)/(hi-lo)*100).toFixed(1)}%"></i></div><span class="v">${r[1]}</span></div>`).join('');
+document.addEventListener('click',async e=>{const b=e.target.closest('.copy');if(!b)return;const t=document.getElementById(b.dataset.t).textContent;const o=b.textContent;try{await navigator.clipboard.writeText(t);b.textContent='Copiado'}catch(_){b.textContent='Selecciona y copia a mano'}setTimeout(()=>{b.textContent=o},1800)});
+
+}
+</script>
+
+</body></html>
