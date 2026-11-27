@@ -8,5 +8,6 @@
 | 2026-11-22 | S1 · Screening (recuperada el 25-11) | CINEMA · S1 · Screening | https://claude.ai/artifact/WTQygpfvUWiVj39P4VK7TP | 2026-11-22_S1-screening.html |
 | 2026-11-23 | S2 · Ejercicios (recuperada el 25-11) | CINEMA · S2 · Ejercicios — Tiempo, física y personalidad | https://claude.ai/artifact/9dxwspaVy6y3cLhuZgtUPv | 2026-11-23_S2-ejercicios.html |
 | 2026-11-25 | S2 · Laboratorio | CINEMA · S2 · Laboratorio — UI con personalidad animal | https://claude.ai/artifact/PDCU4Pgs7mMGRS6rc1CBwH | 2026-11-25_S2-laboratorio.html |
+| 2026-11-27 | S2 · Entrega | CINEMA · S2 · Entrega — Tres personalidades | https://claude.ai/artifact/Gsg8uqeZdWQNjKuMReZTmQ | 2026-11-27_S2-entrega.html (+ clip vertical 2026-11-27_S2-entrega_vertical.mp4) |
 
 Propuesta de mejora de skill del Screening S1: `skill-flujo-motion_S1.md` (flujo-motion con la sección «Reglas de los screenings»).

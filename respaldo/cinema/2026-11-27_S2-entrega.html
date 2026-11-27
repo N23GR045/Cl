@@ -1,0 +1,389 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>CINEMA · S2 · Entrega — Tres personalidades</title>
+<meta name="description" content="Comparativa de tres personalidades de movimiento (pantera, oso y colibrí) sobre la misma reserva de plaza de Natural Life RP, con línea de tiempo arrastrable.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Special+Gothic+Condensed+One&family=Special+Gothic:wght@400;500&family=Fira+Code:wght@500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#07060b; --bg2:#0f0c18; --line:#2a2340; --ink:#ece9f5; --mute:#a59fbd; --dim:#6f6889;
+  --vio:#8b5cf6; --vio2:#a78bfa; --vio3:#c4b5fd;
+  --c-pantera:#a78bfa; --c-oso:#f0abfc; --c-colibri:#67e8f9;
+  --ease-out:cubic-bezier(0.23,1,0.32,1); --ease-in-out:cubic-bezier(0.77,0,0.175,1);
+  --dur-press:140ms; --dur-ui:200ms;
+  color-scheme:dark;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){ --bg:#07060b; --ink:#ece9f5; } }
+:root[data-theme="dark"]{ --bg:#07060b; --ink:#ece9f5; }
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 16px/1.55 "Special Gothic",system-ui,sans-serif;
+  padding:env(safe-area-inset-top,0) 0 env(safe-area-inset-bottom,0)}
+.wrap{max-width:1120px;margin:0 auto;padding:0 16px}
+h1,h2,h3{font-family:"Special Gothic Condensed One",Impact,sans-serif;font-weight:400;letter-spacing:.01em;margin:0}
+.mono{font-family:"Fira Code",ui-monospace,monospace;font-size:12px;letter-spacing:.04em}
+a{color:var(--vio3)}
+:focus-visible{outline:2px solid var(--vio3);outline-offset:3px;border-radius:6px}
+header{padding:28px 0 8px}
+.kick{color:var(--vio2);text-transform:uppercase}
+h1{font-size:clamp(44px,11vw,96px);line-height:.92;margin:10px 0 14px}
+h1 em{font-style:normal;color:var(--vio2)}
+.lede{color:var(--mute);max-width:60ch;margin:0}
+.rule{display:inline-block;margin-top:14px;padding:6px 10px;border:1px solid var(--line);border-radius:999px;color:var(--mute)}
+
+/* ── Escenario ── */
+.studio{display:grid;gap:16px;margin-top:22px}
+@media (min-width:980px){.studio{grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);align-items:start}}
+.stage{background:var(--bg2);border:1px solid var(--line);border-radius:18px;padding:10px;display:grid;gap:8px}
+.lane{position:relative;height:150px;border-radius:12px;overflow:hidden;
+  background:linear-gradient(90deg,rgba(139,92,246,.06),transparent 60%),#0a0812;border:1px solid #1c1730}
+.lane-tag{position:absolute;left:12px;top:10px;display:flex;gap:8px;align-items:baseline;z-index:3;pointer-events:none}
+.lane-tag b{font:400 20px/1 "Special Gothic Condensed One",sans-serif;letter-spacing:.02em}
+.lane[data-k=pantera] .lane-tag b{color:var(--c-pantera)} .lane[data-k=oso] .lane-tag b{color:var(--c-oso)} .lane[data-k=colibri] .lane-tag b{color:var(--c-colibri)}
+.lane-tag span{color:var(--dim)}
+.slot{position:absolute;left:12px;right:12px;bottom:14px;height:86px}
+/* los tres elementos */
+.card{position:absolute;left:0;top:0;width:min(58%,250px);height:86px;border-radius:12px;padding:12px 14px;
+  background:linear-gradient(160deg,#1d1631,#120e1f);border:1px solid #3a2f5c;transform-origin:50% 100%;
+  box-shadow:0 10px 30px -12px rgba(139,92,246,.45)}
+.card small{display:block;color:var(--vio2);font:500 11px/1 "Fira Code",monospace;letter-spacing:.08em;text-transform:uppercase}
+.card strong{display:block;white-space:nowrap;font:400 23px/1.05 "Special Gothic Condensed One",sans-serif;margin-top:8px}
+.card i{font-style:normal;color:var(--mute);font-size:13px}
+.btn{position:absolute;right:0;top:21px;height:44px;min-width:104px;padding:0 16px;border-radius:999px;border:0;
+  background:var(--vio);color:#fff;font:500 15px/44px "Special Gothic",sans-serif;text-align:center;transform-origin:50% 50%;
+  box-shadow:0 0 0 1px rgba(255,255,255,.12) inset}
+.btn.ok{background:#1d1631;color:var(--vio3);box-shadow:0 0 0 1px var(--vio2) inset}
+.seal{position:absolute;left:calc(min(58%,250px) - 46px);top:-14px;width:58px;height:58px;border-radius:50%;
+  display:grid;place-items:center;text-align:center;background:#07060b;border:2px solid var(--vio2);color:var(--vio3);
+  font:500 9.5px/1.15 "Fira Code",monospace;letter-spacing:.04em;text-transform:uppercase;transform-origin:50% 0;z-index:2}
+.seal.lit{background:var(--vio);color:#fff;border-color:var(--vio3)}
+
+/* ── Controles ── */
+.deck{display:grid;gap:10px;padding:12px 4px 2px}
+.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.pill{appearance:none;border:1px solid var(--line);background:#120e1f;color:var(--ink);border-radius:999px;
+  min-height:44px;padding:0 16px;font:500 14px "Special Gothic",sans-serif;cursor:pointer;transition:transform var(--dur-press) var(--ease-out),background var(--dur-ui)}
+.pill:active{transform:scale(.97)}
+@media (hover:hover) and (pointer:fine){.pill:hover{background:#1b1530}}
+.pill.main{background:var(--vio);border-color:var(--vio);color:#fff;min-width:108px}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:999px;padding:3px;background:#0b0914}
+.seg button{appearance:none;border:0;background:none;color:var(--mute);min-height:38px;padding:0 12px;border-radius:999px;font:500 13px "Special Gothic",sans-serif;cursor:pointer}
+.seg button[aria-pressed=true]{background:#241b3d;color:var(--ink)}
+.scrub{display:flex;gap:10px;align-items:center}
+.scrub input{flex:1;accent-color:var(--vio2);height:32px}
+.scrub output{min-width:64px;text-align:right;color:var(--mute)}
+.beats{display:flex;justify-content:space-between;color:var(--dim);padding:0 2px}
+.note{color:var(--mute);font-size:14px;margin:0;min-height:2.6em}
+
+/* ── Panel de datos ── */
+.panel{background:var(--bg2);border:1px solid var(--line);border-radius:18px;padding:16px}
+.panel h2{font-size:28px}
+.panel p{color:var(--mute);font-size:14px;margin:6px 0 10px}
+svg.chart{width:100%;height:auto;display:block}
+table{width:100%;border-collapse:collapse;font-size:14px;margin-top:12px}
+th,td{text-align:left;padding:8px 6px;border-top:1px solid var(--line);vertical-align:top}
+th{color:var(--dim);font:500 11px "Fira Code",monospace;letter-spacing:.06em;text-transform:uppercase}
+td.n{font-family:"Fira Code",monospace;font-size:13px;white-space:nowrap}
+.dot{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:6px;vertical-align:1px}
+
+/* ── Secciones ── */
+section.block{padding:44px 0 6px}
+section.block h2{font-size:clamp(32px,6vw,52px);line-height:1}
+.grid3{display:grid;gap:12px;margin-top:18px}
+@media (min-width:760px){.grid3{grid-template-columns:repeat(3,1fr)}}
+.verdict{border:1px solid var(--line);border-radius:16px;padding:16px;background:#0c0a15}
+.verdict h3{font-size:26px}
+.verdict .use{color:var(--vio3);font-size:14px;margin:4px 0 8px}
+.verdict p{color:var(--mute);font-size:14.5px;margin:0}
+ul.learn{padding-left:18px;margin:14px 0 0;max-width:70ch} ul.learn li{margin:0 0 10px;color:var(--mute)} ul.learn b{color:var(--ink)}
+footer{padding:36px 0 56px;color:var(--dim);font-size:13.5px}
+footer p{margin:0 0 10px;max-width:80ch}
+#fps{position:fixed;right:12px;bottom:calc(12px + env(safe-area-inset-bottom,0px));z-index:9;min-height:36px;padding:0 12px;font-size:12px}
+
+/* reduced-motion diseñado: fundidos, nada se desplaza */
+.rm .card,.rm .btn,.rm .seal{transform:none!important}
+@media (prefers-reduced-motion: reduce){ .pill{transition:background var(--dur-ui)} }
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <div class="kick mono">CINEMA//MOTION LAB · Semana 2 · Entrega</div>
+  <h1>Tres caracteres,<br><em>una plaza</em></h1>
+  <p class="lede">La misma reserva de plaza en la beta de Natural Life RP, contada por tres personalidades a la vez. Solo cambian masa, rigidez y amortiguación. Arrastra la línea de tiempo y compara fotograma a fotograma.</p>
+  <span class="rule mono">Restricción de la semana · tres elementos por escena: ficha, botón y sello</span>
+</header>
+
+<div class="studio">
+  <div>
+    <div class="stage" id="stage" aria-label="Escenario: tres carriles con la misma escena">
+      <div class="lane" data-k="pantera"><div class="lane-tag"><b>Pantera</b><span class="mono" data-z></span></div>
+        <div class="slot"><div class="card"><small>Natural Life RP</small><strong>Beta · 18 plazas</strong><i>Rol serio · gratis</i></div><div class="btn" aria-hidden="true">Entrar</div><div class="seal" aria-hidden="true">Dentro<br>beta</div></div></div>
+      <div class="lane" data-k="oso"><div class="lane-tag"><b>Oso</b><span class="mono" data-z></span></div>
+        <div class="slot"><div class="card"><small>Natural Life RP</small><strong>Beta · 18 plazas</strong><i>Rol serio · gratis</i></div><div class="btn" aria-hidden="true">Entrar</div><div class="seal" aria-hidden="true">Dentro<br>beta</div></div></div>
+      <div class="lane" data-k="colibri"><div class="lane-tag"><b>Colibrí</b><span class="mono" data-z></span></div>
+        <div class="slot"><div class="card"><small>Natural Life RP</small><strong>Beta · 18 plazas</strong><i>Rol serio · gratis</i></div><div class="btn" aria-hidden="true">Entrar</div><div class="seal" aria-hidden="true">Dentro<br>beta</div></div></div>
+    </div>
+    <div class="deck">
+      <div class="row">
+        <button class="pill main" id="play" type="button">Reproducir</button>
+        <button class="pill" id="rep" type="button" title="Reproduce la 1ª, 2ª y 3ª pasada seguidas">Repetir ×3</button>
+        <div class="seg" role="group" aria-label="Pasada">
+          <button type="button" data-pass="1" aria-pressed="true">1ª vez</button>
+          <button type="button" data-pass="2" aria-pressed="false">2ª y siguientes</button>
+        </div>
+      </div>
+      <div class="scrub">
+        <label for="t" class="mono" style="color:var(--dim)">t</label>
+        <input id="t" type="range" min="0" max="4600" step="10" value="0" aria-label="Línea de tiempo en milisegundos">
+        <output id="tv" class="mono" for="t">0 ms</output>
+      </div>
+      <div class="beats mono" aria-hidden="true"><span>0 · llega la ficha</span><span>1,9 s · pulsa</span><span>2,4 s · sello</span></div>
+      <p class="note" id="note" aria-live="polite">Primera vez: cada personalidad se presenta entera.</p>
+      <div class="row">
+        <button class="pill" id="rmBtn" type="button" aria-pressed="false">Ver con movimiento reducido</button>
+      </div>
+    </div>
+  </div>
+
+  <aside class="panel">
+    <h2>La misma curva, tres caracteres</h2>
+    <p>Posición de la ficha en el tiempo (simulada con muelles a 1 ms y muestreada a 120 Hz). La línea vertical es el cabezal.</p>
+    <svg class="chart" id="chart" viewBox="0 0 400 210" role="img" aria-label="Gráfica de la posición de la ficha frente al tiempo para las tres personalidades"></svg>
+    <table aria-label="Medidas de la simulación">
+      <thead><tr><th>Carácter</th><th style="text-transform:none">ζ</th><th>Se pasa</th><th>En reposo</th></tr></thead>
+      <tbody id="tbody"></tbody>
+    </table>
+    <p class="mono" style="margin-top:10px">ζ = c / 2√(k·m) · «se pasa»: píxeles más allá del sitio (el rebote se mide sobre 180 px para no depender del ancho) · «en reposo»: a menos de 0,5 px y quieta.</p>
+  </aside>
+</div>
+
+<section class="block">
+  <h2>Qué carácter va en cada sitio</h2>
+  <div class="grid3">
+    <div class="verdict"><h3 style="color:var(--c-pantera)">Pantera</h3><div class="use mono">Base de toda la interfaz</div>
+      <p>Llega antes que nadie y sin pasarse. Toda la energía está en la anticipación. Es el tono de un servidor de rol serio: navegación, menús, normativa.</p></div>
+    <div class="verdict"><h3 style="color:var(--c-oso)">Oso</h3><div class="use mono">Un solo momento: la plaza</div>
+      <p>El peso dice «esto importa». Se reserva para el instante de entrar en la beta. El sello cae y la ficha lo nota. Si se usa en todo, la interfaz se vuelve torpe.</p></div>
+    <div class="verdict"><h3 style="color:var(--c-colibri)">Colibrí</h3><div class="use mono">Avisos, y solo la primera vez</div>
+      <p>Respuesta inmediata y oscilación viva. Sirve para llamar la atención, y cansa a la tercera. Desde la segunda pasada sube la amortiguación y solo queda el gesto.</p></div>
+  </div>
+</section>
+
+<section class="block">
+  <h2>Aprendizajes</h2>
+  <ul class="learn">
+    <li><b>Comparar exige un solo reloj.</b> Las tres simulaciones se calculan antes y se leen por tiempo. Por eso la línea de tiempo se arrastra y los tres carriles están siempre en el mismo fotograma.</li>
+    <li><b>La segunda vez no se grita.</b> Subir ζ a 0,85 y recortar la anticipación conserva el carácter (quién llega primero, quién pesa) y quita el rebote que cansa.</li>
+    <li><b>Tres elementos bastan para tener carácter.</b> El sello hace de testigo: su reacción al golpe dice más de la masa que la propia ficha.</li>
+  </ul>
+  <h2 style="margin-top:28px">Qué mejorar</h2>
+  <ul class="learn">
+    <li>Medir los 60 fps en un Android de gama media real con el botón «fps». Aquí se midió en Chromium con la CPU frenada ×4.</li>
+    <li>La ruta reducida aún muestra el botón de reproducir: en la Semana 3 debería mostrar directamente el estado final con un único fundido.</li>
+  </ul>
+</section>
+
+<footer>
+  <p><b style="color:var(--mute)">Estudio:</b> lidera Motion y 3D (simulación de muelles precalculada y pasadas con amortiguación creciente); Diseño UI acompaña (tres elementos en la paleta del servidor, tipografía Special Gothic de la S2); Calidad acompaña (capturas a 390 y 1440 px en tres momentos, ruta reducida, teclado y medidor de fps).</p>
+  <p>Reglas del Screening S1 aplicadas: línea de tiempo arrastrable, ningún <code>blur</code>, el único «golpe» (el sello en el oso) mueve la ficha 4 px y responde a un impacto visible.</p>
+  <p>Fuentes de la búsqueda: <a href="https://motion.dev/tutorials/js-spring">Motion · JS spring</a> · <a href="https://kylesnav.github.io/delightful-design-system/delightful-animation.html">An animation system that sparks joy</a> · <a href="https://developer.apple.com/design/human-interface-guidelines/motion.md">Apple HIG · Motion</a> · <a href="https://skills.sh/LottieFiles/motion-design-skill/motion-design">LottieFiles · motion-design skill</a></p>
+  <p>Siguiente · domingo · Screening de la Semana 2.</p>
+</footer>
+</div>
+<button class="pill" id="fps" type="button" aria-pressed="false">fps</button>
+
+<script>
+(() => {
+  const root = document.documentElement;
+  const mq = matchMedia('(prefers-reduced-motion: reduce)');
+  const reduced = () => mq.matches || root.classList.contains('rm');
+
+  /* ── Personalidades (las del Laboratorio S2) ── */
+  const P = {
+    pantera: { m: 1,   k: 260, c: 32.25, antMs: 260, antX: 14, antQ: 8, stretch: 6, press: [.94, 200], hitY: 0, hitQ: 0,  sealK: 300, sealC: 34 },
+    oso:     { m: 3,   k: 140, c: 20.5,  antMs: 360, antX: 22, antQ: 4, stretch: 2, press: [.9, 300],  hitY: 4, hitQ: 5,  sealK: 160, sealC: 11 },
+    colibri: { m: .35, k: 420, c: 7.27,  antMs: 50,  antX: 3,  antQ: 0, stretch: 3, press: [.97, 90],  hitY: -3, hitQ: 0, sealK: 380, sealC: 6 }
+  };
+  const KEYS = ['pantera', 'oso', 'colibri'];
+  const zeta = p => p.c / (2 * Math.sqrt(p.k * p.m));
+  /* segunda pasada: ζ mínimo 0,85 y media anticipación */
+  function calm(p) {
+    const z = Math.max(zeta(p), .85), c = z * 2 * Math.sqrt(p.k * p.m);
+    const sz = Math.max(p.sealC / (2 * Math.sqrt(p.sealK)), .85);
+    return { ...p, c, antMs: p.antMs * .6, antX: p.antX * .5, antQ: p.antQ * .5, stretch: p.stretch * .5,
+      hitY: p.hitY * .5, hitQ: p.hitQ * .5, sealC: sz * 2 * Math.sqrt(p.sealK) };
+  }
+
+  const END = 4.6, HZ = 120, N = Math.round(END * HZ) + 1;
+  const REF = 180, T_IN = .2, T_PRESS = 1.9, T_SEAL = 2.4;
+
+  /* ── Simulación determinista: muelles a 1 ms, muestras a 120 Hz ── */
+  function simulate(p, W) {
+    const dt = .001, out = new Float32Array(N * 6);   // x, q, btnS, sealY, sealR, cardY
+    const s = (x) => ({ x, v: 0, t: x });
+    const X = s(0), Q = s(0), B = s(1), SY = s(-90), SR = s(0), CY = s(0);
+    const card = { m: p.m, k: p.k, c: p.c }, btn = { m: 1, k: 520, c: 30 }, seal = { m: 1, k: p.sealK, c: p.sealC };
+    const st = (o, q, h) => { const a = (-q.k * (o.x - o.t) - q.c * o.v) / q.m; o.v += a * h; o.x += o.v * h; };
+    let crossed = false, xpx = -W, phase = 0, hit = false, pressed = false, released = false, sealOn = false, j = 0, peak = -1e9, restAt = null;
+    for (let i = 0; i <= END * 1000; i++) {
+      const t = i * dt;
+      if (phase === 0 && t >= T_IN) { phase = 1; X.t = -p.antX / W; Q.t = p.antQ; }
+      if (phase === 1 && t >= T_IN + p.antMs / 1000) { phase = 2; X.t = 1; Q.t = -p.stretch; }
+      if (phase === 2 && Q.t < 0 && t >= T_IN + p.antMs / 1000 + .12) Q.t = 0;
+      if (!pressed && t >= T_PRESS) { pressed = true; B.t = p.press[0]; }
+      if (!released && t >= T_PRESS + p.press[1] / 1000) { released = true; B.t = 1; }
+      if (!sealOn && t >= T_SEAL) { sealOn = true; SY.t = 0; SR.t = 0; SR.v = -40; }
+      if (sealOn && !hit && SY.x >= -1) { hit = true; CY.v += p.hitY * 60; Q.v += p.hitQ * 40; }
+      st(X, card, dt); st(Q, card, dt); st(B, btn, dt); st(SY, seal, dt); st(SR, seal, dt); st(CY, { m: p.m, k: 600, c: 30 * p.m }, dt);
+      /* el viaje se mapea al ancho del carril; el rebote, a una distancia fija de 180 px (no depende de la pantalla) */
+      if (X.x >= 1) crossed = true;
+      xpx = crossed ? (X.x - 1) * REF : -W * (1 - X.x);
+      const vpx = X.v * (crossed ? REF : W);
+      if (phase === 2) { peak = Math.max(peak, xpx); if (restAt === null && Math.abs(xpx) < .5 && Math.abs(vpx) < 1) restAt = t; else if (Math.abs(xpx) >= .5) restAt = null; }
+      if (i % (1000 / HZ) < 1 || i === END * 1000) {
+        const k = j * 6; if (j < N) { out[k] = xpx; out[k+1] = Q.x; out[k+2] = B.x; out[k+3] = SY.x; out[k+4] = SR.x; out[k+5] = CY.x; j++; }
+      }
+    }
+    return { out, overshoot: Math.max(0, peak), settle: restAt === null ? END : restAt - (T_IN + p.antMs / 1000), hitAt: null };
+  }
+
+  /* ── DOM ── */
+  const lanes = KEYS.map(k => {
+    const el = document.querySelector(`.lane[data-k=${k}]`);
+    el.querySelector('[data-z]').textContent = 'ζ ' + zeta(P[k]).toFixed(2).replace('.', ',');
+    return { k, el, card: el.querySelector('.card'), btn: el.querySelector('.btn'), seal: el.querySelector('.seal') };
+  });
+  let tracks = {}, W = 300, pass = 1;
+  function build() {
+    W = lanes[0].el.clientWidth;
+    tracks = { 1: {}, 2: {} };
+    for (const k of KEYS) { tracks[1][k] = simulate(P[k], W); tracks[2][k] = simulate(calm(P[k]), W); }
+    drawChart(); fillTable();
+  }
+
+  const tIn = document.getElementById('t'), tv = document.getElementById('tv'), note = document.getElementById('note');
+  let tMs = 0;
+  function render() {
+    const i = Math.min(N - 1, Math.round(tMs / 1000 * HZ)), rm = reduced(), t = tMs / 1000;
+    for (const L of lanes) {
+      const o = tracks[pass][L.k].out, b = i * 6;
+      if (rm) {
+        L.card.style.opacity = Math.min(1, Math.max(0, (t - T_IN) / .25)).toFixed(3);
+        L.seal.style.opacity = Math.min(1, Math.max(0, (t - T_SEAL) / .25)).toFixed(3);
+        L.card.style.transform = L.btn.style.transform = L.seal.style.transform = '';
+      } else {
+        const q = o[b+1] / 100;
+        L.card.style.opacity = ''; L.seal.style.opacity = t < T_SEAL ? '0' : '';
+        L.card.style.transform = `translate3d(${o[b].toFixed(2)}px,${o[b+5].toFixed(2)}px,0) scale(${(1 + q).toFixed(4)},${(1 - q).toFixed(4)})`;
+        L.btn.style.transform = `scale(${o[b+2].toFixed(4)})`;
+        L.seal.style.transform = `translate3d(${o[b].toFixed(2)}px,${(o[b+3] + o[b+5]).toFixed(2)}px,0) rotate(${o[b+4].toFixed(2)}deg)`;
+      }
+      const ok = t >= T_PRESS + .09;
+      L.btn.classList.toggle('ok', ok); L.btn.textContent = ok ? 'Dentro ✓' : 'Entrar';
+      L.seal.classList.toggle('lit', L.k === 'pantera' && t >= T_SEAL + .25);
+    }
+    tIn.value = Math.round(tMs); tv.textContent = Math.round(tMs) + ' ms';
+    head.setAttribute('x1', px(t)); head.setAttribute('x2', px(t));
+  }
+
+  /* ── Gráfica ── */
+  const svg = document.getElementById('chart'), NS = 'http://www.w3.org/2000/svg';
+  const px = t => 34 + t / END * 356, py = v => 170 - (v + W) / (W * 1.16) * 140;
+  let head;
+  function drawChart() {
+    svg.innerHTML = '';
+    const mk = (n, a) => { const e = document.createElementNS(NS, n); for (const k in a) e.setAttribute(k, a[k]); svg.appendChild(e); return e; };
+    mk('line', { x1: 34, x2: 390, y1: py(0), y2: py(0), stroke: '#3a2f5c', 'stroke-dasharray': '3 4' });
+    mk('text', { x: 30, y: py(0) + 4, fill: '#6f6889', 'font-size': 10, 'text-anchor': 'end', 'font-family': 'Fira Code' }).textContent = 'sitio';
+    mk('text', { x: 30, y: py(-W) + 4, fill: '#6f6889', 'font-size': 10, 'text-anchor': 'end', 'font-family': 'Fira Code' }).textContent = 'fuera';
+    for (const [t, l] of [[0, '0'], [T_PRESS, '1,9 s'], [T_SEAL, '2,4'], [END, '4,6 s']]) {
+      mk('line', { x1: px(t), x2: px(t), y1: 178, y2: 182, stroke: '#6f6889' });
+      mk('text', { x: px(t), y: 196, fill: '#6f6889', 'font-size': 10, 'text-anchor': t === END ? 'end' : 'middle', 'font-family': 'Fira Code' }).textContent = l;
+    }
+    const col = { pantera: '#a78bfa', oso: '#f0abfc', colibri: '#67e8f9' };
+    const lab = { pantera: 'pantera', oso: 'oso', colibri: 'colibrí' };
+    KEYS.forEach((k, n) => {
+      const o = tracks[pass][k].out, pts = [];
+      for (let i = 0; i < Math.round(1.6 * HZ); i += 1) pts.push(px(i / HZ).toFixed(1) + ',' + py(o[i * 6]).toFixed(1));
+      for (let i = Math.round(1.6 * HZ); i < N; i += 6) pts.push(px(i / HZ).toFixed(1) + ',' + py(o[i * 6]).toFixed(1));
+      mk('polyline', { points: pts.join(' '), fill: 'none', stroke: col[k], 'stroke-width': 1.8, 'stroke-linejoin': 'round' });
+      mk('text', { x: 392, y: py(0) + 34 + n * 15, fill: col[k], 'font-size': 11, 'text-anchor': 'end', 'font-family': 'Fira Code' }).textContent = lab[k];
+    });
+    head = mk('line', { x1: 34, x2: 34, y1: 14, y2: 178, stroke: '#ece9f5', 'stroke-width': 1, opacity: .7 });
+  }
+  function fillTable() {
+    const name = { pantera: 'Pantera', oso: 'Oso', colibri: 'Colibrí' }, col = { pantera: 'var(--c-pantera)', oso: 'var(--c-oso)', colibri: 'var(--c-colibri)' };
+    document.getElementById('tbody').innerHTML = KEYS.map(k => {
+      const p = pass === 1 ? P[k] : calm(P[k]), r = tracks[pass][k];
+      return `<tr><td><span class="dot" style="background:${col[k]}"></span>${name[k]}</td><td class="n">${zeta(p).toFixed(2).replace('.', ',')}</td><td class="n">${r.overshoot.toFixed(1).replace('.', ',')} px</td><td class="n">${Math.round(r.settle * 1000)} ms</td></tr>`;
+    }).join('');
+  }
+
+  /* ── Transporte: un solo reloj ── */
+  const playBtn = document.getElementById('play'), repBtn = document.getElementById('rep');
+  let playing = false, raf = 0, last = 0, visible = true, queue = [];
+  const NOTES = { 1: 'Primera vez: cada personalidad se presenta entera.', 2: 'Segunda vez y siguientes: ζ ≥ 0,85 y media anticipación. Se reconoce el carácter, no se repite el número.' };
+  function setPass(n) {
+    pass = n; document.querySelectorAll('[data-pass]').forEach(b => b.setAttribute('aria-pressed', String(+b.dataset.pass === n)));
+    note.textContent = NOTES[n];
+    lanes.forEach(L => { const p = n === 1 ? P[L.k] : calm(P[L.k]); L.el.querySelector('[data-z]').textContent = 'ζ ' + zeta(p).toFixed(2).replace('.', ','); });
+    drawChart(); fillTable(); render();
+  }
+  function loop(now) {
+    raf = 0; if (!playing || !visible) return;
+    tMs += Math.min(50, now - last); last = now;
+    if (tMs >= END * 1000) {
+      tMs = END * 1000; render();
+      if (queue.length) { const n = queue.shift(); setTimeout(() => { if (!playing) return; setPass(n); tMs = 0; last = performance.now(); raf = requestAnimationFrame(loop); }, 500); return; }
+      stop(); return;
+    }
+    render(); raf = requestAnimationFrame(loop);
+  }
+  function start() {
+    if (tMs >= END * 1000) tMs = 0;
+    playing = true; playBtn.textContent = 'Pausa';
+    lanes.forEach(L => [L.card, L.btn, L.seal].forEach(e => e.style.willChange = 'transform'));
+    last = performance.now(); if (!raf) raf = requestAnimationFrame(loop);
+  }
+  function stop() {
+    playing = false; playBtn.textContent = 'Reproducir'; queue = []; repBtn.textContent = 'Repetir ×3';
+    lanes.forEach(L => [L.card, L.btn, L.seal].forEach(e => e.style.willChange = ''));
+  }
+  playBtn.addEventListener('click', () => playing ? stop() : start());
+  repBtn.addEventListener('click', () => { stop(); setPass(1); tMs = 0; queue = [2, 2]; repBtn.textContent = '1ª · 2ª · 3ª…'; start(); });
+  document.querySelectorAll('[data-pass]').forEach(b => b.addEventListener('click', () => setPass(+b.dataset.pass)));
+  tIn.addEventListener('input', () => { if (playing) stop(); tMs = +tIn.value; render(); });
+
+  /* parar fuera de pantalla */
+  new IntersectionObserver(([e]) => { visible = e.isIntersecting; if (visible && playing && !raf) { last = performance.now(); raf = requestAnimationFrame(loop); } }, { threshold: .05 })
+    .observe(document.getElementById('stage'));
+
+  /* reducido */
+  const rmBtn = document.getElementById('rmBtn');
+  rmBtn.addEventListener('click', () => { const on = !root.classList.contains('rm'); root.classList.toggle('rm', on); rmBtn.setAttribute('aria-pressed', String(on)); rmBtn.textContent = on ? 'Ver con movimiento completo' : 'Ver con movimiento reducido'; render(); });
+  mq.addEventListener('change', render);
+
+  /* medidor de fps (receta 24) */
+  const fpsBtn = document.getElementById('fps'); let fr = 0, fl = 0, fOn = false;
+  function fpsTick(now) { if (!fOn) return; fr++; if (now - fl >= 500) { fpsBtn.textContent = Math.round(fr * 1000 / (now - fl)) + ' fps'; fr = 0; fl = now; } requestAnimationFrame(fpsTick); }
+  fpsBtn.addEventListener('click', () => { fOn = !fOn; fpsBtn.setAttribute('aria-pressed', String(fOn)); if (fOn) { fl = performance.now(); fr = 0; requestAnimationFrame(fpsTick); } else fpsBtn.textContent = 'fps'; });
+
+  /* rehacer al cambiar el ancho del carril */
+  let rw = 0; new ResizeObserver(() => { const w = lanes[0].el.clientWidth; if (Math.abs(w - rw) > 2) { rw = w; build(); render(); } }).observe(lanes[0].el);
+
+  /* para capturas: congelar en un instante */
+  window.__seek = (ms, p = 1) => { stop(); if (p !== pass) setPass(p); tMs = ms; render(); };
+
+  build(); render();
+  /* autoarranque una vez, al verse, si no hay movimiento reducido */
+  const once = new IntersectionObserver(([e]) => { if (e.isIntersecting) { once.disconnect(); if (!reduced() && !new URLSearchParams(location.search).has('still')) setTimeout(start, 400); else { tMs = END * 1000; render(); } } }, { threshold: .4 });
+  once.observe(document.getElementById('stage'));
+})();
+</script>
+</body>
+</html>
