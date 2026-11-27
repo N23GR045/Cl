@@ -1,0 +1,178 @@
+<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Natural Life RP · Beta de 18 plazas</title><meta name="description" content="Servidor FiveM de rol en español que empieza de cero. Beta de 18 plazas, gratis, sin pay to win y sin whitelist. Se entra por Discord."><meta property="og:title" content="Natural Life RP · Beta de 18 plazas"><meta property="og:description" content="Servidor FiveM de rol en español que empieza de cero. Beta de 18 plazas, gratis, sin pay to win y sin whitelist. Se entra por Discord."><meta property="og:type" content="website"><meta name="theme-color" content="#0B0A10"><link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Protest+Strike&family=Rubik:wght@400;500;600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet"><style>body{margin:0;background:#0B0A10}
+html{scroll-padding-top:80px;scroll-padding-bottom:96px;scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+.nl{--bg:#0B0A10;--sf:#15131D;--sf2:#1C1927;--ln:#2A2638;--tx:#EDEBF5;--mu:#ABA5BF;--vi:#7C3AED;--vi2:#6D28D9;--vl:#C4B5FD;--ease:cubic-bezier(.22,1,.36,1);--fd:'Protest Strike',Impact,sans-serif;--fh:'Space Grotesk',sans-serif;--fb:'Rubik',system-ui,sans-serif;
+background:var(--bg);color:var(--tx);font-family:var(--fb);font-size:1rem;line-height:1.6;position:relative;overflow-x:clip;
+background-image:radial-gradient(70% 50% at 85% 0%,rgba(124,58,237,.22),transparent 70%),radial-gradient(40% 30% at 0% 60%,rgba(124,58,237,.08),transparent 70%),linear-gradient(rgba(196,181,253,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(196,181,253,.035) 1px,transparent 1px);background-size:auto,auto,64px 64px,64px 64px}
+.nl *{box-sizing:border-box}
+.nl a{color:var(--vl)}
+.nl .wrap{max-width:1160px;margin:0 auto;padding:0 20px}
+.nl .skip{position:absolute;left:12px;top:-80px;z-index:20;background:var(--tx);color:var(--bg);padding:12px 16px;border-radius:10px;font-weight:600;text-decoration:none}
+.nl .skip:focus{top:12px}
+.nl :focus-visible{outline:3px solid var(--vl);outline-offset:3px;border-radius:10px}
+.nl .btn:focus-visible{outline-color:#fff}
+.nl header.top{position:sticky;top:0;z-index:10;background:rgba(11,10,16,.9);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid var(--ln)}
+.nl .bar{display:flex;align-items:center;justify-content:space-between;gap:16px;min-height:64px}
+.nl .logo{display:inline-flex;align-items:center;gap:10px;min-height:44px;font-family:var(--fh);font-weight:700;font-size:1.05rem;color:var(--tx);text-decoration:none;letter-spacing:.04em}
+.nl .ring{display:inline-grid;place-items:center;width:30px;height:30px;border-radius:50%;border:2px solid var(--vl);box-shadow:0 0 12px rgba(124,58,237,.7),inset 0 0 8px rgba(124,58,237,.5);font-size:.62rem;letter-spacing:0;color:var(--tx)}
+.nl .logo b{color:var(--vl);font-weight:700}
+.nl nav ul{display:flex;gap:6px;list-style:none;margin:0;padding:0}
+.nl nav a{display:inline-flex;align-items:center;min-height:44px;padding:0 10px;color:var(--mu);text-decoration:none;font-size:.92rem;border-radius:10px}
+.nl nav a:hover{color:var(--tx);background:var(--sf)}
+.nl .btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:52px;padding:0 24px;border-radius:14px;background:var(--vi);color:#fff;font-weight:600;text-decoration:none;border:0;box-shadow:0 0 0 1px rgba(196,181,253,.25),0 8px 30px -8px rgba(124,58,237,.8)}
+.nl .btn:hover{background:var(--vi2)}
+.nl .btn.sm{min-height:44px;padding:0 16px;font-size:.92rem}
+.nl .btn svg{width:20px;height:20px}
+.nl .ghost{display:inline-flex;align-items:center;min-height:52px;padding:0 20px;border-radius:14px;border:1px solid var(--ln);color:var(--tx);text-decoration:none;background:rgba(21,19,29,.6)}
+.nl .ghost:hover{border-color:var(--vl)}
+.nl .hero{position:relative;padding:64px 0 72px;min-height:min(86vh,760px);display:flex;align-items:center}
+.nl .hero .art{position:absolute;inset:0;z-index:0;background-size:cover;background-position:70% 50%;opacity:.95;-webkit-mask-image:linear-gradient(90deg,transparent 0%,#000 45%);mask-image:linear-gradient(90deg,transparent 0%,#000 45%)}
+.nl .hero .wrap{position:relative;z-index:1;width:100%}
+.nl .tag{display:inline-flex;align-items:center;gap:8px;font-size:.8rem;letter-spacing:.14em;text-transform:uppercase;color:var(--vl);border:1px solid #3B2F5C;border-radius:999px;padding:6px 14px;background:rgba(11,10,16,.7)}
+.nl .dot{width:8px;height:8px;border-radius:50%;background:#A78BFA;box-shadow:0 0 10px #A78BFA}
+.nl h1{font-family:var(--fd);font-weight:400;font-size:clamp(3rem,8.4vw,6.6rem);line-height:.92;margin:22px 0 18px;max-width:11ch;letter-spacing:.005em;text-wrap:balance}
+.nl h1 em{font-style:normal;color:var(--vl)}
+.nl .lead{font-size:1.15rem;color:var(--mu);max-width:50ch;margin:0 0 30px;text-wrap:pretty}
+.nl .ctas{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
+.nl .facts{display:flex;flex-wrap:wrap;gap:10px;margin:32px 0 0;padding:0;list-style:none}
+.nl .facts li{border:1px solid var(--ln);background:rgba(21,19,29,.75);border-radius:12px;padding:8px 14px;color:var(--mu);font-size:.95rem}
+.nl .facts strong{color:var(--tx);font-variant-numeric:tabular-nums}
+.nl section{padding:88px 0;border-top:1px solid var(--ln)}
+.nl .kicker{display:inline-flex;align-items:center;gap:10px;font-family:var(--fh);font-size:.85rem;letter-spacing:.14em;text-transform:uppercase;color:var(--vl);margin:0 0 14px}
+.nl .kicker .ring{width:26px;height:26px;font-size:.7rem}
+.nl h2{font-family:var(--fh);font-weight:700;font-size:clamp(1.9rem,4vw,2.9rem);line-height:1.05;margin:0 0 12px;text-wrap:balance;letter-spacing:-.01em}
+.nl h3{font-family:var(--fh);font-weight:700;font-size:1.15rem;margin:10px 0 6px}
+.nl .sub{color:var(--mu);margin:0 0 36px;max-width:60ch;text-wrap:pretty}
+.nl .grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.nl .grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.nl .card{background:var(--sf);border:1px solid var(--ln);border-radius:18px;padding:24px;transition:border-color .2s var(--ease),transform .2s var(--ease)}
+.nl .card:hover{border-color:#4C3D7A}
+.nl .card p{margin:0;color:var(--mu)}
+.nl .num{font-family:var(--fh);font-size:.85rem;color:var(--vl);letter-spacing:.08em}
+.nl ol.steps{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}
+.nl ol.steps li{position:relative}
+.nl .ph{display:block;border:1px dashed #4C3D7A;border-radius:12px;padding:10px 12px;color:var(--vl);font-size:.85rem;margin-top:12px;background:rgba(124,58,237,.06)}
+.nl .rules{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.nl .rule{display:flex;gap:14px;align-items:flex-start;background:var(--sf);border:1px solid var(--ln);border-radius:16px;padding:18px}
+.nl .rule .ab{flex:none;display:grid;place-items:center;width:48px;height:48px;border-radius:50%;border:2px solid var(--vl);font-family:var(--fh);font-weight:700;font-size:.9rem;box-shadow:0 0 14px rgba(124,58,237,.45)}
+.nl .rule h3{margin:2px 0 4px;font-size:1rem}
+.nl .rule p{margin:0;color:var(--mu);font-size:.95rem}
+.nl .log{border-left:2px solid #3B2F5C;margin:0;padding:0 0 0 24px;list-style:none;display:grid;gap:20px}
+.nl .log li{position:relative}
+.nl .log li::before{content:"";position:absolute;left:-32px;top:6px;width:14px;height:14px;border-radius:50%;background:var(--bg);border:2px solid var(--vl);box-shadow:0 0 10px rgba(124,58,237,.7)}
+.nl .log time{font-family:var(--fh);font-size:.85rem;color:var(--vl);letter-spacing:.06em}
+.nl .log p{margin:4px 0 0;color:var(--mu)}
+.nl details{background:var(--sf);border:1px solid var(--ln);border-radius:14px;margin:0 0 10px}
+.nl summary{cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 20px;font-weight:500;min-height:56px;list-style:none}
+.nl summary::-webkit-details-marker{display:none}
+.nl summary::after{content:"+";font-family:var(--fh);font-size:1.4rem;color:var(--vl);transition:transform .2s var(--ease)}
+.nl details[open] summary::after{transform:rotate(45deg)}
+.nl details p{margin:0;padding:0 20px 18px;color:var(--mu)}
+.nl .final{text-align:center;padding:104px 0;border-top:1px solid var(--ln);background:radial-gradient(50% 70% at 50% 100%,rgba(124,58,237,.25),transparent 70%)}
+.nl .final h2{font-family:var(--fd);font-weight:400;font-size:clamp(2.4rem,6vw,4.4rem);line-height:.95}
+.nl .final .sub{margin:0 auto 30px}
+.nl .final .ctas{justify-content:center}
+.nl footer{border-top:1px solid var(--ln);padding:28px 0 104px;color:var(--mu);font-size:.88rem}
+.nl footer .row{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:12px 24px}
+.nl footer ul{display:flex;flex-wrap:wrap;gap:4px 14px;list-style:none;margin:0;padding:0}
+.nl footer a{display:inline-flex;align-items:center;min-height:44px;color:var(--mu)}
+.nl footer a:hover{color:var(--tx)}
+.nl .dock{position:fixed;left:12px;right:12px;bottom:max(12px,env(safe-area-inset-bottom));z-index:9;display:none}
+.nl .dock .btn{width:100%}
+@media (max-width:860px){.nl nav{display:none}.nl .grid3,.nl .rules{grid-template-columns:1fr}.nl ol.steps{grid-template-columns:1fr 1fr}.nl .grid2{grid-template-columns:1fr}.nl .dock{display:block}.nl .hero{padding:40px 0 56px;min-height:auto;align-items:flex-end}.nl .hero .art{-webkit-mask-image:linear-gradient(180deg,#000 0%,rgba(0,0,0,.35) 60%,rgba(0,0,0,.25) 100%);mask-image:linear-gradient(180deg,#000 0%,rgba(0,0,0,.35) 60%,rgba(0,0,0,.25) 100%);background-position:78% 20%}.nl .hero .wrap{padding-top:140px}.nl section{padding:60px 0}.nl .top .btn.sm{display:none}}
+@media (max-width:520px){.nl ol.steps{grid-template-columns:1fr}}
+@media (min-width:1600px){.nl{font-size:1.125rem}.nl .wrap{max-width:1320px}.nl :focus-visible{outline-width:4px}}
+@media (prefers-reduced-motion:no-preference){
+.nl .btn{transition:background .15s var(--ease),transform .12s var(--ease)}
+.nl .btn:active,.nl .ghost:active{transform:scale(.97)}
+.nl .in{animation:nl-up .7s var(--ease) both}
+.nl .in.d1{animation-delay:.08s}.nl .in.d2{animation-delay:.16s}.nl .in.d3{animation-delay:.24s}.nl .in.d4{animation-delay:.32s}
+.nl .hero .art{animation:nl-fade 1.2s var(--ease) both}
+@supports (animation-timeline:view()){.nl .rv{animation:nl-up linear both;animation-timeline:view();animation-range:entry 0% entry 40%}}
+}
+@keyframes nl-up{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+@keyframes nl-fade{from{opacity:0;transform:scale(1.03)}to{opacity:.95;transform:none}}
+.nl .more{display:inline-flex;align-items:center;min-height:44px;font-weight:500}
+@media (min-width:861px){.nl .hero .art{left:42%;background-position:62% 50%;-webkit-mask-image:linear-gradient(90deg,transparent 0%,#000 30%);mask-image:linear-gradient(90deg,transparent 0%,#000 30%)}}
+@media (max-width:860px){.nl .hero .art{-webkit-mask-image:linear-gradient(180deg,rgba(0,0,0,.9) 0%,rgba(0,0,0,.25) 45%,rgba(0,0,0,.12) 100%);mask-image:linear-gradient(180deg,rgba(0,0,0,.9) 0%,rgba(0,0,0,.25) 45%,rgba(0,0,0,.12) 100%)}}
+@media (min-width:861px){.nl .hero .art{background-position:86% 50%}}
+@media (min-width:861px) and (max-width:1100px){.nl .hero .art{left:50%}.nl .lead{max-width:40ch}.nl h1{font-size:clamp(3rem,7vw,5rem)}}
+
+.nl .hero .art{background-image:url(2026-11-27_dia-14_hero.webp)}</style></head><body><div class="nl lp">
+<a class="skip" href="#contenido">Saltar al contenido</a>
+<header class="top">
+<div class="wrap bar">
+<span class="logo"><span class="ring" aria-hidden="true">NL</span><span>NATURAL <b>LIFE</b> RP</span></span>
+<a class="btn sm" href="https://discord.gg/[INVITACION-VARIANTE]">Entrar al Discord</a>
+</div>
+</header>
+<main>
+<div class="hero" id="contenido" tabindex="-1">
+<div class="art" role="img" aria-label="Emblema NL de Natural Life en 3D, violeta, dentro de un anillo de neón sobre asfalto mojado"></div>
+<div class="wrap">
+<span class="tag in"><span class="dot" aria-hidden="true"></span>Vienes del vídeo · beta de 18 plazas</span>
+<h1 class="in d1">Sin invitación. Sin pagar. <em>Sin whitelist.</em></h1>
+<p class="lead in d2">Servidor de rol de GTA en español con entrada por Discord. Lees la normativa y conectas.</p>
+<div class="ctas in d3">
+<a class="btn" href="https://discord.gg/[INVITACION-VARIANTE]">Entrar al Discord de la beta</a>
+</div>
+<ul class="facts in d4">
+<li><strong>Gratis</strong>, sin pay to win</li>
+<li><strong>Sin whitelist</strong></li>
+<li>Rol en <strong>español</strong></li>
+</ul>
+</div>
+</div>
+
+<section aria-labelledby="t-por">
+<div class="wrap">
+<h2 id="t-por" class="rv">Por qué entrar ahora y no en la apertura</h2>
+<p class="sub">Porque ahora es cuando una sola persona cambia una ciudad.</p>
+<div class="grid3">
+<article class="card rv"><span class="num">01</span><h3>Tu progreso se queda</h3><p>Lo que hagas en la beta sigue contigo cuando abramos. No hay reinicio.</p></article>
+<article class="card rv"><span class="num">02</span><h3>Tu voz cuenta</h3><p>18 personas a las que se escucha de verdad. Lo que se cambia, se anota en el diario.</p></article>
+<article class="card rv"><span class="num">03</span><h3>Recompensas a los testers</h3><p>Los más activos reciben recompensas estéticas en la apertura. [DETALLAR CUÁLES]</p></article>
+</div>
+</div>
+</section>
+
+<section aria-labelledby="t-pasos">
+<div class="wrap">
+<h2 id="t-pasos" class="rv">Cómo entrar en cuatro pasos</h2>
+<p class="sub">GTA V original en PC y FiveM, que es gratis. El resto pasa en Discord.</p>
+<ol class="steps">
+<li class="card rv"><span class="num">1</span><h3>Instala FiveM</h3><p>Desde su web oficial, con tu GTA V original.</p></li>
+<li class="card rv"><span class="num">2</span><h3>Entra al Discord</h3><p>Con el botón de esta página.</p></li>
+<li class="card rv"><span class="num">3</span><h3>Lee la normativa</h3><p>Cinco minutos. Es corta.</p></li>
+<li class="card rv"><span class="num">4</span><h3>Conecta</h3><p>La dirección está en el canal de bienvenida.</p></li>
+</ol>
+</div>
+</section>
+
+<section aria-labelledby="t-faq">
+<div class="wrap">
+<h2 id="t-faq" class="rv">Antes de entrar</h2>
+<p class="sub">Las tres dudas que más se repiten.</p>
+<details><summary>¿De verdad es gratis?</summary><p>Sí. Las donaciones son opcionales y solo estéticas: ninguna da dinero, armas ni coches.</p></details>
+<details><summary>¿Es rol serio o un servidor de tiroteos?</summary><p>Rol serio con el caos justo: persecuciones y golpes, pero con una normativa que protege la historia de todos.</p></details>
+<details><summary>¿Hay edad mínima?</summary><p>[EDAD MÍNIMA DEL SERVIDOR — definir en la normativa]</p></details>
+</div>
+</section>
+
+<div class="final">
+<div class="wrap">
+<h2 class="rv">La ciudad está vacía. Todavía.</h2>
+<p class="sub">Las primeras 18 personas deciden cómo suena Natural Life.</p>
+<div class="ctas"><a class="btn" href="https://discord.gg/[INVITACION-VARIANTE]">Entrar al Discord de la beta</a></div>
+</div>
+</div>
+</main>
+<footer>
+<div class="wrap row">
+<span>Natural Life RP · Proyecto de fans, sin relación con Rockstar Games, Take-Two ni Cfx.re.</span>
+<ul><li><a href="/">Web completa</a></li><li><a href="/privacidad">Privacidad</a></li></ul>
+</div>
+</footer>
+<aside class="dock" aria-label="Acceso rápido"><a class="btn" href="https://discord.gg/[INVITACION-VARIANTE]">Entrar al Discord de la beta</a></aside>
+</div>
+</body></html>
