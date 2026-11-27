@@ -9,3 +9,4 @@ Copia del HTML de cada sesión (artifact privado en claude.ai). Fotogramas, prev
 | 2026-11-20 | 03 | Cámara motivada (recuperada el 25-11) | https://claude.ai/artifact/2x1zwTwSW8JHJiSWtYzsHu |
 | 2026-11-23 | 04 | Luz y color (recuperada el 25-11) | https://claude.ai/artifact/5tjKgw5osQEZmUbRBSBnn5 |
 | 2026-11-25 | 05 | Prompt de Veo | https://claude.ai/artifact/9VhJxcoqMf6aQx87R2YkVv |
+| 2026-11-27 | 06 | Prompt de Kling | https://claude.ai/artifact/XdYxGvJkXHtmoN8iiaNdkb |
