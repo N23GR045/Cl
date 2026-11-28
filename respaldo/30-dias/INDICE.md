@@ -18,3 +18,4 @@ Copia de cada día del entrenamiento. Los Docs se guardan en .md, las Sheets en 
 | 2026-11-25 | 12 | Estructura multipágina | https://claude.ai/artifact/8kKotm6Mk4LuuBqD34AY55 | 2026-11-25_dia-12.html |
 | 2026-11-26 | 13 | Auditoría responsive y accesibilidad | https://claude.ai/artifact/5zKev65crA7XdDFizhJsTM | 2026-11-26_dia-13.md |
 | 2026-11-27 | 14 | Sitio de 1 página + landing | https://claude.ai/artifact/VSAm4J4TLZmGqA72K4m7Hy | 2026-11-27_dia-14.md · 2026-11-27_dia-14.html · _landing-V3.html · _landing-V5.html · _hero.webp · _emblema-blender.py · skill-flujo-web-completo_dia-14.md |
+| 2026-11-28 | 15 | Diagrama de arquitectura (Reparto de Deudas) | https://claude.ai/artifact/U877vjx8LZj3WCqSfSJKMn | 2026-11-28_dia-15.md · 2026-11-28_dia-15_pizarra.json |

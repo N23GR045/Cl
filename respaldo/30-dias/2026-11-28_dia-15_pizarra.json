@@ -1,0 +1,590 @@
+{
+ "e1": {
+  "type": "text",
+  "x": 0,
+  "y": -230,
+  "text": "Reparto de Deudas · arquitectura",
+  "size": "title"
+ },
+ "e2": {
+  "type": "text",
+  "x": 0,
+  "y": -160,
+  "text": "Tus deudas viven en tu móvil, no en un servidor.",
+  "size": "large"
+ },
+ "e3": {
+  "type": "text",
+  "x": 0,
+  "y": -105,
+  "size": "small",
+  "text": "Clave: **azul** = dentro de tu móvil · **blanco** = fuera · **borde terracota** = riesgo a vigilar · **morado** = el dato que protegemos. Línea discontinua = futuro opcional."
+ },
+ "e4": {
+  "type": "container",
+  "x": 0,
+  "y": 0,
+  "w": 1040,
+  "h": 420,
+  "text": "En tu móvil Android · zona de confianza"
+ },
+ "e5": {
+  "type": "container",
+  "x": 1110,
+  "y": 0,
+  "w": 420,
+  "h": 420,
+  "text": "Fuera del móvil"
+ },
+ "e6": {
+  "type": "container",
+  "x": 0,
+  "y": 500,
+  "w": 1530,
+  "h": 190,
+  "text": "Cómo llega el APK a tu móvil"
+ },
+ "e7": {
+  "type": "shape",
+  "kind": "rounded",
+  "x": 24,
+  "y": 40,
+  "w": 200,
+  "h": 110,
+  "color": "blue",
+  "text": "**Pantallas**\nPersonas · Gastos · Saldos\nHTML/CSS/JS"
+ },
+ "e8": {
+  "type": "shape",
+  "kind": "rounded",
+  "x": 288,
+  "y": 40,
+  "w": 220,
+  "h": 110,
+  "color": "blue",
+  "text": "**Lógica de reparto**\nimportes en céntimos enteros · redondeo justo"
+ },
+ "e9": {
+  "type": "shape",
+  "kind": "rounded",
+  "x": 572,
+  "y": 40,
+  "w": 200,
+  "h": 110,
+  "color": "blue",
+  "text": "**Repositorio de datos**\nla única puerta al almacén"
+ },
+ "e10": {
+  "type": "shape",
+  "kind": "database",
+  "x": 836,
+  "y": 30,
+  "w": 180,
+  "h": 130,
+  "color": "purple",
+  "text": "**IndexedDB**\npersonas, gastos, pagos"
+ },
+ "e11": {
+  "type": "shape",
+  "kind": "rounded",
+  "x": 572,
+  "y": 214,
+  "w": 200,
+  "h": 90,
+  "color": "blue",
+  "text": "Exportar / importar copia (JSON)"
+ },
+ "e12": {
+  "type": "shape",
+  "kind": "rounded",
+  "x": 836,
+  "y": 214,
+  "w": 180,
+  "h": 90,
+  "color": "blue",
+  "text": "Hoja de compartir de Android"
+ },
+ "e13": {
+  "type": "shape",
+  "kind": "pill",
+  "x": 24,
+  "y": 340,
+  "w": 992,
+  "h": 56,
+  "color": "blue",
+  "text": "**Shell Capacitor 8** · WebView de Android · funciona sin conexión · sin permisos extra"
+ },
+ "e14": {
+  "type": "shape",
+  "kind": "rounded",
+  "x": 1134,
+  "y": 214,
+  "w": 200,
+  "h": 90,
+  "color": "white",
+  "text": "Copia en el destino que **tú** elijas"
+ },
+ "e15": {
+  "type": "shape",
+  "kind": "rounded",
+  "x": 1134,
+  "y": 40,
+  "w": 372,
+  "h": 110,
+  "color": "white",
+  "text": "**Supabase (opcional, día 17)**\nsincronizar entre móviles con RLS y datos cifrados"
+ },
+ "e16": {
+  "type": "shape",
+  "kind": "rounded",
+  "x": 24,
+  "y": 540,
+  "w": 230,
+  "h": 100,
+  "color": "white",
+  "text": "**Repo GitHub**\nsolo código, nunca datos"
+ },
+ "e17": {
+  "type": "shape",
+  "kind": "rounded",
+  "x": 318,
+  "y": 540,
+  "w": 210,
+  "h": 100,
+  "color": "white",
+  "text": "**GitHub Actions**\ncompila en cada tag v*"
+ },
+ "e18": {
+  "type": "shape",
+  "kind": "rounded",
+  "x": 592,
+  "y": 540,
+  "w": 200,
+  "h": 100,
+  "color": "white",
+  "stroke": "terracotta",
+  "text": "**Firma**\nkeystore en Secrets, nunca en el repo"
+ },
+ "e19": {
+  "type": "shape",
+  "kind": "rounded",
+  "x": 856,
+  "y": 540,
+  "w": 200,
+  "h": 100,
+  "color": "white",
+  "text": "**APK en Releases**\nversionCode sube en cada versión"
+ },
+ "e20": {
+  "type": "shape",
+  "kind": "rounded",
+  "x": 1120,
+  "y": 540,
+  "w": 280,
+  "h": 100,
+  "color": "white",
+  "stroke": "terracotta",
+  "text": "**Lo instalas a mano**\nOjo: verificación de desarrollador de Android (global en 2027)"
+ },
+ "e21": {
+  "type": "arrow",
+  "from": "e7",
+  "to": "e8",
+  "fromSide": "right",
+  "toSide": "left"
+ },
+ "e22": {
+  "type": "arrow",
+  "from": "e8",
+  "to": "e9",
+  "fromSide": "right",
+  "toSide": "left"
+ },
+ "e23": {
+  "type": "arrow",
+  "from": "e9",
+  "to": "e10",
+  "fromSide": "right",
+  "toSide": "left"
+ },
+ "e24": {
+  "type": "arrow",
+  "from": "e9",
+  "to": "e11",
+  "fromSide": "bottom",
+  "toSide": "top"
+ },
+ "e25": {
+  "type": "arrow",
+  "from": "e11",
+  "to": "e12",
+  "fromSide": "right",
+  "toSide": "left"
+ },
+ "e26": {
+  "type": "arrow",
+  "from": "e12",
+  "to": "e14",
+  "fromSide": "right",
+  "toSide": "left"
+ },
+ "e28": {
+  "type": "arrow",
+  "from": "e16",
+  "to": "e17",
+  "fromSide": "right",
+  "toSide": "left"
+ },
+ "e29": {
+  "type": "arrow",
+  "from": "e17",
+  "to": "e18",
+  "fromSide": "right",
+  "toSide": "left"
+ },
+ "e30": {
+  "type": "arrow",
+  "from": "e18",
+  "to": "e19",
+  "fromSide": "right",
+  "toSide": "left"
+ },
+ "e31": {
+  "type": "arrow",
+  "from": "e19",
+  "to": "e20",
+  "fromSide": "right",
+  "toSide": "left"
+ },
+ "e27": {
+  "type": "arrow",
+  "from": "e10",
+  "to": "e15",
+  "fromSide": "right",
+  "toSide": "left",
+  "dash": true
+ },
+ "e32": {
+  "type": "arrow",
+  "from": "e20",
+  "to": "e13",
+  "fromSide": "top",
+  "toSide": "right",
+  "label": "instala"
+ },
+ "e33": {
+  "type": "text",
+  "x": 0,
+  "y": 760,
+  "text": "Decisiones de arquitectura",
+  "size": "large"
+ },
+ "e34": {
+  "type": "table",
+  "x": 0,
+  "y": 820,
+  "cols": {
+   "c1": {
+    "at": 1,
+    "w": 190
+   },
+   "c2": {
+    "at": 2,
+    "w": 250
+   },
+   "c3": {
+    "at": 3,
+    "w": 380
+   },
+   "c4": {
+    "at": 4,
+    "w": 340
+   }
+  },
+  "rows": {
+   "r1": {
+    "at": 1,
+    "c1": "Decisión",
+    "c2": "Elegido",
+    "c3": "Por qué",
+    "c4": "Riesgo que abre"
+   },
+   "r2": {
+    "at": 2,
+    "c1": "Dónde viven los datos",
+    "c2": "En el móvil (IndexedDB)",
+    "c3": "Sin servidor no hay brecha central ni coste; funciona sin red",
+    "c4": "Si pierdes el móvil, pierdes los datos → copia JSON"
+   },
+   "r3": {
+    "at": 3,
+    "c1": "Dinero",
+    "c2": "Enteros en céntimos",
+    "c3": "En JS 0,1 + 0,2 ≠ 0,3; el céntimo sobrante se reparte siempre igual",
+    "c4": "Exige tests del reparto (Especialización, módulo 7)"
+   },
+   "r4": {
+    "at": 4,
+    "c1": "Empaquetado",
+    "c2": "Capacitor 8 (minSdk 24, target 36)",
+    "c3": "APK que abre sin conexión; target 36 es lo que pide Play desde el 31-08-2026",
+    "c4": "Pasar a Capacitor 9 cuando se publique"
+   },
+   "r5": {
+    "at": 5,
+    "c1": "Build",
+    "c2": "GitHub Actions + firma con Secrets",
+    "c3": "Versiones reproducibles sin claves en el repo",
+    "c4": "Perder el keystore impide actualizar encima"
+   },
+   "r6": {
+    "at": 6,
+    "c1": "Distribución",
+    "c2": "APK en Releases, sin Play",
+    "c3": "Gratis y directo para ti y tus amigos",
+    "c4": "Verificación de desarrollador: hoy solo Brasil, Indonesia, Singapur y Tailandia; global en 2027"
+   },
+   "r7": {
+    "at": 7,
+    "c1": "Sincronización",
+    "c2": "Ninguna por ahora",
+    "c3": "Minimización de datos (RGPD art. 5.1.c y 25)",
+    "c4": "Si se añade: login, RLS y cifrado de extremo a extremo"
+   }
+  },
+  "fills": {
+   "r2": {
+    "c2": "purple"
+   },
+   "r6": {
+    "c4": "peach"
+   }
+  }
+ },
+ "e35": {
+  "type": "text",
+  "x": 0,
+  "y": 1290,
+  "text": "Matriz del estudio (nota sobre 10)",
+  "size": "large"
+ },
+ "e36": {
+  "type": "table",
+  "x": 0,
+  "y": 1350,
+  "cols": {
+   "c1": {
+    "at": 1,
+    "w": 300
+   },
+   "c2": {
+    "at": 2,
+    "w": 130
+   },
+   "c3": {
+    "at": 3,
+    "w": 110
+   },
+   "c4": {
+    "at": 4,
+    "w": 110
+   },
+   "c5": {
+    "at": 5,
+    "w": 120
+   },
+   "c6": {
+    "at": 6,
+    "w": 150
+   },
+   "c7": {
+    "at": 7,
+    "w": 90
+   }
+  },
+  "rows": {
+   "r1": {
+    "at": 1,
+    "c1": "Opción",
+    "c2": "Privacidad 30 %",
+    "c3": "Coste 20 %",
+    "c4": "Offline 20 %",
+    "c5": "Sencillez 15 %",
+    "c6": "Varios móviles 15 %",
+    "c7": "Nota"
+   },
+   "r2": {
+    "at": 2,
+    "c1": "Local-first + Capacitor (elegida)",
+    "c2": "5",
+    "c3": "5",
+    "c4": "5",
+    "c5": "4",
+    "c6": "2",
+    "c7": "8,8"
+   },
+   "r3": {
+    "at": 3,
+    "c1": "Backend Supabase desde el día 1",
+    "c2": "3",
+    "c3": "4",
+    "c4": "3",
+    "c5": "2",
+    "c6": "5",
+    "c7": "6,7"
+   },
+   "r4": {
+    "at": 4,
+    "c1": "TWA (web publicada + APK ligero)",
+    "c2": "3",
+    "c3": "4",
+    "c4": "3",
+    "c5": "4",
+    "c6": "3",
+    "c7": "6,7"
+   }
+  },
+  "fills": {
+   "r2": {
+    "c7": "green"
+   }
+  }
+ },
+ "e37": {
+  "type": "text",
+  "x": 0,
+  "y": 1560,
+  "wrap": 1010,
+  "text": "**Estudio:** lidera Ingeniería (arquitectura local-first) · Seguridad marca las fronteras de confianza (firma, distribución, copia) · Calidad audita. La TWA pierde además porque exige dominio propio con assetlinks.json, y la regla es no usar dominios."
+ },
+ "e38": {
+  "type": "text",
+  "x": 0,
+  "y": 1640,
+  "wrap": 1010,
+  "size": "small",
+  "text": "Fuentes (consultadas el 28-11-2026): [Android developer verification, 30-03-2026, act. 29-09-2026](https://developer.android.com/blog/posts/android-developer-verification-rolling-out-to-all-developers-on-play-console-and-android-developer-console) · [Capacitor 8: guía de actualización](https://capacitorjs.com/docs/updating/8-0) · [Capacitor 8.5, 31-07-2026](https://ionic.io/blog/capacitor-8-5-released) · [The Road to Capacitor 9, 28-08-2026](https://ionic.io/blog/the-road-to-capacitor-9) · [Play: requisito de target API](https://support.google.com/googleplay/android-developer/answer/11926878?hl=en) · [Smashing: arquitectura local-first, 05-2026](https://smashingmagazine.com/2026/05/architecture-local-first-web-development/)"
+ },
+ "e39": {
+  "type": "text",
+  "x": 1260,
+  "y": 760,
+  "text": "Preguntas abiertas",
+  "size": "large",
+  "groups": [
+   "q1"
+  ]
+ },
+ "e40": {
+  "type": "text",
+  "x": 1260,
+  "y": 815,
+  "wrap": 280,
+  "text": "No pude leer el repo desde aquí. ¿Guarda hoy en localStorage o IndexedDB?",
+  "groups": [
+   "q1"
+  ]
+ },
+ "e41": {
+  "type": "text",
+  "x": 1260,
+  "y": 895,
+  "wrap": 280,
+  "text": "",
+  "placeholder": "Supongo localStorage → migrar a IndexedDB",
+  "groups": [
+   "q1"
+  ]
+ },
+ "e42": {
+  "type": "text",
+  "x": 1260,
+  "y": 963,
+  "wrap": 280,
+  "text": "¿El APK sale de Capacitor o de otra vía?",
+  "groups": [
+   "q1"
+  ]
+ },
+ "e43": {
+  "type": "text",
+  "x": 1260,
+  "y": 1019,
+  "wrap": 280,
+  "text": "",
+  "placeholder": "Capacitor, con build en GitHub Actions",
+  "groups": [
+   "q1"
+  ]
+ },
+ "e44": {
+  "type": "text",
+  "x": 1260,
+  "y": 1087,
+  "wrap": 280,
+  "text": "¿Hay algún servidor o todo es local?",
+  "groups": [
+   "q1"
+  ]
+ },
+ "e45": {
+  "type": "text",
+  "x": 1260,
+  "y": 1143,
+  "wrap": 280,
+  "text": "",
+  "placeholder": "Todo local, sin servidor",
+  "groups": [
+   "q1"
+  ]
+ },
+ "e46": {
+  "type": "text",
+  "x": 1260,
+  "y": 1211,
+  "wrap": 280,
+  "text": "¿Quieres verla también en el Fire TV?",
+  "groups": [
+   "q1"
+  ]
+ },
+ "e47": {
+  "type": "text",
+  "x": 1260,
+  "y": 1267,
+  "wrap": 280,
+  "text": "",
+  "placeholder": "Mismo APK, vista de solo consulta con mando",
+  "groups": [
+   "q1"
+  ]
+ },
+ "e48": {
+  "type": "text",
+  "x": 1260,
+  "y": 1290,
+  "text": "Aprendizajes",
+  "size": "large"
+ },
+ "e49": {
+  "type": "text",
+  "x": 1260,
+  "y": 1345,
+  "wrap": 270,
+  "text": "- Una app de dinero sin servidor se protege en tres puntos: firma, distribución y copia.\n- Guardar céntimos enteros es una decisión de arquitectura, no un detalle.\n- Distribuir fuera de Play ya depende de la verificación de desarrollador de Android."
+ },
+ "e50": {
+  "type": "text",
+  "x": 1260,
+  "y": 1560,
+  "text": "Qué mejorar mañana",
+  "size": "large"
+ },
+ "e51": {
+  "type": "text",
+  "x": 1260,
+  "y": 1615,
+  "wrap": 270,
+  "text": "- Día 16: mockup de 2 pantallas sobre este flujo, leyendo antes el repo real.\n- Dar acceso al repo Reparto-de-deudas- a esta tarea para contrastar el diagrama."
+ }
+}
