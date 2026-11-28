@@ -7,3 +7,4 @@
 | 2026-11-21 | 03 | Negociación · Sesión 3 — Etiquetas y auditoría de acusaciones | https://claude.ai/artifact/K57Nw8necBmRGZHJ61MArd |
 | 2026-11-24 | 04 | Negociación · Sesión 4 — Buscar el «no» | https://claude.ai/artifact/XdoWp8tRxnCpWUKG38PrAD |
 | 2026-11-26 | 05 | Negociación · Sesión 5 — Conseguir el «eso es» y resúmenes | https://claude.ai/artifact/BEQTqk1KucyRmUAJUYzi8X |
+| 2026-11-28 | 06 | Negociación · Sesión 6 — Preguntas calibradas | https://claude.ai/artifact/UtoeEWYUmEvAGMTL2e7dGY |
